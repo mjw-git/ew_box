@@ -9,7 +9,8 @@
     "build:react": "webpack --config render/config/webpack.prod.js",
     "build:main": "tsc --p tsconfig.main.json",
     "start:electron": "electron ./main-dist/index",
-    "macpack": "electron-builder"
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win"
   },
   "build": {
     "productName": "test",
@@ -21,6 +22,19 @@
         "dmg",
         "zip"
       ]
+    },
+    "win": {
+      "icon": "build/favicon.ico",
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": false
     }
   },
   "keywords": [],

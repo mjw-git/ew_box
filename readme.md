@@ -5,4 +5,5 @@ yarn start:electron
 ### build
 yarn build:react  
 yarn build:main  
-yarn macpack
+build for mac: yarn build:mac  
+build for win:yarn build:win
