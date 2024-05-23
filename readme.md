@@ -6,4 +6,4 @@ yarn start:electron
 yarn build:react  
 yarn build:main  
 build for mac: yarn build:mac  
-build for win:yarn build:win
+build for win: yarn build:win
