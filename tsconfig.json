@@ -19,7 +19,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "baseUrl": "./render",
+  "baseUrl": "",
   "paths": {
     "@/*": ["src/*"]
   },
