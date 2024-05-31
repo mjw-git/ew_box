@@ -14,7 +14,12 @@ const VisuallyHiddenInput = styled('input')({
   whiteSpace: 'nowrap',
   width: '100%',
 })
-
+const StickyButton = styled(Button)({
+  width: '100%',
+  marginTop: 20,
+  position: 'sticky',
+  bottom: 0,
+})
 const ImageShape = () => {
   const [imgList, setImgList] = useState<File[]>([])
   console.log(imgList)
@@ -53,14 +58,28 @@ const ImageShape = () => {
                       删除
                     </span>
                   </div>
-                  <img className={styles.img_item} src={'atom:///' + item.path} alt='' />{' '}
+                  <img
+                    onLoad={(e) => {
+                      console.log((e.target as HTMLImageElement).naturalWidth)
+                    }}
+                    loading='lazy'
+                    className={styles.img_item}
+                    src={'atom:///' + item.path}
+                    alt=''
+                  />
                 </div>
               )
             })}
           </div>
         </>
       )}
-      <Button variant='contained'>Compress</Button>
+      <StickyButton
+        onClick={() => {
+          window.sharpApi.compress(imgList.map((i) => i.path))
+        }}
+        variant='contained'>
+        Compress
+      </StickyButton>
     </div>
   )
 }

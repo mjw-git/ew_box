@@ -2,6 +2,7 @@ import { BrowserView, BrowserWindow, app, protocol } from 'electron'
 import isDev from 'electron-is-dev'
 import { ipcMain } from 'electron/main'
 import { resolve, normalize } from 'path'
+import registerService from './ipc'
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
     icon: resolve(__dirname, '../assets/pluto.png'),
@@ -16,11 +17,8 @@ function createWindow() {
       nodeIntegration: true,
     },
   })
-  ipcMain.on('set-title', (event, title) => {
-    const webContents = event.sender
-    const win = BrowserWindow.fromWebContents(webContents)
-    win?.setTitle(title)
-  })
+  registerService()
+
   if (isDev) {
     window.webContents.openDevTools()
     window.loadURL('http://localhost:8889')
@@ -29,16 +27,21 @@ function createWindow() {
   }
   return window
 }
-app.dock.setIcon(resolve(__dirname, '../assets/pluto.png'))
-app.on('ready', () => {
-  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
-})
-app.whenReady().then(() => {
-  createWindow()
-  // 这个需要在app.ready触发之后使用
+function registerProtocol() {
   protocol.registerFileProtocol('atom', (request, callback) => {
     const url = request.url.substring(7)
 
     callback(decodeURI(normalize(url.split('?')[0])))
   })
+}
+app.dock.setIcon(resolve(__dirname, '../assets/pluto.png'))
+app.on('ready', () => {
+  process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
+})
+app.whenReady().then(() => {
+  app.getAppPath()
+
+  createWindow()
+  // 这个需要在app.ready触发之后使用
+  registerProtocol()
 })

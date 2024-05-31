@@ -59,7 +59,7 @@ export const ElectronDevPlugin = (): Plugin => {
         let electronProcess = spawn(`${electron}`, [path.join(__dirname, '../main-dist/index.js')], { stdio: 'inherit' }) as ChildProcess
         console.log('plugins-dev : electronProcess : ', electronProcess.pid)
         // 扩展功能 ： 增加 electron 的热启动功能
-        fs.watch(path.join(__dirname, '../main-dist/index.js'), () => {
+        fs.watch(path.join(__dirname, '../main-dist'), () => {
           firstRender = false
           console.log('plugins-dev : main进程目录中的文件发生改变了')
           if (electronProcess && !firstRender) {
