@@ -29,10 +29,11 @@ const electronBuild2Js = async () => {
     entryPoints: [path.join(__dirname, '../main/index.ts'), path.join(__dirname, '../main/preload/index.ts')],
     bundle: true,
     outdir: OUT_DIR,
+    loader: { '.node': 'file' }, // 配置 loader 处理 .node 文件
     // outfile:'target/electron/electronMain.js',
     platform: 'node',
     target: 'node16',
-    external: ['electron'],
+    external: ['electron', 'sharp'],
   })
   await context.watch()
 
@@ -59,7 +60,8 @@ export const ElectronDevPlugin = (): Plugin => {
         let electronProcess = spawn(`${electron}`, [path.join(__dirname, '../main-dist/index.js')], { stdio: 'inherit' }) as ChildProcess
         console.log('plugins-dev : electronProcess : ', electronProcess.pid)
         // 扩展功能 ： 增加 electron 的热启动功能
-        fs.watch(path.join(__dirname, '../main-dist'), () => {
+        fs.watch(path.join(__dirname, '../main-dist'), (e, file) => {
+          // console.log(e, file)
           firstRender = false
           console.log('plugins-dev : main进程目录中的文件发生改变了')
           if (electronProcess && !firstRender) {

@@ -3,6 +3,7 @@ import isDev from 'electron-is-dev'
 import { ipcMain } from 'electron/main'
 import { resolve, normalize } from 'path'
 import registerService from './ipc'
+import Channel from './interface/channel'
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
     icon: resolve(__dirname, '../assets/pluto.png'),
@@ -17,6 +18,7 @@ function createWindow() {
       nodeIntegration: true,
     },
   })
+  Channel.mainWindow = window
   registerService()
 
   if (isDev) {

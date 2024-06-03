@@ -2,7 +2,9 @@ import { Link, Outlet } from 'react-router-dom'
 import styles from './index.module.less'
 import logo from '../assets/images/pluto.png'
 import { Stack, Divider } from '@mui/material'
+import useInitLocalApi from '../hook/useInitLocalApi'
 const Layout = () => {
+  useInitLocalApi()
   return (
     <div>
       <div className={styles.container}>

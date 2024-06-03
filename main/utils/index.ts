@@ -18,15 +18,21 @@ export async function isImg(path: string) {
     await isExistFileOrDir(path)
     const imgReg = /\.(jpg|jpeg|png|webp)$/i
     const ext = extname(path).toLowerCase()
-    let convertExt = ext === '.jpg' ? 'jpeg' : ext
+    console.log(ext)
+    let convertExt = ext === '.jpg' ? '.jpeg' : ext
     return (imgReg.test(convertExt) ? convertExt.replace('.', '') : null) as DefaultImgType | null
   } catch (error) {
     return Promise.reject(error)
   }
 }
-export async function compressImg(options: { path: string; quality: number; output: string; ext?: DefaultImgType }) {
-  const { path, quality, output, ext } = options
+export function formatTaskName() {
+  const date = new Date()
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}${date.getHours()}时${date.getMinutes()}`
+}
+export async function compressImg(options: { path: string; quality?: number; output: string; ext?: DefaultImgType }) {
+  const { path, quality = 80, output, ext } = options
   const convertRxt = ext || (await isImg(path))
+
   if (!convertRxt) {
     return Promise.reject(new Error('type error'))
   }

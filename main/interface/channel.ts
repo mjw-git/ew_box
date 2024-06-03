@@ -1,6 +1,7 @@
 import { ipcMain } from 'electron/main'
 
 class Channel {
+  static mainWindow: Electron.BrowserWindow
   name: string
   static listenerMap: Map<string, ElSelf.IpcMainOn> = new Map()
   constructor(name: string) {
