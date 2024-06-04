@@ -6,6 +6,7 @@ interface Window {
   }
   localApi: {
     onSave: <T>(callback: (e: Electron.IpcRendererEvent, params: LocalSaveParams<T>) => void) => void
+    onUpdate: <T>(callback: (e: Electron.IpcRendererEvent, params: LocalSaveParams<T>) => void) => void
     onDelete: (callback: (e: Electron.IpcRendererEvent, params: string) => void) => void
   }
 }
