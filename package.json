@@ -67,6 +67,7 @@
     "@mui/material": "^5.15.18",
     "@types/uuid": "^9.0.8",
     "ahooks": "^3.8.0",
+    "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.11",
     "electron-is-dev": "^2.0.0",
     "esbuild": "^0.21.3",

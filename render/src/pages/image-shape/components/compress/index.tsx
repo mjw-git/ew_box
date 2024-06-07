@@ -2,6 +2,7 @@ import { Button, styled } from '@mui/material'
 import styles from './index.module.less'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
@@ -21,8 +22,11 @@ const StickyButton = styled(Button)({
   position: 'sticky',
   bottom: 0,
 })
-
-const Compress = () => {
+interface CompressProps {
+  onTabChange: (index: number) => void
+}
+const Compress = (props: CompressProps) => {
+  const { onTabChange } = props
   const [imgList, setImgList] = useState<File[]>([])
   return (
     <div className={styles.container}>
@@ -58,23 +62,17 @@ const Compress = () => {
                     删除
                   </span>
                 </div>
-                <img
-                  onLoad={(e) => {
-                    console.log((e.target as HTMLImageElement).naturalWidth)
-                  }}
-                  loading='lazy'
-                  className={styles.img_item}
-                  src={'atom:///' + item.path}
-                  alt=''
-                />
+                <img loading='lazy' className={styles.img_item} src={'atom:///' + item.path} alt='' />
               </div>
             )
           })}
         </div>
       )}
       <StickyButton
-        onClick={() => {
-          window.sharpApi.compress(imgList.map((i) => i.path))
+        onClick={async () => {
+          await window.sharpApi.compress(imgList.map((i) => i.path))
+          setImgList([])
+          onTabChange(1)
         }}
         variant='contained'>
         Compress

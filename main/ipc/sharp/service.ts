@@ -1,7 +1,7 @@
 import { app } from 'electron'
 import electronIsDev from 'electron-is-dev'
 import { save, updateItem } from 'main/local'
-import { compressImg, formatTaskName, isExistFileOrDir } from 'main/utils'
+import { compressImg, formatTaskName, getFileSize, isExistFileOrDir } from 'main/utils'
 import { v4 as uuid } from 'uuid'
 import { join } from 'path'
 import { mkdirSync } from 'fs'
@@ -17,17 +17,20 @@ async function compressImageList(imgList: string[]) {
   save('task', { task_name: task_name, path: outputPath, task_id: _uuid, create_tm: new Date().getTime() }, { type: 'readwrite' })
   for (const img of imgList) {
     const img_uuid = uuid()
-    const temp = { id: img_uuid, task_id: _uuid, path: img, status: COMPRESS_STATUS.PROCESSING }
+    const size = await getFileSize(img)
+    const temp = { id: img_uuid, task_id: _uuid, path: img, status: COMPRESS_STATUS.PROCESSING, size }
     save('task_img_item', temp)
     const is_exit = await isExistFileOrDir(outputPath)
     if (!is_exit) {
       mkdirSync(outputPath)
     }
     compressImg({ path: img, output: outputPath })
-      .then(() => {
-        updateItem('task_img_item', { ...temp, status: COMPRESS_STATUS.SUCCESS })
+      .then(async (path) => {
+        const size = await getFileSize(path)
+
+        updateItem('task_img_item', { ...temp, status: COMPRESS_STATUS.SUCCESS, compressed_size: size })
       })
-      .catch((err) => {
+      .catch(() => {
         updateItem('task_img_item', { ...temp, status: COMPRESS_STATUS.WAITING })
       })
   }

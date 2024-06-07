@@ -2,7 +2,7 @@
 interface Window {
   electronAPI: any
   sharpApi: {
-    compress: (fileList: string[]) => void
+    compress: (fileList: string[]) => Promise<void>
   }
   localApi: {
     onSave: <T>(callback: (e: Electron.IpcRendererEvent, params: LocalSaveParams<T>) => void) => void

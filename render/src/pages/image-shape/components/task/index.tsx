@@ -1,16 +1,17 @@
-import { Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
+import { Collapse, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { useRequest } from 'ahooks'
-import PlutoIndexDb from '../../../../indexdb'
 import styles from './index.module.less'
-import { getIndexDBDataByIndex } from '../../../../indexdb/operate'
+import { getIndexDBData, getIndexDBDataByIndex } from '@/indexdb/operate'
 import { COMPRESS_STATUS } from '../../../../../../main/ipc/sharp/type'
-import OverflowText from '../../../../components/OverflowText'
-import SnackerBarContext from '../../../../context/snackerBarContext'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import SnackerBarContext from '@/context/snackerBarContext'
 import dayjs from 'dayjs'
+import copy from 'copy-to-clipboard'
+import { convertBytes } from '@/utils'
 function Row(props: { row: Schema.CompressTask }) {
   const { show } = useContext(SnackerBarContext)
   const { row } = props
@@ -49,10 +50,16 @@ function Row(props: { row: Schema.CompressTask }) {
         <TableCell align='center'>
           <Typography variant='body2'>{dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}</Typography>
         </TableCell>
-        <TableCell align='right'>
+        <TableCell align='center'>
           <Tooltip title={row.path}>
-            <Typography sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: 350 }} variant='body2'>
-              {row.path}
+            <Typography sx={{ color: '#4f8d6f', cursor: 'pointer' }} variant='body2'>
+              <span
+                onClick={() => {
+                  copy(row.path)
+                  show('copy success')
+                }}>
+                copy path
+              </span>
             </Typography>
           </Tooltip>
         </TableCell>
@@ -81,20 +88,42 @@ function Row(props: { row: Schema.CompressTask }) {
                 <TableHead>
                   <TableRow>
                     <TableCell>Path</TableCell>
+                    <TableCell>Size</TableCell>
+                    <TableCell>Compressed Size</TableCell>
                     <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody sx={{ border: '1px solid red' }}>
-                  {(data ?? []).map((historyRow) => (
-                    <TableRow key={historyRow.path}>
+                  {(data ?? []).map((item) => (
+                    <TableRow key={item.path}>
                       <TableCell sx={{ maxWidth: 120 }} component='th' scope='row'>
                         <Typography variant='caption' display='block' gutterBottom>
-                          {historyRow.path}
+                          {item.path}
                         </Typography>
                       </TableCell>
+                      <TableCell sx={{ maxWidth: 120 }} component='th' scope='row'>
+                        <Typography variant='caption' display='block' gutterBottom>
+                          {convertBytes(item.size)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell sx={{ maxWidth: 120 }} component='th' scope='row'>
+                        {item.status === COMPRESS_STATUS.SUCCESS ? (
+                          <Stack direction='row' alignItems='center' gap={1}>
+                            <Typography variant='caption' display='block' gutterBottom>
+                              {convertBytes(item.compressed_size)}
+                            </Typography>
+                            <Stack direction='column' justifyContent='center'>
+                              <ArrowDownwardIcon fontSize='small' sx={{ color: 'green', fontSize: 12 }} />
+                              <span style={{ fontSize: 12, color: 'green' }}>{(((item.size - item.compressed_size) * 100) / item.size).toFixed(1) + '%'}</span>
+                            </Stack>
+                          </Stack>
+                        ) : (
+                          '-'
+                        )}
+                      </TableCell>
                       <TableCell>
-                        <Typography sx={{ color: historyRow.status === 'success' ? 'green' : 'rebeccapurple' }} variant='caption' display='block' gutterBottom>
-                          {historyRow.status}
+                        <Typography sx={{ color: item.status === 'success' ? 'green' : 'rebeccapurple' }} variant='caption' display='block' gutterBottom>
+                          {item.status}
                         </Typography>
                       </TableCell>
                     </TableRow>
@@ -109,14 +138,8 @@ function Row(props: { row: Schema.CompressTask }) {
   )
 }
 const Task = () => {
-  const [tableData, setTableData] = useState<any[]>([])
-  useEffect(() => {
-    const request = PlutoIndexDb.db.transaction(['task'], 'readonly').objectStore('task').getAll()
-    request.onsuccess = (e) => {
-      setTableData(request.result.sort((a, b) => a.create_tm - b.create_tm) as any)
-    }
-    // console.log(temp.result)
-  }, [])
+  const { data: tableData = [] } = useRequest(() => getIndexDBData<Schema.CompressTask[]>('task'))
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label='collapsible table'>

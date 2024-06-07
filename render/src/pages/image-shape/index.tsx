@@ -37,7 +37,11 @@ const ImageShape = () => {
         <PlutoTab iconPosition='start' icon={<TaskIcon />} label='TASK' />
       </PlutoTabs>
       <TabPanel index={0} value={value}>
-        <Compress />
+        <Compress
+          onTabChange={(e) => {
+            setValue(e)
+          }}
+        />
       </TabPanel>
       <TabPanel index={1} value={value}>
         <Task />
