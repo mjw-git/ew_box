@@ -9,7 +9,7 @@ const PlutoTabs = styled(Tabs)({
   minHeight: '35px',
   paddingLeft: 20,
   '& .MuiTabs-indicator': {
-    backgroundColor: '#fc7e00',
+    backgroundColor: '#389e0d',
   },
   '& .MuiTab-root': {
     minHeight: '35px',
@@ -18,7 +18,7 @@ const PlutoTabs = styled(Tabs)({
 const PlutoTab = styled(Tab)({
   color: '#3d3d3d',
   '&.Mui-selected': {
-    color: '#fc7e00',
+    color: '#389e0d',
   },
   '&.Mui-focusVisible': {
     backgroundColor: '#d1eaff',

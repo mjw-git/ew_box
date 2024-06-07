@@ -1,9 +1,9 @@
-import { Button, styled } from '@mui/material'
+import { Button, Divider, Stack, Typography, styled } from '@mui/material'
 import styles from './index.module.less'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import SettingsIcon from '@mui/icons-material/Settings'
+import CancelPresentationIcon from '@mui/icons-material/CancelPresentation'
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
   height: '100%',
@@ -31,7 +31,7 @@ const Compress = (props: CompressProps) => {
   return (
     <div className={styles.container}>
       <div className={styles.file_upload_box}>
-        <CloudUploadIcon sx={{ fontSize: 62, color: '#fc7e00' }} fontSize='large' />
+        <CloudUploadIcon sx={{ fontSize: 62, color: '#389e0d' }} fontSize='large' />
         <div className={styles.upload_text}>Upload Image</div>
         <VisuallyHiddenInput
           multiple
@@ -44,7 +44,28 @@ const Compress = (props: CompressProps) => {
           type='file'
         />
       </div>
-
+      <Stack justifyContent='space-between' marginTop={1} gap={1} direction='row'>
+        <Stack className={styles.icon_wrapper} gap={0.5} alignItems='center' direction='row'>
+          <SettingsIcon className={styles.icon} />
+          <Typography className={styles.text_color} variant='caption'>
+            Setting
+          </Typography>
+        </Stack>
+        <Stack
+          onClick={() => {
+            setImgList([])
+          }}
+          className={styles.icon_wrapper}
+          gap={0.5}
+          alignItems='center'
+          direction='row'>
+          <CancelPresentationIcon className={styles.icon} />
+          <Typography className={styles.text_color} variant='caption'>
+            Clear All Images
+          </Typography>
+        </Stack>
+      </Stack>
+      <Divider classes={{ root: styles.divider_border }} sx={{ margin: '12px' }} />
       {Array.isArray(imgList) && (
         <div className={styles.img_list}>
           {imgList.map((item, index) => {
@@ -69,6 +90,7 @@ const Compress = (props: CompressProps) => {
         </div>
       )}
       <StickyButton
+        disabled={imgList.length === 0}
         onClick={async () => {
           await window.sharpApi.compress(imgList.map((i) => i.path))
           setImgList([])

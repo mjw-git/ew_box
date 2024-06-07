@@ -13,11 +13,30 @@
   width: 100%;
   border-radius: 20px;
   cursor: pointer;
-  border: 2px dashed #fc7e00;
+  border: 2px dashed #389e0d;
+}
+.divider_border {
+  border-color: #389e0d !important;
+}
+.icon_wrapper {
+  &:hover {
+    .icon,
+    .text_color {
+      color: #73d13d;
+    }
+  }
+}
+.text_color {
+  font-size: 14px;
+  cursor: pointer;
+  color: #389e0d;
+}
+.icon {
+  cursor: pointer;
+  color: #389e0d;
 }
 
 .img_list {
-  // height: 400px;
   overflow: auto;
   margin-top: 20px;
   display: grid;
@@ -70,7 +89,7 @@
   object-fit: contain;
 }
 .upload_text {
-  color: #fc7e00;
+  color: #389e0d;
   font-size: 20px;
   font-weight: 600;
 }

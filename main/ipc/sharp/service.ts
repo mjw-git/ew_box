@@ -3,7 +3,7 @@ import electronIsDev from 'electron-is-dev'
 import { save, updateItem } from 'main/local'
 import { compressImg, formatTaskName, getFileSize, isExistFileOrDir } from 'main/utils'
 import { v4 as uuid } from 'uuid'
-import { join } from 'path'
+import { join, basename } from 'path'
 import { mkdirSync } from 'fs'
 import { COMPRESS_STATUS } from './type'
 
@@ -18,7 +18,7 @@ async function compressImageList(imgList: string[]) {
   for (const img of imgList) {
     const img_uuid = uuid()
     const size = await getFileSize(img)
-    const temp = { id: img_uuid, task_id: _uuid, path: img, status: COMPRESS_STATUS.PROCESSING, size }
+    const temp = { id: img_uuid, task_id: _uuid, path: img, basename: basename(img), status: COMPRESS_STATUS.PROCESSING, size }
     save('task_img_item', temp)
     const is_exit = await isExistFileOrDir(outputPath)
     if (!is_exit) {

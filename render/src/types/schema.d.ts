@@ -6,6 +6,7 @@ declare namespace Schema {
     create_tm: number
   }
   interface CompressTaskItem {
+    basename: string
     size: number
     compressed_size: number
     task_id: string

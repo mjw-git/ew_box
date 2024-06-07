@@ -1,4 +1,4 @@
-import { Collapse, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
+import { Collapse, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography, styled } from '@mui/material'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
@@ -12,6 +12,10 @@ import SnackerBarContext from '@/context/snackerBarContext'
 import dayjs from 'dayjs'
 import copy from 'copy-to-clipboard'
 import { convertBytes } from '@/utils'
+const TaskTableCell = styled(TableCell)({
+  borderBottom: 'none',
+  padding: '8px',
+})
 function Row(props: { row: Schema.CompressTask }) {
   const { show } = useContext(SnackerBarContext)
   const { row } = props
@@ -19,8 +23,6 @@ function Row(props: { row: Schema.CompressTask }) {
   const { data, cancel } = useRequest(
     () =>
       getIndexDBDataByIndex<Schema.CompressTaskItem[]>('task_img_item', 'task_id', row.task_id).then((res) => {
-        console.log(res)
-
         return res
       }),
     {
@@ -37,20 +39,20 @@ function Row(props: { row: Schema.CompressTask }) {
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell>
+        <TaskTableCell>
           <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </TableCell>
-        <TableCell component='th' scope='row'>
+        </TaskTableCell>
+        <TaskTableCell component='th' scope='row'>
           <Typography variant='body2' gutterBottom>
             {row.task_name}
           </Typography>
-        </TableCell>
-        <TableCell align='center'>
+        </TaskTableCell>
+        <TaskTableCell align='center'>
           <Typography variant='body2'>{dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}</Typography>
-        </TableCell>
-        <TableCell align='center'>
+        </TaskTableCell>
+        <TaskTableCell align='center'>
           <Tooltip title={row.path}>
             <Typography sx={{ color: '#4f8d6f', cursor: 'pointer' }} variant='body2'>
               <span
@@ -62,9 +64,9 @@ function Row(props: { row: Schema.CompressTask }) {
               </span>
             </Typography>
           </Tooltip>
-        </TableCell>
+        </TaskTableCell>
 
-        <TableCell align='center'>
+        <TaskTableCell align='center'>
           <Typography
             onClick={async () => {
               const result = await window.systemApi.openPath(row.path)
@@ -78,7 +80,7 @@ function Row(props: { row: Schema.CompressTask }) {
             gutterBottom>
             open
           </Typography>
-        </TableCell>
+        </TaskTableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -93,20 +95,20 @@ function Row(props: { row: Schema.CompressTask }) {
                     <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody sx={{ border: '1px solid red' }}>
+                <TableBody>
                   {(data ?? []).map((item) => (
                     <TableRow key={item.path}>
-                      <TableCell sx={{ maxWidth: 120 }} component='th' scope='row'>
+                      <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
                         <Typography variant='caption' display='block' gutterBottom>
-                          {item.path}
+                          {item.basename}
                         </Typography>
                       </TableCell>
-                      <TableCell sx={{ maxWidth: 120 }} component='th' scope='row'>
+                      <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
                         <Typography variant='caption' display='block' gutterBottom>
                           {convertBytes(item.size)}
                         </Typography>
                       </TableCell>
-                      <TableCell sx={{ maxWidth: 120 }} component='th' scope='row'>
+                      <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
                         {item.status === COMPRESS_STATUS.SUCCESS ? (
                           <Stack direction='row' alignItems='center' gap={1}>
                             <Typography variant='caption' display='block' gutterBottom>
@@ -141,11 +143,11 @@ const Task = () => {
   const { data: tableData = [] } = useRequest(() => getIndexDBData<Schema.CompressTask[]>('task'))
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer>
       <Table aria-label='collapsible table'>
         <TableHead>
           <TableRow>
-            <TableCell />
+            <TableCell style={{ width: 30 }} />
             <TableCell>Task Name</TableCell>
             <TableCell align='center'>Create Time</TableCell>
             <TableCell align='center'>Save Path</TableCell>
