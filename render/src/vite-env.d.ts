@@ -9,6 +9,9 @@ interface Window {
     onUpdate: <T>(callback: (e: Electron.IpcRendererEvent, params: LocalSaveParams<T>) => void) => void
     onDelete: (callback: (e: Electron.IpcRendererEvent, params: string) => void) => void
   }
+  systemApi: {
+    openPath: (path: string) => Promise<string>
+  }
 }
 
 declare namespace Local {

@@ -8,7 +8,8 @@ export default class PlutoIndexDb {
     request.onupgradeneeded = () => {
       PlutoIndexDb.db = request.result
       PlutoIndexDb.db.createObjectStore('task', { keyPath: 'task_id' })
-      PlutoIndexDb.db.createObjectStore('task_img_item', { keyPath: 'id' })
+      const task_img_item = PlutoIndexDb.db.createObjectStore('task_img_item', { keyPath: 'id' })
+      task_img_item.createIndex('task_id', 'task_id', { unique: false })
     }
     // 连接成功
     request.onsuccess = () => {

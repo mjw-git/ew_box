@@ -10,13 +10,15 @@ import { COMPRESS_STATUS } from './type'
 async function compressImageList(imgList: string[]) {
   const url = app.getAppPath()
   const _uuid = uuid()
+
   const task_name = formatTaskName()
-  save('task', { name: task_name, task_id: _uuid, create_tm: new Date().getTime() }, { type: 'readwrite' })
+  const outputPath = electronIsDev ? join(__dirname, `../testImg/${task_name}_${_uuid}`) : url
+
+  save('task', { task_name: task_name, path: outputPath, task_id: _uuid, create_tm: new Date().getTime() }, { type: 'readwrite' })
   for (const img of imgList) {
     const img_uuid = uuid()
     const temp = { id: img_uuid, task_id: _uuid, path: img, status: COMPRESS_STATUS.PROCESSING }
     save('task_img_item', temp)
-    const outputPath = electronIsDev ? join(__dirname, `../testImg/${task_name}_${_uuid}`) : url
     const is_exit = await isExistFileOrDir(outputPath)
     if (!is_exit) {
       mkdirSync(outputPath)

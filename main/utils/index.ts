@@ -27,7 +27,7 @@ export async function isImg(path: string) {
 }
 export function formatTaskName() {
   const date = new Date()
-  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}${date.getHours()}时${date.getMinutes()}分`
+  return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日${date.getHours()}时${date.getMinutes()}分`
 }
 export async function compressImg(options: { path: string; quality?: number; output: string; ext?: DefaultImgType }) {
   const { path, quality = 80, output, ext } = options

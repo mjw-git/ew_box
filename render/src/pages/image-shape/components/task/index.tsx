@@ -1,34 +1,38 @@
-import { Box, Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import { Collapse, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography } from '@mui/material'
+
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useRequest } from 'ahooks'
 import PlutoIndexDb from '../../../../indexdb'
-function createData(name: string, calories: number, fat: number, carbs: number, protein: number, price: number) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      {
-        date: '2020-01-05',
-        customerId: '11091700',
-        amount: 3,
-      },
-      {
-        date: '2020-01-02',
-        customerId: 'Anonymous',
-        amount: 1,
-      },
-    ],
-  }
-}
-function Row(props: { row: any }) {
+import styles from './index.module.less'
+import { getIndexDBDataByIndex } from '../../../../indexdb/operate'
+import { COMPRESS_STATUS } from '../../../../../../main/ipc/sharp/type'
+import OverflowText from '../../../../components/OverflowText'
+import SnackerBarContext from '../../../../context/snackerBarContext'
+import dayjs from 'dayjs'
+function Row(props: { row: Schema.CompressTask }) {
+  const { show } = useContext(SnackerBarContext)
   const { row } = props
   const [open, setOpen] = React.useState(false)
-  const [imgList, setImgList] = useState()
+  const { data, cancel } = useRequest(
+    () =>
+      getIndexDBDataByIndex<Schema.CompressTaskItem[]>('task_img_item', 'task_id', row.task_id).then((res) => {
+        console.log(res)
+
+        return res
+      }),
+    {
+      onSuccess: (list) => {
+        if (!list.some((i) => i.status === COMPRESS_STATUS.PROCESSING)) {
+          cancel()
+        }
+      },
+      pollingInterval: 1000,
+      refreshDeps: [open],
+      ready: !!open,
+    },
+  )
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -38,58 +42,78 @@ function Row(props: { row: any }) {
           </IconButton>
         </TableCell>
         <TableCell component='th' scope='row'>
-          {row.name}
+          <Typography variant='body2' gutterBottom>
+            {row.task_name}
+          </Typography>
         </TableCell>
-        <TableCell align='center'>{row.create_time}</TableCell>
         <TableCell align='center'>
-          <Typography sx={{ color: 'red' }} component='a'>
-            open folder
+          <Typography variant='body2'>{dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}</Typography>
+        </TableCell>
+        <TableCell align='right'>
+          <Tooltip title={row.path}>
+            <Typography sx={{ textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', width: 350 }} variant='body2'>
+              {row.path}
+            </Typography>
+          </Tooltip>
+        </TableCell>
+
+        <TableCell align='center'>
+          <Typography
+            onClick={async () => {
+              const result = await window.systemApi.openPath(row.path)
+              if (result === 'error') {
+                show('file is not exits')
+              }
+            }}
+            className={styles.link_text}
+            variant='caption'
+            display='block'
+            gutterBottom>
+            open
           </Typography>
         </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout='auto' unmountOnExit>
-            <Box sx={{ margin: 1 }}>
-              <Typography variant='h6' gutterBottom component='div'>
-                History
-              </Typography>
-              {/* <Table size='small' aria-label='purchases'>
+            <TableContainer sx={{ margin: 1, maxHeight: 300 }}>
+              <Table stickyHeader size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell align='right'>Amount</TableCell>
-                    <TableCell align='right'>Total price ($)</TableCell>
+                    <TableCell>Path</TableCell>
+                    <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component='th' scope='row'>
-                        {historyRow.date}
+                <TableBody sx={{ border: '1px solid red' }}>
+                  {(data ?? []).map((historyRow) => (
+                    <TableRow key={historyRow.path}>
+                      <TableCell sx={{ maxWidth: 120 }} component='th' scope='row'>
+                        <Typography variant='caption' display='block' gutterBottom>
+                          {historyRow.path}
+                        </Typography>
                       </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align='right'>{historyRow.amount}</TableCell>
-                      <TableCell align='right'>{Math.round(historyRow.amount * row.price * 100) / 100}</TableCell>
+                      <TableCell>
+                        <Typography sx={{ color: historyRow.status === 'success' ? 'green' : 'rebeccapurple' }} variant='caption' display='block' gutterBottom>
+                          {historyRow.status}
+                        </Typography>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
-              </Table> */}
-            </Box>
+              </Table>
+            </TableContainer>
           </Collapse>
         </TableCell>
       </TableRow>
     </React.Fragment>
   )
 }
-const rows = [createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99), createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99), createData('Eclair', 262, 16.0, 24, 6.0, 3.79), createData('Cupcake', 305, 3.7, 67, 4.3, 2.5), createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5)]
 const Task = () => {
   const [tableData, setTableData] = useState<any[]>([])
   useEffect(() => {
     const request = PlutoIndexDb.db.transaction(['task'], 'readonly').objectStore('task').getAll()
     request.onsuccess = (e) => {
-      setTableData(request.result as any)
+      setTableData(request.result.sort((a, b) => a.create_tm - b.create_tm) as any)
     }
     // console.log(temp.result)
   }, [])
@@ -101,9 +125,8 @@ const Task = () => {
             <TableCell />
             <TableCell>Task Name</TableCell>
             <TableCell align='center'>Create Time</TableCell>
+            <TableCell align='center'>Save Path</TableCell>
             <TableCell align='center'>Operate</TableCell>
-            {/* <TableCell align='right'>Carbs&nbsp;(g)</TableCell>
-            <TableCell align='right'>Protein&nbsp;(g)</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>

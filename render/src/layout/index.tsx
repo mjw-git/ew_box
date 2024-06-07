@@ -1,9 +1,19 @@
 import { Link, Outlet } from 'react-router-dom'
 import styles from './index.module.less'
 import logo from '../assets/images/pluto.png'
-import { Stack, Divider } from '@mui/material'
+import { Stack, Divider, Snackbar } from '@mui/material'
 import useInitLocalApi from '../hook/useInitLocalApi'
+import SnackerBarContext from '../context/snackerBarContext'
+import { useState } from 'react'
 const Layout = () => {
+  const [value, setValue] = useState('')
+  const [open, setOpen] = useState(false)
+  const handleOpen = (msg: string) => {
+    console.log(msg)
+
+    setValue(msg)
+    setOpen(true)
+  }
   useInitLocalApi()
   return (
     <div>
@@ -24,7 +34,21 @@ const Layout = () => {
           </div>
         </nav>
         <main className={styles.main_container}>
-          <Outlet />
+          <Snackbar
+            onClose={() => {
+              setOpen(false)
+            }}
+            autoHideDuration={2400}
+            open={open}
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            message={value}
+          />
+          <SnackerBarContext.Provider
+            value={{
+              show: handleOpen,
+            }}>
+            <Outlet />
+          </SnackerBarContext.Provider>
         </main>
       </div>
     </div>
