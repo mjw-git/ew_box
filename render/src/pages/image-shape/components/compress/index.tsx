@@ -1,8 +1,9 @@
-import { Button, Divider, Stack, Typography, styled } from '@mui/material'
+import { Button, Checkbox, Divider, Stack, Typography, styled } from '@mui/material'
 import styles from './index.module.less'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useState } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
 import CancelPresentationIcon from '@mui/icons-material/CancelPresentation'
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
@@ -46,10 +47,12 @@ const Compress = (props: CompressProps) => {
       </div>
       <Stack justifyContent='space-between' marginTop={1} gap={1} direction='row'>
         <Stack className={styles.icon_wrapper} gap={0.5} alignItems='center' direction='row'>
-          <SettingsIcon className={styles.icon} />
-          <Typography className={styles.text_color} variant='caption'>
-            Setting
-          </Typography>
+          <Stack alignItems='center' flexDirection='row'>
+            <Checkbox />
+            <Typography className={styles.text_color} variant='caption'>
+              all webp
+            </Typography>
+          </Stack>
         </Stack>
         <Stack
           onClick={() => {
@@ -59,7 +62,7 @@ const Compress = (props: CompressProps) => {
           gap={0.5}
           alignItems='center'
           direction='row'>
-          <CancelPresentationIcon className={styles.icon} />
+          <DeleteForeverIcon className={styles.icon} />
           <Typography className={styles.text_color} variant='caption'>
             Clear All Images
           </Typography>

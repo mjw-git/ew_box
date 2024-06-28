@@ -1,16 +1,16 @@
-import { BrowserView, BrowserWindow, app, protocol } from 'electron'
+import { BrowserWindow, app, protocol } from 'electron'
 import isDev from 'electron-is-dev'
-import { ipcMain } from 'electron/main'
 import { resolve, normalize } from 'path'
 import registerService from './ipc'
 import Channel from './interface/channel'
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
-    icon: resolve(__dirname, '../assets/pluto.png'),
     alwaysOnTop: false,
     height: 1200,
     width: 1200,
     minWidth: 800,
+    frame: false,
+    titleBarStyle: 'hidden',
     webPreferences: {
       preload: resolve(__dirname, './preload/index.js'),
       webSecurity: false,
@@ -20,7 +20,6 @@ function createWindow() {
   })
   Channel.mainWindow = window
   registerService()
-
   if (isDev) {
     window.webContents.openDevTools()
     window.loadURL('http://localhost:8889')
@@ -36,7 +35,7 @@ function registerProtocol() {
     callback(decodeURI(normalize(url.split('?')[0])))
   })
 }
-app.dock.setIcon(resolve(__dirname, '../assets/pluto.png'))
+app.dock.setIcon(resolve(__dirname, '../assets/icons.iconset/icon_512x512.png'))
 app.on('ready', () => {
   process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
 })

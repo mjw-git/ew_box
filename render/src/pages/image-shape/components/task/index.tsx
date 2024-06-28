@@ -1,4 +1,4 @@
-import { Collapse, IconButton, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography, styled } from '@mui/material'
+import { Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography, styled } from '@mui/material'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
@@ -140,7 +140,11 @@ function Row(props: { row: Schema.CompressTask }) {
   )
 }
 const Task = () => {
-  const { data: tableData = [] } = useRequest(() => getIndexDBData<Schema.CompressTask[]>('task'))
+  const { data: tableData = [] } = useRequest(() =>
+    getIndexDBData<Schema.CompressTask[]>('task').then((res) => {
+      return (res ?? []).sort((pre, next) => next.create_tm - pre.create_tm)
+    }),
+  )
 
   return (
     <TableContainer>

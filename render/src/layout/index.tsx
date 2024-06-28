@@ -5,7 +5,9 @@ import { Stack, Divider, Snackbar } from '@mui/material'
 import useInitLocalApi from '../hook/useInitLocalApi'
 import SnackerBarContext from '../context/snackerBarContext'
 import { useState } from 'react'
+
 const Layout = () => {
+  console.log(logo)
   const [value, setValue] = useState('')
   const [open, setOpen] = useState(false)
   const handleOpen = (msg: string) => {
@@ -19,19 +21,10 @@ const Layout = () => {
     <div>
       <div className={styles.container}>
         <nav className={styles.menu_container}>
-          <Stack spacing={1} direction='row' alignItems='center'>
-            <img width={50} src={logo} alt='pluto' />
-
-            <div className={styles.title}>
-              <b>P</b>luto
-            </div>
+          <Stack spacing={1} direction='column' justifyContent='center'>
+            <img width={48} src={logo} alt='pluto' />
           </Stack>
-          <Divider sx={{ width: '85%', borderColor: '#ffffff56', marginTop: 1 }} variant='middle' component='div'></Divider>
-          <div className={styles.menu_item}>
-            <Link to='/shape'>
-              <div>Image Sharp</div>
-            </Link>
-          </div>
+          <Stack spacing={1} direction='column' justifyContent='center'></Stack>
         </nav>
         <main className={styles.main_container}>
           <Snackbar
