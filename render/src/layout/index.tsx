@@ -5,9 +5,9 @@ import { Stack, Divider, Snackbar } from '@mui/material'
 import useInitLocalApi from '../hook/useInitLocalApi'
 import SnackerBarContext from '../context/snackerBarContext'
 import { useState } from 'react'
+import SvgIcon from '@/components/SvgIcon'
 
 const Layout = () => {
-  console.log(logo)
   const [value, setValue] = useState('')
   const [open, setOpen] = useState(false)
   const handleOpen = (msg: string) => {
@@ -20,12 +20,15 @@ const Layout = () => {
   return (
     <div>
       <div className={styles.container}>
-        <nav className={styles.menu_container}>
+        <Stack component='nav' gap={4} className={styles.menu_container}>
           <Stack spacing={1} direction='column' justifyContent='center'>
             <img width={48} src={logo} alt='pluto' />
           </Stack>
-          <Stack spacing={1} direction='column' justifyContent='center'></Stack>
-        </nav>
+          <Stack spacing={1} gap={1} direction='column' justifyContent='center'>
+            <SvgIcon className={styles.menu_icon} width={28} height={30} name='pic' />
+            <SvgIcon className={styles.menu_icon} width={28} height={30} name='password_box' />
+          </Stack>
+        </Stack>
         <main className={styles.main_container}>
           <Snackbar
             onClose={() => {

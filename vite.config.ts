@@ -1,14 +1,23 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { ElectronDevPlugin } from './plugins/vite-plugin-electron-dev'
+console.log(path.resolve(process.cwd(), 'src/assets/svg'))
 // https://vitejs.dev/config/
 export default defineConfig({
   root: path.join(__dirname, './render'),
   server: {
     port: 8889,
   },
-  plugins: [react(), ElectronDevPlugin()],
+  plugins: [
+    react(),
+    ElectronDevPlugin(),
+    createSvgIconsPlugin({
+      iconDirs: [path.resolve(process.cwd(), 'render/src/assets/svg')], //svg地址
+      symbolId: 'icon-[dir]-[name]',
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './render/src'),

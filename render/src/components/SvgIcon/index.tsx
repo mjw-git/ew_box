@@ -1,8 +1,24 @@
-/*
- * @Author: mengjiawei mengjiawei@moresec.cn
- * @Date: 2024-06-28 15:02:49
- * @LastEditors: mengjiawei mengjiawei@moresec.cn
- * @LastEditTime: 2024-06-28 15:02:50
- * @FilePath: /electron-react/render/src/components/SvgIcon/index.tsx
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
+import styles from './index.module.less'
+import { HTMLAttributes } from 'react'
+import classnames from 'classnames'
+interface SvgIconProps extends HTMLAttributes<HTMLSpanElement> {
+  name: string
+  size?: number
+  width?: number
+  height?: number
+  color?: string
+}
+const SvgIcon = (props: SvgIconProps) => {
+  const { name, prefix = 'icon', className, width = 30, height, style, ...rest } = props
+  const symbolId = `#${prefix}-${name}`
+  const cls = classnames(styles.icon_wrapper, className)
+  return (
+    <span className={cls} {...rest} style={{ ...style }}>
+      <svg aria-hidden='true' style={{ height, width }}>
+        <use href={symbolId} />
+      </svg>
+    </span>
+  )
+}
+
+export default SvgIcon
