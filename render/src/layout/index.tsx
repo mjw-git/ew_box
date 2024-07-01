@@ -6,6 +6,7 @@ import useInitLocalApi from '../hook/useInitLocalApi'
 import SnackerBarContext from '../context/snackerBarContext'
 import { useState } from 'react'
 import SvgIcon from '@/components/SvgIcon'
+import './index.less'
 
 const Layout = () => {
   const [value, setValue] = useState('')
