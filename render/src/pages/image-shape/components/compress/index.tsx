@@ -1,8 +1,9 @@
-import { Button, Checkbox, Divider, Stack, Typography, styled } from '@mui/material'
+import { Button, Checkbox, Divider, Stack, Tabs, Typography, styled } from '@mui/material'
 import styles from './index.module.less'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useState } from 'react'
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
   height: '100%',
