@@ -2,7 +2,7 @@ export default class PlutoIndexDb {
   static db: IDBDatabase
   private dbName: string
 
-  initDB() {
+  initDB(afterInitFn: () => void) {
     const request = indexedDB.open(this.dbName, 3)
     // 创建或更新成功
     request.onupgradeneeded = () => {
@@ -14,14 +14,15 @@ export default class PlutoIndexDb {
     // 连接成功
     request.onsuccess = () => {
       PlutoIndexDb.db = request.result
+      afterInitFn()
     }
     // 连接失败
     request.onerror = (e) => {
       console.log(e)
     }
   }
-  constructor(name: string) {
+  constructor(name: string, afterInitFn: () => void) {
     this.dbName = name
-    this.initDB()
+    this.initDB(afterInitFn)
   }
 }

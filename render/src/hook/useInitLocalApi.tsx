@@ -1,7 +1,6 @@
 import PlutoIndexDb from '../indexdb'
 
 const useInitLocalApi = () => {
-  new PlutoIndexDb('pluto')
   window.localApi.onSave((e, value: Local.LocalSaveParams<{ name: string; value: any }>) => {
     const request = PlutoIndexDb.db
       .transaction([value.name], value.options?.type || 'readwrite')

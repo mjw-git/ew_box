@@ -4,6 +4,8 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styles from './index.module.less'
 import PlutoSelect from '@/components/Select'
 import PlutoButton from '@/components/Button'
+import { useRequest } from 'ahooks'
+import { getIndexDBData } from '@/indexdb/operate'
 
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
@@ -31,6 +33,14 @@ const ImageShape = () => {
     await window.sharpApi.compress(imgList.map((i) => i.path))
     setImgList([])
   }
+
+  const { data: tableData = [] } = useRequest(() =>
+    getIndexDBData<Schema.CompressTask[]>('task').then((res) => {
+      return (res ?? []).sort((pre, next) => next.create_tm - pre.create_tm)
+    }),
+  )
+  console.log(tableData)
+
   return (
     <>
       <div className={styles.container}>
