@@ -6,9 +6,10 @@ import Channel from './interface/channel'
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
     alwaysOnTop: false,
-    height: 1200,
+    height: 800,
     width: 1200,
-    minWidth: 800,
+    minWidth: 1000,
+    minHeight: 600,
     frame: false,
     titleBarStyle: 'hidden',
     webPreferences: {

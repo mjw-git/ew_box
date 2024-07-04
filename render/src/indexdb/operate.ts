@@ -2,8 +2,6 @@ import PlutoIndexDb from '.'
 
 export async function getIndexDBData<T>(name: string): Promise<T> {
   return new Promise((resolve, reject) => {
-    console.log(PlutoIndexDb.db)
-
     const request = PlutoIndexDb.db.transaction([name], 'readonly').objectStore(name).getAll()
     request.onsuccess = () => {
       resolve(request.result as T)

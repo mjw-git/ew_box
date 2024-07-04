@@ -39,22 +39,27 @@ function Row(props: { row: Schema.CompressTask }) {
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TaskTableCell>
+        {/* <TaskTableCell>
           <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
-        </TaskTableCell>
+        </TaskTableCell> */}
         <TaskTableCell component='th' scope='row'>
-          <Typography variant='body2' gutterBottom>
-            {row.task_name}
-          </Typography>
+          <Stack flexDirection='row' alignItems='center'>
+            <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+            <Typography variant='body2' gutterBottom>
+              {row.task_name}
+            </Typography>
+          </Stack>
         </TaskTableCell>
-        <TaskTableCell align='center'>
+        <TaskTableCell align='left'>
           <Typography variant='body2'>{dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}</Typography>
         </TaskTableCell>
-        <TaskTableCell align='center'>
+        {/* <TaskTableCell align='left'>
           <Tooltip title={row.path}>
-            <Typography sx={{ color: '#4f8d6f', cursor: 'pointer' }} variant='body2'>
+            <Typography className='text-primary cursor-pointer' variant='body2'>
               <span
                 onClick={() => {
                   copy(row.path)
@@ -64,9 +69,9 @@ function Row(props: { row: Schema.CompressTask }) {
               </span>
             </Typography>
           </Tooltip>
-        </TaskTableCell>
+        </TaskTableCell> */}
 
-        <TaskTableCell align='center'>
+        <TaskTableCell align='left'>
           <Typography
             onClick={async () => {
               const result = await window.systemApi.openPath(row.path)
@@ -74,7 +79,7 @@ function Row(props: { row: Schema.CompressTask }) {
                 show('file is not exits')
               }
             }}
-            className={styles.link_text}
+            className='text-primary'
             variant='caption'
             display='block'
             gutterBottom>
@@ -151,11 +156,9 @@ const Task = () => {
       <Table aria-label='collapsible table'>
         <TableHead>
           <TableRow>
-            <TableCell style={{ width: 30 }} />
-            <TableCell>Task Name</TableCell>
-            <TableCell align='center'>Create Time</TableCell>
-            <TableCell align='center'>Save Path</TableCell>
-            <TableCell align='center'>Operate</TableCell>
+            <TableCell align='left'>Task Name</TableCell>
+            <TableCell align='left'>Create Time</TableCell>
+            <TableCell align='left'>Operate</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

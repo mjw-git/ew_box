@@ -3,11 +3,12 @@ export default class PlutoIndexDb {
   private dbName: string
 
   initDB(afterInitFn: () => void) {
-    const request = indexedDB.open(this.dbName, 3)
+    const request = indexedDB.open(this.dbName, 4)
     // 创建或更新成功
     request.onupgradeneeded = () => {
       PlutoIndexDb.db = request.result
       PlutoIndexDb.db.createObjectStore('task', { keyPath: 'task_id' })
+      afterInitFn()
       const task_img_item = PlutoIndexDb.db.createObjectStore('task_img_item', { keyPath: 'id' })
       task_img_item.createIndex('task_id', 'task_id', { unique: false })
     }

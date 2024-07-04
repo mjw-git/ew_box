@@ -23,6 +23,7 @@ const PlutoButton: React.FC<React.HTMLAttributes<HTMLButtonElement>> = (props) =
     removeRipple(button)
     // 将 ripple 添加到 button 上
     button.appendChild(circle)
+    onClick?.(event)
   }
 
   // 移除 ripple
