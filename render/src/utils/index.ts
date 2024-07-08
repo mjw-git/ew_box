@@ -1,3 +1,4 @@
+export const PIC_PATH_PREFIX = 'atom:///'
 export function convertBytes(bytes: number, unit = 'B') {
   const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
   let i = 0

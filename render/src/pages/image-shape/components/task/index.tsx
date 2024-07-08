@@ -2,16 +2,17 @@ import { Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContaine
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import React, { useContext } from 'react'
+import React, { forwardRef, useContext, useImperativeHandle } from 'react'
 import { useRequest } from 'ahooks'
-import styles from './index.module.less'
 import { getIndexDBData, getIndexDBDataByIndex } from '@/indexdb/operate'
 import { COMPRESS_STATUS } from '../../../../../../main/ipc/sharp/type'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import SnackerBarContext from '@/context/snackerBarContext'
 import dayjs from 'dayjs'
-import copy from 'copy-to-clipboard'
 import { convertBytes } from '@/utils'
+export interface TaskRefType {
+  getList?: () => void
+}
 const TaskTableCell = styled(TableCell)({
   borderBottom: 'none',
   padding: '8px',
@@ -39,11 +40,6 @@ function Row(props: { row: Schema.CompressTask }) {
   return (
     <React.Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        {/* <TaskTableCell>
-          <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TaskTableCell> */}
         <TaskTableCell component='th' scope='row'>
           <Stack flexDirection='row' alignItems='center'>
             <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
@@ -57,19 +53,6 @@ function Row(props: { row: Schema.CompressTask }) {
         <TaskTableCell align='left'>
           <Typography variant='body2'>{dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}</Typography>
         </TaskTableCell>
-        {/* <TaskTableCell align='left'>
-          <Tooltip title={row.path}>
-            <Typography className='text-primary cursor-pointer' variant='body2'>
-              <span
-                onClick={() => {
-                  copy(row.path)
-                  show('copy success')
-                }}>
-                copy path
-              </span>
-            </Typography>
-          </Tooltip>
-        </TaskTableCell> */}
 
         <TaskTableCell align='left'>
           <Typography
@@ -79,7 +62,7 @@ function Row(props: { row: Schema.CompressTask }) {
                 show('file is not exits')
               }
             }}
-            className='text-primary'
+            className='text-primary cursor-pointer'
             variant='caption'
             display='block'
             gutterBottom>
@@ -144,13 +127,21 @@ function Row(props: { row: Schema.CompressTask }) {
     </React.Fragment>
   )
 }
-const Task = () => {
-  const { data: tableData = [] } = useRequest(() =>
+const Task = (_: any, ref: React.Ref<TaskRefType>) => {
+  const { data: tableData = [], run: getRun } = useRequest(() =>
     getIndexDBData<Schema.CompressTask[]>('task').then((res) => {
       return (res ?? []).sort((pre, next) => next.create_tm - pre.create_tm)
     }),
   )
-
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        getList: getRun,
+      }
+    },
+    [],
+  )
   return (
     <TableContainer>
       <Table aria-label='collapsible table'>
@@ -170,4 +161,4 @@ const Task = () => {
     </TableContainer>
   )
 }
-export default Task
+export default forwardRef(Task)

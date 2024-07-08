@@ -5,9 +5,9 @@ import { compressImg, formatTaskName, getFileSize, isExistFileOrDir } from 'main
 import { v4 as uuid } from 'uuid'
 import { join, basename } from 'path'
 import { mkdirSync } from 'fs'
-import { COMPRESS_STATUS } from './type'
+import { COMPRESS_STATUS, CompressOptions } from './type'
 
-async function compressImageList(imgList: string[]) {
+async function compressImageList(imgList: string[], options: CompressOptions) {
   const url = app.getAppPath()
   const _uuid = uuid()
 
@@ -24,10 +24,10 @@ async function compressImageList(imgList: string[]) {
     if (!is_exit) {
       mkdirSync(outputPath)
     }
-    compressImg({ path: img, output: outputPath })
+
+    compressImg({ path: img, output: outputPath, quality: options.quality, ext: options.type === 'self' ? undefined : options.type })
       .then(async (path) => {
         const size = await getFileSize(path)
-
         updateItem('task_img_item', { ...temp, status: COMPRESS_STATUS.SUCCESS, compressed_size: size })
       })
       .catch(() => {

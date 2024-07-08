@@ -12,13 +12,10 @@ import classNames from 'classnames'
 
 const Layout = () => {
   const { pathname } = useLocation()
-  console.log(pathname)
 
   const [value, setValue] = useState('')
   const [open, setOpen] = useState(false)
   const handleOpen = (msg: string) => {
-    console.log(msg)
-
     setValue(msg)
     setOpen(true)
   }

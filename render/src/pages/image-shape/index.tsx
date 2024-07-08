@@ -1,22 +1,24 @@
 import { styled, Select, MenuItem, Stack, Slider } from '@mui/material'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styles from './index.module.less'
 import PlutoSelect from '@/components/Select'
 import PlutoButton from '@/components/Button'
 import { useRequest } from 'ahooks'
 import { getIndexDBData } from '@/indexdb/operate'
-import Task from './components/task'
+import Task, { TaskRefType } from './components/task'
+import ImagePreview from '@/components/ImagePreview'
 
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
+  fontSize: 0,
   height: '100%',
   overflow: 'hidden',
   bottom: 0,
   left: 0,
-  zIndex: 999,
+  zIndex: 0,
   position: 'absolute',
-  cursor: 'pointer',
+  cursor: 'pointer !important',
   whiteSpace: 'nowrap',
   width: '100%',
 })
@@ -28,21 +30,22 @@ const QualitySlider = styled(Slider)({
 })
 const ImageShape = () => {
   const [imgList, setImgList] = useState<File[]>([])
-  const [value, setValue] = useState('self')
+  const [type, setType] = useState('self')
+  const [open, setOpen] = useState(false)
   const [quality, setQuality] = useState(80)
-  const handleCompress = async () => {
-    console.log(11)
+  const [previewIdx, setPreviewIdx] = useState(0)
+  const taskRef = useRef<TaskRefType>(null)
 
-    await window.sharpApi.compress(imgList.map((i) => i.path))
+  const handleCompress = async () => {
+    if (imgList.length === 0) return
+
+    await window.sharpApi.compress(
+      imgList.map((i) => i.path),
+      { type: type, quality: quality },
+    )
+    taskRef.current?.getList?.()
     setImgList([])
   }
-
-  const { data: tableData = [] } = useRequest(() =>
-    getIndexDBData<Schema.CompressTask[]>('task').then((res) => {
-      return (res ?? []).sort((pre, next) => next.create_tm - pre.create_tm)
-    }),
-  )
-  console.log(tableData)
 
   return (
     <>
@@ -54,7 +57,9 @@ const ImageShape = () => {
               Start
             </PlutoButton>
             <div className='w-[140px] gap-[20px]  px-[12px] py-[4px] cursor-pointer flex items-center  relative  border-solid rounded-[12px] border-primary border-[2px]'>
-              <CloudUploadIcon className='text-primary text-4xl cursor-pointer' fontSize='medium' />
+              <span className='cursor-pointer'>
+                <CloudUploadIcon className='text-primary text-4xl cursor-pointer' fontSize='medium' />
+              </span>
               <div className='text-primary  font-semibold'>Upload</div>
               <VisuallyHiddenInput
                 title=''
@@ -74,9 +79,9 @@ const ImageShape = () => {
             <Stack gap={1} alignItems='center' flexDirection='row'>
               <span className='text-primary inline-block w-[120px]'>Compress Type</span>
               <PlutoSelect
-                value={value}
+                value={type}
                 onChange={(e) => {
-                  setValue(e.target.value as string)
+                  setType(e.target.value as string)
                 }}
                 placeholder='select'>
                 <MenuItem value='webp'>webp</MenuItem>
@@ -104,7 +109,15 @@ const ImageShape = () => {
           </div>
           <div className='mt-[20px] border-solid border-primary max-h-[600px] overflow-auto bg-[#fff] rounded-[12px] border-[1px] p-[8px]'>
             <div className='text-primary font-bold'> Compress Task</div>
-            <Task />
+            <Task ref={taskRef} />
+            <ImagePreview
+              open={open}
+              onClose={() => {
+                setOpen(false)
+              }}
+              currentIdx={previewIdx}
+              imgList={imgList}
+            />
           </div>
         </div>
 
@@ -115,7 +128,14 @@ const ImageShape = () => {
               return (
                 <div key={item.path} className={styles.img_box}>
                   <div className={styles.operator_mask}>
-                    <span className={styles.preview}>预览</span>
+                    <span
+                      onClick={() => {
+                        setOpen(true)
+                        setPreviewIdx(index)
+                      }}
+                      className={styles.preview}>
+                      preview
+                    </span>
                     <span
                       onClick={() => {
                         const temp = [...imgList]
@@ -123,7 +143,7 @@ const ImageShape = () => {
                         setImgList(temp)
                       }}
                       className={styles.preview}>
-                      删除
+                      delete
                     </span>
                   </div>
                   <img loading='lazy' className={styles.img_item} src={'atom:///' + item.path} alt='' />

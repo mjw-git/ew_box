@@ -5,3 +5,7 @@ export enum COMPRESS_STATUS {
   SUCCESS = 'success',
   FAIL = 'fail',
 }
+export interface CompressOptions {
+  type: SharpSpace.DefaultImgType | 'self'
+  quality: number
+}

@@ -1,8 +1,7 @@
 //判断文件是否存在
 import fs from 'fs/promises'
-import { extname, basename } from 'path'
+import { extname, basename, parse } from 'path'
 import sharp from 'sharp'
-export type DefaultImgType = 'png' | 'jpeg' | 'webp'
 export async function isExistFileOrDir(path: string) {
   return fs
     .stat(path)
@@ -24,7 +23,7 @@ export async function isImg(path: string) {
     const imgReg = /\.(jpg|jpeg|png|webp)$/i
     const ext = extname(path).toLowerCase()
     let convertExt = ext === '.jpg' ? '.jpeg' : ext
-    return (imgReg.test(convertExt) ? convertExt.replace('.', '') : null) as DefaultImgType | null
+    return (imgReg.test(convertExt) ? convertExt.replace('.', '') : null) as SharpSpace.DefaultImgType | null
   } catch (error) {
     return Promise.reject(error)
   }
@@ -35,14 +34,18 @@ export function formatTaskName() {
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日${date.getHours()}时${date.getMinutes()}分`
 }
 
-export async function compressImg(options: { path: string; quality?: number; output: string; ext?: DefaultImgType }) {
+export async function compressImg(options: { path: string; quality?: number; output: string; ext?: SharpSpace.DefaultImgType }) {
   const { path, quality = 80, output, ext } = options
+
   const convertRxt = ext || (await isImg(path))
 
   if (!convertRxt) {
     return Promise.reject(new Error('type error'))
   }
-  const savePath = `${removeLastSlash(output)}/${basename(path)}`
+  console.log(basename(path), path, 'base')
+
+  const savePath = `${removeLastSlash(output)}/${parse(basename(path)).name}.${convertRxt}`
+
   return sharp(path)
     ?.[convertRxt]?.({ quality })
     .toFile(savePath)
