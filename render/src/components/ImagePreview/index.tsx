@@ -7,14 +7,14 @@ import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOu
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined'
 import { PIC_PATH_PREFIX } from '@/utils'
 interface ImagePreviewProps {
-  imgList: File[]
+  imgList: string[]
   open: boolean
   onClose: () => void
-  currentIdx: number
+  currentIdx?: number
 }
 
 const ImagePreview = (props: ImagePreviewProps) => {
-  const { onClose, currentIdx, imgList, open } = props
+  const { onClose, currentIdx = 0, imgList, open } = props
   if (!open) return null
 
   const [scaleCount, setScaleCount] = useState(1)
@@ -97,7 +97,7 @@ const ImagePreview = (props: ImagePreviewProps) => {
         <CancelOutlinedIcon />
       </span>
       <div className='text-white' style={{ transform: `scale(${scaleCount})` }}>
-        <img className='w-[50vw]' src={`${PIC_PATH_PREFIX}${currentImg.path}`} alt='no pic' />
+        <img className='w-[50vw]' src={`${currentImg}`} alt='no pic' />
       </div>
     </div>
   )

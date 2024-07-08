@@ -8,6 +8,7 @@ import { useRequest } from 'ahooks'
 import { getIndexDBData } from '@/indexdb/operate'
 import Task, { TaskRefType } from './components/task'
 import ImagePreview from '@/components/ImagePreview'
+import { PIC_PATH_PREFIX } from '@/utils'
 
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
@@ -69,6 +70,7 @@ const ImageShape = () => {
                   if (e.target.files!.length > 0) {
                     setImgList(Array.from(e.target.files!))
                   }
+                  e.target.value = ''
                 }}
                 accept='image/png,image/jpg,image/webp'
                 type='file'
@@ -116,7 +118,7 @@ const ImageShape = () => {
                 setOpen(false)
               }}
               currentIdx={previewIdx}
-              imgList={imgList}
+              imgList={imgList.map((i) => `${PIC_PATH_PREFIX}${i.path}`)}
             />
           </div>
         </div>

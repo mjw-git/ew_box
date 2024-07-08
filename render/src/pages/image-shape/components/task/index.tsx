@@ -9,7 +9,9 @@ import { COMPRESS_STATUS } from '../../../../../../main/ipc/sharp/type'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import SnackerBarContext from '@/context/snackerBarContext'
 import dayjs from 'dayjs'
-import { convertBytes } from '@/utils'
+import { PIC_PATH_PREFIX, convertBytes } from '@/utils'
+import { useOpen } from '@/hook/useOpen'
+import ImagePreview from '@/components/ImagePreview'
 export interface TaskRefType {
   getList?: () => void
 }
@@ -20,6 +22,7 @@ const TaskTableCell = styled(TableCell)({
 function Row(props: { row: Schema.CompressTask }) {
   const { show } = useContext(SnackerBarContext)
   const { row } = props
+  const { open: previewOpen, openModal, closeModal, data: previewList = [] } = useOpen<string[]>()
   const [open, setOpen] = React.useState(false)
   const { data, cancel } = useRequest(
     () =>
@@ -42,6 +45,7 @@ function Row(props: { row: Schema.CompressTask }) {
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TaskTableCell component='th' scope='row'>
           <Stack flexDirection='row' alignItems='center'>
+            <ImagePreview currentIdx={0} onClose={closeModal} open={previewOpen} imgList={previewList} />
             <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
@@ -87,7 +91,14 @@ function Row(props: { row: Schema.CompressTask }) {
                   {(data ?? []).map((item) => (
                     <TableRow key={item.path}>
                       <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
-                        <Typography variant='caption' display='block' gutterBottom>
+                        <Typography
+                          className='text-primary cursor-pointer'
+                          variant='caption'
+                          display='block'
+                          onClick={() => {
+                            openModal([`${PIC_PATH_PREFIX}${item.path}`])
+                          }}
+                          gutterBottom>
                           {item.basename}
                         </Typography>
                       </TableCell>
