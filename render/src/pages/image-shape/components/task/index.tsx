@@ -1,4 +1,4 @@
-import { Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, Typography, styled } from '@mui/material'
+import { Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled } from '@mui/material'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
@@ -46,16 +46,18 @@ function Row(props: { row: Schema.CompressTask }) {
         <TaskTableCell component='th' scope='row'>
           <Stack flexDirection='row' alignItems='center'>
             <ImagePreview currentIdx={0} onClose={closeModal} open={previewOpen} imgList={previewList} />
-            <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
+            <IconButton sx={{ color: '#fff' }} aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
               {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
             </IconButton>
-            <Typography variant='body2' gutterBottom>
+            <Typography className='text-textColor' sx={{ color: '#fff' }} variant='body2' gutterBottom>
               {row.task_name}
             </Typography>
           </Stack>
         </TaskTableCell>
         <TaskTableCell align='left'>
-          <Typography variant='body2'>{dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}</Typography>
+          <Typography className='text-textColor' variant='body2'>
+            {dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}
+          </Typography>
         </TaskTableCell>
 
         <TaskTableCell align='left'>
@@ -77,14 +79,16 @@ function Row(props: { row: Schema.CompressTask }) {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout='auto' unmountOnExit>
-            <TableContainer sx={{ margin: 1, maxHeight: 300 }}>
-              <Table stickyHeader size='small' aria-label='purchases'>
-                <TableHead>
+            <TableContainer sx={{ margin: 1, maxHeight: 300, background: '#000' }}>
+              <Table className='bg-black' stickyHeader size='small' aria-label='purchases'>
+                <TableHead className='bg-black'>
                   <TableRow>
-                    <TableCell>Path</TableCell>
-                    <TableCell>Size</TableCell>
-                    <TableCell>Compressed Size</TableCell>
-                    <TableCell>Status</TableCell>
+                    <TableCell sx={{ background: '#000', color: '#fff' }} className='bg-black'>
+                      Path
+                    </TableCell>
+                    <TableCell sx={{ background: '#000', color: '#fff' }}>Size</TableCell>
+                    <TableCell sx={{ background: '#000', color: '#fff' }}>Compressed Size</TableCell>
+                    <TableCell sx={{ background: '#000', color: '#fff' }}>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -103,11 +107,11 @@ function Row(props: { row: Schema.CompressTask }) {
                         </Typography>
                       </TableCell>
                       <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
-                        <Typography variant='caption' display='block' gutterBottom>
+                        <Typography className='text-textColor' variant='caption' display='block' gutterBottom>
                           {convertBytes(item.size)}
                         </Typography>
                       </TableCell>
-                      <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
+                      <TableCell sx={{ padding: 1 }} component='th' scope='row'>
                         {item.status === COMPRESS_STATUS.SUCCESS ? (
                           <Stack direction='row' alignItems='center' gap={1}>
                             <Typography variant='caption' display='block' gutterBottom>
@@ -155,12 +159,18 @@ const Task = (_: any, ref: React.Ref<TaskRefType>) => {
   )
   return (
     <TableContainer>
-      <Table aria-label='collapsible table'>
+      <Table aria-label='collapsible table' className='bg-black'>
         <TableHead>
-          <TableRow>
-            <TableCell align='left'>Task Name</TableCell>
-            <TableCell align='left'>Create Time</TableCell>
-            <TableCell align='left'>Operate</TableCell>
+          <TableRow className='text-white'>
+            <TableCell sx={{ color: '#fff' }} align='left'>
+              Task Name
+            </TableCell>
+            <TableCell sx={{ color: '#fff' }} align='left'>
+              Create Time
+            </TableCell>
+            <TableCell sx={{ color: '#fff' }} align='left'>
+              Operate
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

@@ -1,5 +1,5 @@
 import { styled, Select, MenuItem, Stack, Slider } from '@mui/material'
-import { useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styles from './index.module.less'
 import PlutoSelect from '@/components/Select'
@@ -9,6 +9,7 @@ import { getIndexDBData } from '@/indexdb/operate'
 import Task, { TaskRefType } from './components/task'
 import ImagePreview from '@/components/ImagePreview'
 import { PIC_PATH_PREFIX } from '@/utils'
+import SnackerBarContext from '@/context/snackerBarContext'
 
 const VisuallyHiddenInput = styled('input')({
   opacity: 0,
@@ -36,10 +37,10 @@ const ImageShape = () => {
   const [quality, setQuality] = useState(80)
   const [previewIdx, setPreviewIdx] = useState(0)
   const taskRef = useRef<TaskRefType>(null)
-
+  const { show } = useContext(SnackerBarContext)
   const handleCompress = async () => {
     if (imgList.length === 0) return
-
+    show('start compress')
     await window.sharpApi.compress(
       imgList.map((i) => i.path),
       { type: type, quality: quality },
@@ -109,7 +110,7 @@ const ImageShape = () => {
               />
             </Stack>
           </div>
-          <div className='mt-[20px] border-solid border-primary max-h-[600px] overflow-auto bg-[#fff] rounded-[12px] border-[1px] p-[8px]'>
+          <div className='mt-[20px] border-solid border-primary max-h-[600px] overflow-auto bg-black rounded-[12px] border-[1px] p-[8px]'>
             <div className='text-primary font-bold'> Compress Task</div>
             <Task ref={taskRef} />
             <ImagePreview
