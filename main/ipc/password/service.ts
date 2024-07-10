@@ -20,8 +20,6 @@ const createSecretKey = async (key: string) => {
 
       return true
     } catch (error) {
-      console.log(error)
-
       return false
     }
   } else {

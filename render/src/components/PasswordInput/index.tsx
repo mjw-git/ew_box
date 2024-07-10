@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 
 interface PasswordInputProps {
+  value?: string
   count?: number
+  onEnter?: () => void
+  onChange?: (password: string) => void
 }
 const PasswordInput = (props: PasswordInputProps) => {
-  const { count = 4 } = props
+  const { count = 4, value, onChange } = props
 
   const [values, setValues] = useState<string[]>(new Array(count).fill(''))
   const focusIndex = useRef(0)
@@ -14,10 +17,18 @@ const PasswordInput = (props: PasswordInputProps) => {
     inputDomList.current[0]?.focus()
   }, [])
 
+  useEffect(() => {
+    if (value) {
+      const password = value.split('')
+      if (password.length < count) setValues(password.concat(new Array(count - password.length).fill('')))
+    }
+  }, [value])
+
   return (
     <div className='flex items-center gap-4'>
       {new Array(count).fill(0).map((_, index) => (
         <input
+          type='password'
           ref={(dom) => {
             inputDomList.current[index] = dom!
           }}
@@ -42,6 +53,7 @@ const PasswordInput = (props: PasswordInputProps) => {
             const textLen = e.target.value.length
             values[index] = e.target.value.substring((e.target.selectionStart || 1) - 1, e.target.selectionStart || 1)
             setValues([...values])
+            onChange?.(values.join(''))
             const nextInput = inputDomList.current[index + 1]
             if (nextInput && !!textLen) {
               nextInput.focus()
@@ -49,7 +61,7 @@ const PasswordInput = (props: PasswordInputProps) => {
             }
           }}
           value={values[index]}
-          className='outline-none text-primary pl-[15px] pr-[10px] h-[50px] w-[50px] text-3xl bg-white border-solid border-[1px] rounded-[4px] border-primary'
+          className='outline-none text-center text-primary  leading-[50px]  h-[50px] w-[50px] text-3xl bg-white border-solid border-[1px] rounded-[4px] border-primary'
           key={index}
         />
       ))}
