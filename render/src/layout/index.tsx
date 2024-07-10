@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import styles from './index.module.less'
 import logo from '../assets/images/pluto.png'
 import { Stack, Divider, Snackbar } from '@mui/material'
@@ -12,7 +12,7 @@ import classNames from 'classnames'
 
 const Layout = () => {
   const { pathname } = useLocation()
-
+  const navigate = useNavigate()
   const [value, setValue] = useState('')
   const [open, setOpen] = useState(false)
   const handleOpen = (msg: string) => {
@@ -29,7 +29,16 @@ const Layout = () => {
           </Stack>
           <Stack spacing={1} gap={1} direction='column' justifyContent='center'>
             {routes.map((route) => (
-              <SvgIcon key={route.path} className={classNames(styles.menu_icon, { [styles.menu_item_active]: pathname === route.path })} width={28} height={30} name={route.icon} />
+              <SvgIcon
+                onClick={() => {
+                  navigate(route.path)
+                }}
+                key={route.path}
+                className={classNames(styles.menu_icon, { [styles.menu_item_active]: pathname === route.path })}
+                width={28}
+                height={30}
+                name={route.icon}
+              />
             ))}
           </Stack>
         </Stack>

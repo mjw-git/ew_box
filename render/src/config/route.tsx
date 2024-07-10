@@ -1,11 +1,11 @@
-import ImageCompress from '@/pages/image-compress'
+import PasswordBox from '@/pages/password-box'
 import ImageShape from '@/pages/image-shape'
 
 export const routes = [
   { icon: 'pic', path: '/shape', component: <ImageShape /> },
   {
-    path: '/invoices',
+    path: '/password',
     icon: 'password_box',
-    component: <ImageCompress />,
+    component: <PasswordBox />,
   },
 ]

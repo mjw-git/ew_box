@@ -12,6 +12,9 @@ interface Window {
   systemApi: {
     openPath: (path: string) => Promise<string>
   }
+  passwordBoxApi: {
+    enter: (key: string) => Promise<boolean>
+  }
 }
 
 declare namespace Local {

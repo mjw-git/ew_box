@@ -6,7 +6,6 @@ function createSharpCompressChannel() {
   const sharpChannel = new Channel(COMPRESS_TYPE)
   sharpChannel.createTwoWayChannel((e, list, options: CompressOptions) => {
     if (list.length === 0) return
-    console.log(options)
 
     compressImageList(list, options)
   })

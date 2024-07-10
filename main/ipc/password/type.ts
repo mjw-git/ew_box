@@ -1,0 +1,1 @@
+export const ENTER_TYPE = 'ENTER_PASSWORD_BOX_TYPE'

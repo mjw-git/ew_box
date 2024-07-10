@@ -12,7 +12,7 @@ async function compressImageList(imgList: string[], options: CompressOptions) {
   const _uuid = uuid()
 
   const task_name = formatTaskName()
-  const outputPath = electronIsDev ? join(__dirname, `../testImg/${task_name}_${_uuid}`) : url
+  const outputPath = electronIsDev ? join(__dirname, `../testImg/${task_name}_${_uuid}`) : join(url, `./sharp/${task_name}_${_uuid}`)
 
   save('task', { task_name: task_name, path: outputPath, task_id: _uuid, create_tm: new Date().getTime() }, { type: 'readwrite' })
   for (const img of imgList) {
