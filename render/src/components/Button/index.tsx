@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import './index.less'
 import classNames from 'classnames'
-const PlutoButton: React.FC<React.HTMLAttributes<HTMLButtonElement>> = (props) => {
+const PlutoButton = (props: React.HTMLAttributes<HTMLButtonElement>) => {
   const { children, onClick, className, ...rest } = props
   function playRipple(event: React.MouseEvent<HTMLButtonElement>) {
     const button = event.currentTarget

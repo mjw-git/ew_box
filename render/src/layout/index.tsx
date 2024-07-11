@@ -9,6 +9,8 @@ import SvgIcon from '@/components/SvgIcon'
 import './index.less'
 import { routes } from '@/config/route'
 import classNames from 'classnames'
+import '../styles/global.css'
+import { Toaster } from '@/components/ui/toaster'
 
 const Layout = () => {
   const { pathname } = useLocation()
@@ -43,6 +45,8 @@ const Layout = () => {
           </Stack>
         </Stack>
         <main className={styles.main_container}>
+          <Toaster />
+
           <Snackbar
             onClose={() => {
               setOpen(false)

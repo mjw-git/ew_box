@@ -4,13 +4,18 @@ import SnackerBarContext from '@/context/snackerBarContext'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import { useContext, useEffect, useState } from 'react'
+import AddPasswordDialog from './components/AddPasswordDialog'
+import { Button } from '@/components/ui/button'
+import { useToast } from '@/components/ui/use-toast'
 const ImageCompress = () => {
-  const [entered, setEntered] = useState(false)
+  const [entered, setEntered] = useState(true)
   const [visibleId, setVisibleId] = useState(0)
   const [password, setPassword] = useState('')
   const { show } = useContext(SnackerBarContext)
+  const { toast } = useToast()
   const handleEnter = async () => {
-    const checked = await window.passwordBoxApi.enter('12345')
+    const checked = await window.passwordBoxApi.enter(password)
+
     if (checked) {
       setEntered(true)
     } else {
@@ -35,15 +40,9 @@ const ImageCompress = () => {
   }, [password])
 
   return entered ? (
-    <div className='grid grid-cols-2 gap-1'>
-      <div
-        onClick={async () => {
-          const ans = await window.passwordBoxApi.enter('12345')
-        }}
-        className='rounded-[20px] p-[20px] border-[2px] flex items-center justify-center cursor-pointer border-primary border-solid bg-black text-primary font-bold text-4xl text-center'>
-        Add
-      </div>
-      <div className='rounded-[20px] p-[20px] border-[2px] cursor-pointer border-black border-solid bg-black hover:border-solid hover:border-primary '>
+    <div className='grid grid-cols-2 gap-4'>
+      <AddPasswordDialog />
+      <div className='rounded-[20px] p-[20px] border-[2px] cursor-pointer border-textColor border-solid bg-black hover:border-solid hover:border-primary '>
         <div className='font-bold text-[24px] items-center flex justify-between text-primary'>
           <span>11231</span>
 

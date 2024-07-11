@@ -1,11 +1,10 @@
-import { styled, Select, MenuItem, Stack, Slider } from '@mui/material'
+import { styled, MenuItem, Stack, Slider } from '@mui/material'
 import { useContext, useRef, useState } from 'react'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import styles from './index.module.less'
 import PlutoSelect from '@/components/Select'
 import PlutoButton from '@/components/Button'
-import { useRequest } from 'ahooks'
-import { getIndexDBData } from '@/indexdb/operate'
+
 import Task, { TaskRefType } from './components/task'
 import ImagePreview from '@/components/ImagePreview'
 import { PIC_PATH_PREFIX } from '@/utils'
@@ -55,7 +54,7 @@ const ImageShape = () => {
         <div className='w-[50%]'>
           <div className={styles.upload_container}>
             <h3 className='text-4xl  text-primary font-bold mb-[30px]'>Compress Img</h3>
-            <PlutoButton onClick={handleCompress} className='text-primary  float-right mr-[40px]  w-[100px] h-[100px] flex items-center justify-center border-solid border-[3px] text-2xl rounded-[100px] border-primary font-extrabold hover:bg-primary hover:bg-opacity-20 cursor-pointer hover:text-[#bcf6a3]'>
+            <PlutoButton onClick={handleCompress} className='text-primary  float-right mr-[40px]   w-[100px] h-[100px] flex items-center justify-center border-solid border-[3px] text-2xl rounded-[100px] border-primary font-extrabold hover:bg-primary hover:bg-opacity-20 cursor-pointer hover:text-[#bcf6a3]'>
               Start
             </PlutoButton>
             <div className='w-[140px] gap-[20px]  px-[12px] py-[4px] cursor-pointer flex items-center  relative  border-solid rounded-[12px] border-primary border-[2px]'>
