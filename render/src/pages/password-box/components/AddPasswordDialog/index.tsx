@@ -1,15 +1,17 @@
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import PlutoButton from '@/components/Button'
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useState } from 'react'
 
 const FormSchema = z.object({
+  name: z.string().min(1, {
+    message: 'Please input name',
+  }),
   username: z.string().min(2, {
     message: 'Please input username',
   }),
@@ -24,22 +26,28 @@ const AddPasswordDialog = () => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      name: '',
       password: '',
       username: '',
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    form.reset()
-    setOpen(false)
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className='mt-2 w-[340px] rounded-md bg-slate-950 p-4'>
-          <code className='text-white'>{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    })
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    const { name, username, password } = data
+    const isSuccess = await window.passwordBoxApi.create({ name, username, password })
+    console.log(isSuccess)
+
+    if (isSuccess) {
+      form.reset()
+      setOpen(false)
+      toast({
+        description: 'create succeed',
+      })
+    } else {
+      toast({
+        description: 'create failed',
+      })
+    }
   }
 
   return (
@@ -61,6 +69,19 @@ const AddPasswordDialog = () => {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='w-2/3 space-y-6'>
+            <FormField
+              control={form.control}
+              name='name'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>name</FormLabel>
+                  <FormControl>
+                    <Input className='w-[380px]' placeholder='username' {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name='username'
@@ -90,7 +111,6 @@ const AddPasswordDialog = () => {
             <DialogClose asChild>
               <Button type='submit'>Submit</Button>
             </DialogClose>
-            <DialogFooter></DialogFooter>
           </form>
         </Form>
       </DialogContent>

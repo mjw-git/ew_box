@@ -7,12 +7,16 @@ import { useContext, useEffect, useState } from 'react'
 import AddPasswordDialog from './components/AddPasswordDialog'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
+import { useRequest } from 'ahooks'
+import dayjs from 'dayjs'
 const ImageCompress = () => {
-  const [entered, setEntered] = useState(true)
+  const [entered, setEntered] = useState(false)
   const [visibleId, setVisibleId] = useState(0)
   const [password, setPassword] = useState('')
   const { show } = useContext(SnackerBarContext)
   const { toast } = useToast()
+  const { data: pwdList } = useRequest(window.passwordBoxApi.getList)
+
   const handleEnter = async () => {
     const checked = await window.passwordBoxApi.enter(password)
 
@@ -42,18 +46,23 @@ const ImageCompress = () => {
   return entered ? (
     <div className='grid grid-cols-2 gap-4'>
       <AddPasswordDialog />
-      <div className='rounded-[20px] p-[20px] border-[2px] cursor-pointer border-textColor border-solid bg-black hover:border-solid hover:border-primary '>
-        <div className='font-bold text-[24px] items-center flex justify-between text-primary'>
-          <span>11231</span>
-
-          <VisibilityIcon className='text-white hover:text-primary cursor-pointer' />
-          {!visibleId && <VisibilityOffIcon className='text-white hover:text-primary cursor-pointer' />}
+      {pwdList?.map((item) => (
+        <div key={item.time} className='rounded-[20px] p-[20px] border-[2px] cursor-pointer border-textColor border-solid bg-black hover:border-solid hover:border-primary '>
+          <div className='font-bold text-[24px] items-center flex justify-between text-primary'>
+            <span>{item.name}</span>
+            <VisibilityIcon
+              onClick={async () => {
+                const pwd = await window.passwordBoxApi.decrypt(item.time)
+              }}
+              className='text-white hover:text-primary cursor-pointer'
+            />
+            1{!visibleId && <VisibilityOffIcon className='text-white hover:text-primary cursor-pointer' />}
+          </div>
+          <div className='text-[14px] font-bold text-primary'>
+            create time: <span className='text-white font-thin'>{dayjs(item.time * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>
+          </div>
         </div>
-        <div className='text-[14px] font-bold text-primary'>
-          create time: <span className='text-white font-thin'>2024-10-20 10:22:24</span>
-        </div>
-        <div className='text-[14px]  text-primary'>mark: xxxxxx</div>
-      </div>
+      ))}
     </div>
   ) : (
     <div className='flex flex-col gap-[40px] items-center justify-center h-full'>

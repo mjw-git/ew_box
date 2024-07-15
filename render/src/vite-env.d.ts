@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+
 interface Window {
   electronAPI: any
   sharpApi: {
@@ -13,7 +14,10 @@ interface Window {
     openPath: (path: string) => Promise<string>
   }
   passwordBoxApi: {
+    getList: () => Promise<{ name: string; username: string; time: number }[]>
+    create: (options: { name: string; username: string; password: string }) => Promise<boolean>
     enter: (key: string) => Promise<boolean>
+    decrypt: (time: number) => Promise<string>
   }
 }
 
