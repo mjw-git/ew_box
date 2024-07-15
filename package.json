@@ -75,6 +75,7 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.1",
+    "@radix-ui/react-tooltip": "^1.1.2",
     "@react-spring/web": "^9.7.3",
     "@types/uuid": "^9.0.8",
     "@use-gesture/react": "^10.3.1",

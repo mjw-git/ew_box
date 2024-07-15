@@ -35,7 +35,6 @@ const AddPasswordDialog = () => {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const { name, username, password } = data
     const isSuccess = await window.passwordBoxApi.create({ name, username, password })
-    console.log(isSuccess)
 
     if (isSuccess) {
       form.reset()
@@ -57,11 +56,14 @@ const AddPasswordDialog = () => {
         if (open) {
           form.reset()
         }
+        if (!open) {
+          setOpen(false)
+        }
       }}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)} className='rounded-[20px] p-[20px] border-[2px] flex items-center justify-center cursor-pointer border-primary border-solid bg-black text-primary font-bold text-4xl text-center'>
+        <div onClick={() => setOpen(true)} className='rounded-[20px] p-[20px] border-[2px] flex items-center justify-center cursor-pointer border-primary border-solid bg-black text-primary font-bold text-4xl text-center'>
           Add
-        </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
