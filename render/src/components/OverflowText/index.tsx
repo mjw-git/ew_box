@@ -1,7 +1,7 @@
 import { Tooltip, Typography } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import styles from './index.module.less'
-const OverflowText: React.FC = (props) => {
+const OverflowText = (props) => {
   const { children } = props
   const textRef = useRef<HTMLSpanElement | null>(null)
   const [isOverflowed, setIsOverflowed] = useState(false)

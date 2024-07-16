@@ -1,10 +1,5 @@
-import { Select, SelectProps, Tabs, styled } from '@mui/material'
-const AntTabs = styled(Tabs)({
-  borderBottom: '1px solid #e8e8e8',
-  '& .MuiTabs-indicator': {
-    backgroundColor: 'rgb(52, 199, 89)',
-  },
-})
+import { Select, SelectProps, styled } from '@mui/material'
+
 const PSelect = styled(Select)({
   '.MuiSelect-icon': {
     color: 'rgb(52, 199, 89)',
