@@ -2,6 +2,7 @@ import PlutoButton from '@/components/Button'
 import PasswordInput from '@/components/PasswordInput'
 import SnackerBarContext from '@/context/snackerBarContext'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import DeleteOutline from '@mui/icons-material/DeleteOutline'
 import CopyAllOutlined from '@mui/icons-material/CopyAllOutlined'
 import { useContext, useEffect, useRef, useState } from 'react'
 import AddPasswordDialog from './components/AddPasswordDialog'
@@ -10,6 +11,8 @@ import { useRequest } from 'ahooks'
 import dayjs from 'dayjs'
 import copy from 'copy-to-clipboard'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 const ImageCompress = () => {
   const [entered, setEntered] = useState(false)
   const [visibleId, setVisibleId] = useState(0)
@@ -18,7 +21,7 @@ const ImageCompress = () => {
   const timeRef = useRef<NodeJS.Timeout>()
   const { show } = useContext(SnackerBarContext)
   const { toast } = useToast()
-  const { data: pwdList } = useRequest(window.passwordBoxApi.getList, {
+  const { data: pwdList, run: getList } = useRequest(window.passwordBoxApi.getList, {
     ready: entered,
     refreshDeps: [entered],
   })
@@ -37,8 +40,6 @@ const ImageCompress = () => {
     function onEnter(e: KeyboardEvent) {
       if (e.code === 'Enter') {
         if (password.length === 6) {
-          console.log(e)
-
           handleEnter()
         }
       }
@@ -51,48 +52,74 @@ const ImageCompress = () => {
 
   return entered ? (
     <div className='grid grid-cols-2 gap-4'>
-      <AddPasswordDialog />
+      <AddPasswordDialog onSuccess={getList} />
       {pwdList?.map((item) => (
-        <div key={item.time} className='rounded-[20px] p-[20px] border-[2px] cursor-pointer border-textColor border-solid bg-black hover:border-solid hover:border-primary '>
+        <div key={item.time} className='rounded-[20px] pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[2px] cursor-pointer border-textColor border-solid bg-black hover:border-solid hover:border-primary '>
           <div className='font-bold text-[24px] items-center flex justify-between text-primary'>
             <span>{item.name}</span>
-
-            {visibleId !== item.time ? (
-              <VisibilityOffIcon
-                onClick={async () => {
-                  clearTimeout(timeRef.current)
-                  const pwd = await window.passwordBoxApi.decrypt(item.time)
-                  setTimeout(pwd)
-                  setDecryptPwd(pwd)
-                  setVisibleId(item.time)
-                  timeRef.current = setTimeout(() => {
-                    setDecryptPwd('')
-                    setVisibleId(0)
+            <div className='flex gap-1'>
+              {visibleId !== item.time ? (
+                <VisibilityOffIcon
+                  onClick={async () => {
                     clearTimeout(timeRef.current)
-                  }, 30000)
-                }}
-                className='text-white hover:text-primary cursor-pointer'
-              />
-            ) : (
-              <TooltipProvider delayDuration={100}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <CopyAllOutlined
-                      onClick={() => {
-                        copy(decryptPwd)
-                        toast({
-                          description: 'copy succeed',
-                        })
-                      }}
-                      className='text-white hover:text-primary cursor-pointer'
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>decrypt: {decryptPwd}，you can click to copy</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            )}
+                    const pwd = await window.passwordBoxApi.decrypt(item.time)
+                    setDecryptPwd(pwd)
+                    setVisibleId(item.time)
+                    timeRef.current = setTimeout(() => {
+                      setDecryptPwd('')
+                      setVisibleId(0)
+                      clearTimeout(timeRef.current)
+                    }, 30000)
+                  }}
+                  className='text-white hover:text-primary cursor-pointer'
+                />
+              ) : (
+                <TooltipProvider delayDuration={100}>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <CopyAllOutlined
+                        onClick={() => {
+                          copy(decryptPwd)
+                          toast({
+                            description: 'copy succeed',
+                          })
+                        }}
+                        className='text-white mt-[-14px] hover:text-primary cursor-pointer'
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>
+                        decrypt:<span className='text-red-500'>{decryptPwd}</span>，you can click to copy
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              )}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <DeleteOutline className='text-white hover:text-primary cursor-pointer' />
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogTitle>onConfirm</DialogTitle>
+                  <div>confirm delete this password?</div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={async () => {
+                          await window.passwordBoxApi.delete(item.time)
+                          getList()
+                          toast({
+                            description: 'delete succeed',
+                          })
+                        }}
+                        type='submit'>
+                        yes
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
           <div className='text-[14px] font-bold text-primary'>
             create time: <span className='text-white font-thin'>{dayjs(item.time * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>

@@ -5,7 +5,7 @@ import { shell } from 'electron'
 
 function createSystemChannel() {
   const sharpChannel = new Channel(DIR_OPEN)
-  sharpChannel.createTwoWayChannel(async (e, path) => {
+  sharpChannel.createTwoWayChannel(async (_, path) => {
     const isExist = await isExistFileOrDir(path)
     if (isExist) {
       shell.openPath(path)

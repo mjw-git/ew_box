@@ -1,18 +1,17 @@
-import { app } from 'electron'
 import electronIsDev from 'electron-is-dev'
 import { save, updateItem } from 'main/local'
 import { compressImg, formatTaskName, getFileSize, isExistFileOrDir } from 'main/utils'
 import { v4 as uuid } from 'uuid'
-import { join, basename } from 'path'
+import { join, basename, resolve } from 'path'
 import { mkdirSync } from 'fs'
 import { COMPRESS_STATUS, CompressOptions } from './type'
+import { sharpPath } from '@main/utils/path'
 
 async function compressImageList(imgList: string[], options: CompressOptions) {
-  const url = app.getAppPath()
   const _uuid = uuid()
 
   const task_name = formatTaskName()
-  const outputPath = electronIsDev ? join(__dirname, `../testImg/${task_name}_${_uuid}`) : join(url, `./sharp/${task_name}_${_uuid}`)
+  const outputPath = electronIsDev ? join(__dirname, `../testImg/${task_name}_${_uuid}`) : resolve(sharpPath, `./${task_name}_${_uuid}`)
 
   save('task', { task_name: task_name, path: outputPath, task_id: _uuid, create_tm: new Date().getTime() }, { type: 'readwrite' })
   for (const img of imgList) {

@@ -4,7 +4,7 @@ import compressImageList from './service'
 
 function createSharpCompressChannel() {
   const sharpChannel = new Channel(COMPRESS_TYPE)
-  sharpChannel.createTwoWayChannel((e, list, options: CompressOptions) => {
+  sharpChannel.createTwoWayChannel((_, list, options: CompressOptions) => {
     if (list.length === 0) return
 
     compressImageList(list, options)

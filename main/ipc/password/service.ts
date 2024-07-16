@@ -1,15 +1,14 @@
 import { decrypt, encrypt, getMachineId, isExistFileOrDir } from '@main/utils'
-import { app } from 'electron'
 import fs from 'fs'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import crypto from 'crypto'
 import electronIsDev from 'electron-is-dev'
 import { EnterPasswordBoxType } from './type'
 import sudo from 'sudo-prompt'
+import { pwdPath } from '@main/utils/path'
 
-const path = app.getAppPath()
-const lastSecretKeyPath = electronIsDev ? join(__dirname, `../testImg/password`) : join(path, `./password/secret_key`)
-const lastPwdPath = electronIsDev ? join(__dirname, `../testImg/pwd`) : join(path, `./password/pwd`)
+const lastSecretKeyPath = electronIsDev ? join(__dirname, `../testImg/password`) : resolve(pwdPath, './secret_key')
+const lastPwdPath = electronIsDev ? join(__dirname, `../testImg/pwd`) : resolve(pwdPath, './pwd')
 const createSecretKey = async (key: string) => {
   const machineId = getMachineId()
 
@@ -77,6 +76,18 @@ const decryptPwd = (time: number) => {
     })
   }
 }
+const deletePwd = (time: number) => {
+  const pwd = fs.readFileSync(lastPwdPath)
+  const pwdList = pwd
+    .toString()
+    .split('\n')
+    .filter((i) => i)
+  const findPwdIdx = pwdList.findIndex((i) => i.includes(time + ''))
+  if (findPwdIdx !== -1) {
+    pwdList.splice(findPwdIdx, 1)
+    fs.writeFileSync(lastPwdPath, pwdList.join('\n') + '\n')
+  }
+}
 
 const getPwdList = () => {
   const secretKey = fs.readFileSync(lastSecretKeyPath).toString()
@@ -97,11 +108,10 @@ const getPwdList = () => {
           time: +time,
         }
       })
-    console.log(pwdList)
 
     return pwdList
   } catch (error) {
     return []
   }
 }
-export { createSecretKey, createPwd, getPwdList, decryptPwd }
+export { createSecretKey, createPwd, getPwdList, decryptPwd, deletePwd }

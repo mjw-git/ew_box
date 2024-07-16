@@ -1,6 +1,6 @@
 import Channel from '../../interface/channel'
-import { CREATE_TYPE, DECRYPT_PWD_TYPE, ENTER_TYPE, GET_PWD_LIST_TYPE } from './type'
-import { createPwd, createSecretKey, decryptPwd, getPwdList } from './service'
+import { CREATE_TYPE, DECRYPT_PWD_TYPE, DELETE_PWD_TYPE, ENTER_TYPE, GET_PWD_LIST_TYPE } from './type'
+import { createPwd, createSecretKey, decryptPwd, deletePwd, getPwdList } from './service'
 
 function createPasswordBoxChannel() {
   const passwordBoxChannel = new Channel(ENTER_TYPE)
@@ -26,8 +26,15 @@ function createDecryptPwdChannel() {
     return await decryptPwd(time)
   })
 }
+function createDelPwdChannel() {
+  const createDelPwdChannel = new Channel(DELETE_PWD_TYPE)
+  createDelPwdChannel.createTwoWayChannel(async (_, time) => {
+    return deletePwd(time)
+  })
+}
 function createPasswordBoxService() {
   createDecryptPwdChannel()
+  createDelPwdChannel()
   createPasswordBoxChannel()
   createPwdChannel()
   createGetPwdListChannel()

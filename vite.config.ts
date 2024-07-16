@@ -4,7 +4,6 @@ import path from 'path'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { ElectronDevPlugin } from './plugins/vite-plugin-electron-dev'
 import { ViteLessGlobalVars } from './plugins/vite-less-global-vars'
-console.log(path.resolve(process.cwd(), 'src/assets/svg'))
 // https://vitejs.dev/config/
 export default defineConfig({
   root: path.join(__dirname, './render'),

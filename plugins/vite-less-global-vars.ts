@@ -9,8 +9,6 @@ export const ViteLessGlobalVars = ({ globalPath }: { globalPath: string }): Plug
     name: 'viteLessGlobalVars',
     transform(code, id: string) {
       if (lessFileReg.test(id)) {
-        console.log(id)
-
         return {
           code: `${globalLess.toString()}\n${code}`,
         }

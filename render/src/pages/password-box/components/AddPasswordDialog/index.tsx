@@ -19,10 +19,13 @@ const FormSchema = z.object({
     message: 'Please input password',
   }),
 })
-const AddPasswordDialog = () => {
+const AddPasswordDialog = (props: { onSuccess: () => void }) => {
+  const { onSuccess } = props
+
   const [open, setOpen] = useState(false)
 
   const { toast } = useToast()
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -42,6 +45,7 @@ const AddPasswordDialog = () => {
       toast({
         description: 'create succeed',
       })
+      onSuccess?.()
     } else {
       toast({
         description: 'create failed',
@@ -78,7 +82,7 @@ const AddPasswordDialog = () => {
                 <FormItem>
                   <FormLabel>name</FormLabel>
                   <FormControl>
-                    <Input className='w-[380px]' placeholder='username' {...field} />
+                    <Input className='w-[380px]' placeholder='name' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

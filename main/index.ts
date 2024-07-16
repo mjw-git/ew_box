@@ -3,6 +3,7 @@ import isDev from 'electron-is-dev'
 import { resolve, normalize } from 'path'
 import registerService from './ipc'
 import Channel from './interface/channel'
+import { initDirectory } from './utils/init'
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
     alwaysOnTop: false,
@@ -22,6 +23,7 @@ function createWindow() {
   Channel.mainWindow = window
   registerService()
   if (isDev) {
+    initDirectory()
     window.webContents.openDevTools()
     window.loadURL('http://localhost:8889')
   } else {
