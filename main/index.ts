@@ -4,6 +4,7 @@ import { resolve, normalize } from 'path'
 import registerService from './ipc'
 import Channel from './interface/channel'
 import { initDirectory } from './utils/init'
+import electronIsDev from 'electron-is-dev'
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
     alwaysOnTop: false,
@@ -38,7 +39,9 @@ function registerProtocol() {
     callback(decodeURI(normalize(url.split('?')[0])))
   })
 }
-app.dock.setIcon(resolve(__dirname, '../assets/icons.iconset/icon_512x512.png'))
+if (electronIsDev) {
+  app.dock.setIcon(resolve(__dirname, '../assets/icons.iconset/icon_512x512.png'))
+}
 app.on('ready', () => {
   process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
 })

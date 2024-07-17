@@ -1,11 +1,11 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
+import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 
 import Layout from './layout'
 import { routes } from './config/route'
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route index element={<Navigate to='/shape' />} />
@@ -14,6 +14,6 @@ export default function App() {
           ))}
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   )
 }

@@ -5,8 +5,9 @@ import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { ElectronDevPlugin } from './plugins/vite-plugin-electron-dev'
 import { ViteLessGlobalVars } from './plugins/vite-less-global-vars'
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   root: path.join(__dirname, './render'),
+  base: mode === 'production' ? './' : '/',
   server: {
     port: 8889,
   },
@@ -37,4 +38,4 @@ export default defineConfig({
       },
     },
   },
-})
+}))
