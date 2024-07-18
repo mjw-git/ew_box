@@ -23,8 +23,8 @@ function createWindow() {
   })
   Channel.mainWindow = window
   registerService()
+   initDirectory()
   if (isDev) {
-    initDirectory()
     window.webContents.openDevTools()
     window.loadURL('http://localhost:8889')
   } else {
@@ -46,8 +46,6 @@ app.on('ready', () => {
   process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
 })
 app.whenReady().then(() => {
-  app.getAppPath()
-
   createWindow()
   // 这个需要在app.ready触发之后使用
   registerProtocol()

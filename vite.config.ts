@@ -4,6 +4,7 @@ import path from 'path'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 import { ElectronDevPlugin } from './plugins/vite-plugin-electron-dev'
 import { ViteLessGlobalVars } from './plugins/vite-less-global-vars'
+import { ViteImgToBase64 } from './plugins/vite-img-to-base64'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   root: path.join(__dirname, './render'),
@@ -19,6 +20,7 @@ export default defineConfig(({ mode }) => ({
       iconDirs: [path.resolve(process.cwd(), 'render/src/assets/svg')], //svg地址
       symbolId: 'icon-[dir]-[name]',
     }),
+    ViteImgToBase64()
   ],
   resolve: {
     alias: {

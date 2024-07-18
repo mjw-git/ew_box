@@ -5,7 +5,7 @@
   "main": "./main-dist/index.js",
   "scripts": {
     "start:main": "tsc -w --p tsconfig.main.json",
-    "start:react": "vite",
+    "start:react": "bash start.sh&&vite",
     "build:react": "tsc && vite build",
     "build:main": "tsc --p tsconfig.main.json",
     "start:electron": "electron ./main-dist/index",
