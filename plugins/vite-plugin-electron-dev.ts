@@ -10,6 +10,7 @@ import electron from 'electron'
 // 导入 文件操作
 import fs from 'fs'
 import path from 'path'
+import chokidar from 'chokidar'
 
 // 引入esbuild,把 electron 的 ts 打包成 js
 import esbuild from 'esbuild'
@@ -73,7 +74,7 @@ export const ElectronDevPlugin = (): Plugin => {
         if (!fs.existsSync(mainDir)) {
           fs.mkdirSync(mainDir)
         }
-        fs.watch(mainDir, (e, file) => {
+        chokidar.watch(mainDir).on('all', (e, file) => {
           createElectron()
         })
       })
