@@ -1,10 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import styles from './index.module.less'
 import logo from '../assets/images/pluto.png'
-import { Stack, Snackbar } from '@mui/material'
 import useInitLocalApi from '../hook/useInitLocalApi'
-import SnackerBarContext from '../context/snackerBarContext'
-import { useState } from 'react'
 import SvgIcon from '@/components/SvgIcon'
 import './index.less'
 import { routes } from '@/config/route'
@@ -15,53 +12,35 @@ import { Toaster } from '@/components/ui/toaster'
 const Layout = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  const [value, setValue] = useState('')
-  const [open, setOpen] = useState(false)
-  const handleOpen = (msg: string) => {
-    setValue(msg)
-    setOpen(true)
-  }
+  // const [value, setValue] = useState('')
+  // const [open, setOpen] = useState(false)
+
   useInitLocalApi()
   return (
     <div>
       <div className={styles.container}>
-        <Stack component='nav' gap={4} className={styles.menu_container}>
-          <Stack spacing={1} direction='column' justifyContent='center'>
+        <nav className={styles.menu_container}>
+          <div className='flex flex-col justify-center gap-1'>
             <img width={48} src={logo} alt='pluto' />
-          </Stack>
-          <Stack spacing={1} gap={1} direction='column' justifyContent='center'>
+          </div>
+          <div className='flex flex-col justify-center gap-4 mt-3'>
             {routes.map((route) => (
               <SvgIcon
                 onClick={() => {
                   navigate(route.path)
                 }}
                 key={route.path}
-                className={classNames(styles.menu_icon, { [styles.menu_item_active]: pathname === route.path })}
+                className={classNames(styles.menu_icon, { 'bg-muted': pathname === route.path }, 'text-foreground', 'hover:bg-muted')}
                 width={28}
                 height={30}
                 name={route.icon}
               />
             ))}
-          </Stack>
-        </Stack>
+          </div>
+        </nav>
         <main className={styles.main_container}>
           <Toaster />
-
-          <Snackbar
-            onClose={() => {
-              setOpen(false)
-            }}
-            autoHideDuration={2400}
-            open={open}
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            message={value}
-          />
-          <SnackerBarContext.Provider
-            value={{
-              show: handleOpen,
-            }}>
-            <Outlet />
-          </SnackerBarContext.Provider>
+          <Outlet />
         </main>
       </div>
     </div>

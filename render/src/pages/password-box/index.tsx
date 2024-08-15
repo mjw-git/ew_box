@@ -1,6 +1,5 @@
 import PlutoButton from '@/components/Button'
 import PasswordInput from '@/components/PasswordInput'
-import SnackerBarContext from '@/context/snackerBarContext'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import DeleteOutline from '@mui/icons-material/DeleteOutline'
 import CopyAllOutlined from '@mui/icons-material/CopyAllOutlined'
@@ -13,13 +12,13 @@ import copy from 'copy-to-clipboard'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import SvgIcon from '@/components/SvgIcon'
 const ImageCompress = () => {
   const [entered, setEntered] = useState(false)
   const [visibleId, setVisibleId] = useState(0)
   const [password, setPassword] = useState('')
   const [decryptPwd, setDecryptPwd] = useState('')
   const timeRef = useRef<NodeJS.Timeout>()
-  const { show } = useContext(SnackerBarContext)
   const { toast } = useToast()
   const { data: pwdList, run: getList } = useRequest(window.passwordBoxApi.getList, {
     ready: entered,
@@ -32,7 +31,9 @@ const ImageCompress = () => {
     if (checked) {
       setEntered(true)
     } else {
-      show('password error')
+      toast({
+        description: 'password error',
+      })
     }
   }
 
@@ -54,12 +55,13 @@ const ImageCompress = () => {
     <div className='grid grid-cols-2 gap-4'>
       <AddPasswordDialog onSuccess={getList} />
       {pwdList?.map((item) => (
-        <div key={item.time} className='rounded-[20px] pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[2px] cursor-pointer border-textColor border-solid bg-black hover:border-solid hover:border-primary '>
+        <div key={item.time} className='rounded-[20px] pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[2px] cursor-pointer border-border border-solid hover:border-solid hover:border-primary '>
           <div className='font-bold text-[24px] items-center flex justify-between text-primary'>
             <span>{item.name}</span>
             <div className='flex gap-1'>
               {visibleId !== item.time ? (
-                <VisibilityOffIcon
+                <SvgIcon
+                  name='visible_eye'
                   onClick={async () => {
                     clearTimeout(timeRef.current)
                     const pwd = await window.passwordBoxApi.decrypt(item.time)
@@ -71,13 +73,14 @@ const ImageCompress = () => {
                       clearTimeout(timeRef.current)
                     }, 30000)
                   }}
-                  className='text-white hover:text-primary cursor-pointer'
+                  className='text-black w-[12px] h-[12px] hover:text-primary cursor-pointer'
                 />
               ) : (
                 <TooltipProvider delayDuration={100}>
                   <Tooltip>
                     <TooltipTrigger>
-                      <CopyAllOutlined
+                      <SvgIcon
+                        name='visible_eye text-[14px]'
                         onClick={() => {
                           copy(decryptPwd)
                           toast({

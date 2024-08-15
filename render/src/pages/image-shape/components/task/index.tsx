@@ -1,185 +1,62 @@
-import { Collapse, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, styled } from '@mui/material'
-
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp'
-import React, { forwardRef, useContext, useImperativeHandle } from 'react'
+import React, { forwardRef, useImperativeHandle } from 'react'
 import { useRequest } from 'ahooks'
-import { getIndexDBData, getIndexDBDataByIndex } from '@/indexdb/operate'
-import { COMPRESS_STATUS } from '../../../../../../main/ipc/sharp/type'
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import SnackerBarContext from '@/context/snackerBarContext'
-import dayjs from 'dayjs'
-import { PIC_PATH_PREFIX, convertBytes } from '@/utils'
-import { useOpen } from '@/hook/useOpen'
-import ImagePreview from '@/components/ImagePreview'
+import { getIndexDBData } from '@/indexdb/operate'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import { useToast } from '@/components/ui/use-toast'
+import BaseElliTip from '@/components/BaseElliTip'
 export interface TaskRefType {
   getList?: () => void
 }
-const TaskTableCell = styled(TableCell)({
-  borderBottom: 'none',
-  padding: '8px',
-})
-function Row(props: { row: Schema.CompressTask }) {
-  const { show } = useContext(SnackerBarContext)
-  const { row } = props
-  const { open: previewOpen, openModal, closeModal, data: previewList = [] } = useOpen<string[]>()
-  const [open, setOpen] = React.useState(false)
-  const { data, cancel } = useRequest(
-    () =>
-      getIndexDBDataByIndex<Schema.CompressTaskItem[]>('task_img_item', 'task_id', row.task_id).then((res) => {
-        return res
-      }),
-    {
-      onSuccess: (list) => {
-        if (!list.some((i) => i.status === COMPRESS_STATUS.PROCESSING)) {
-          cancel()
-        }
-      },
-      pollingInterval: 1000,
-      refreshDeps: [open],
-      ready: !!open,
-    },
-  )
-  return (
-    <React.Fragment>
-      <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TaskTableCell component='th' scope='row'>
-          <Stack flexDirection='row' alignItems='center'>
-            <ImagePreview currentIdx={0} onClose={closeModal} open={previewOpen} imgList={previewList} />
-            <IconButton sx={{ color: '#fff' }} aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
-              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-            </IconButton>
-            <Typography className='text-textColor' sx={{ color: '#fff' }} variant='body2' gutterBottom>
-              {row.task_name}
-            </Typography>
-          </Stack>
-        </TaskTableCell>
-        <TaskTableCell align='left'>
-          <Typography className='text-textColor' variant='body2'>
-            {dayjs(row.create_tm).format('YYYY-MM-DD HH:mm:ss')}
-          </Typography>
-        </TaskTableCell>
 
-        <TaskTableCell align='left'>
-          <Typography
-            onClick={async () => {
-              const result = await window.systemApi.openPath(row.path)
-              if (result === 'error') {
-                show('file is not exits')
-              }
-            }}
-            className='text-primary cursor-pointer'
-            variant='caption'
-            display='block'
-            gutterBottom>
-            open
-          </Typography>
-        </TaskTableCell>
-      </TableRow>
-      <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout='auto' unmountOnExit>
-            <TableContainer sx={{ margin: 1, maxHeight: 300, background: '#000' }}>
-              <Table className='bg-black' stickyHeader size='small' aria-label='purchases'>
-                <TableHead className='bg-black'>
-                  <TableRow>
-                    <TableCell sx={{ background: '#000', color: '#fff' }} className='bg-black'>
-                      Path
-                    </TableCell>
-                    <TableCell sx={{ background: '#000', color: '#fff' }}>Size</TableCell>
-                    <TableCell sx={{ background: '#000', color: '#fff' }}>Compressed Size</TableCell>
-                    <TableCell sx={{ background: '#000', color: '#fff' }}>Status</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {(data ?? []).map((item) => (
-                    <TableRow key={item.path}>
-                      <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
-                        <Typography
-                          className='text-primary cursor-pointer'
-                          variant='caption'
-                          display='block'
-                          onClick={() => {
-                            openModal([`${PIC_PATH_PREFIX}${item.path}`])
-                          }}
-                          gutterBottom>
-                          {item.basename}
-                        </Typography>
-                      </TableCell>
-                      <TableCell sx={{ maxWidth: 120, padding: 1 }} component='th' scope='row'>
-                        <Typography className='text-textColor' variant='caption' display='block' gutterBottom>
-                          {convertBytes(item.size)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell sx={{ padding: 1 }} component='th' scope='row'>
-                        {item.status === COMPRESS_STATUS.SUCCESS ? (
-                          <Stack direction='row' alignItems='center' gap={1}>
-                            <Typography variant='caption' display='block' gutterBottom>
-                              {convertBytes(item.compressed_size)}
-                            </Typography>
-                            <Stack direction='column' justifyContent='center'>
-                              <ArrowDownwardIcon fontSize='small' sx={{ color: 'green', fontSize: 12 }} />
-                              <span style={{ fontSize: 12, color: 'green' }}>{(((item.size - item.compressed_size) * 100) / item.size).toFixed(1) + '%'}</span>
-                            </Stack>
-                          </Stack>
-                        ) : (
-                          '-'
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <Typography sx={{ color: item.status === 'success' ? 'green' : 'rebeccapurple' }} variant='caption' display='block' gutterBottom>
-                          {item.status}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Collapse>
-        </TableCell>
-      </TableRow>
-    </React.Fragment>
-  )
-}
 const Task = (_: any, ref: React.Ref<TaskRefType>) => {
+  const { toast } = useToast()
   const { data: tableData = [], run: getRun } = useRequest(() =>
     getIndexDBData<Schema.CompressTask[]>('task').then((res) => {
       return (res ?? []).sort((pre, next) => next.create_tm - pre.create_tm)
     }),
   )
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        getList: getRun,
-      }
-    },
-    [],
-  )
+  useImperativeHandle(ref, () => {
+    return {
+      getList: getRun,
+    }
+  }, [])
   return (
-    <TableContainer>
-      <Table aria-label='collapsible table' className='bg-black'>
-        <TableHead>
-          <TableRow className='text-white'>
-            <TableCell sx={{ color: '#fff' }} align='left'>
-              Task Name
-            </TableCell>
-            <TableCell sx={{ color: '#fff' }} align='left'>
-              Create Time
-            </TableCell>
-            <TableCell sx={{ color: '#fff' }} align='left'>
-              Operate
-            </TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {tableData.map((row) => (
-            <Row key={row.task_id} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className='w-[100px]'>Name</TableHead>
+          <TableHead>Create_tm</TableHead>
+          <TableHead className='w-[120px]'>Operator</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {tableData.map((i) => {
+          return (
+            <TableRow key={i.path}>
+              <TableCell className='w-[150px]'>
+                <BaseElliTip text={i.task_name} />
+              </TableCell>
+              <TableCell>
+                <BaseElliTip text={i.path} />
+              </TableCell>
+              <TableCell className='text-primary cursor-pointer'>
+                <span
+                  onClick={async () => {
+                    const result = await window.systemApi.openPath(i.path)
+                    if (result === 'error') {
+                      toast({
+                        description: 'fold not exits',
+                      })
+                    }
+                  }}>
+                  open
+                </span>
+              </TableCell>
+            </TableRow>
+          )
+        })}
+      </TableBody>
+    </Table>
   )
 }
 export default forwardRef(Task)

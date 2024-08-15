@@ -15,6 +15,7 @@ function createWindow() {
     frame: false,
     titleBarStyle: 'hidden',
     webPreferences: {
+      devTools: isDev,
       preload: resolve(__dirname, './preload/index.js'),
       webSecurity: false,
       contextIsolation: true,
@@ -23,7 +24,7 @@ function createWindow() {
   })
   Channel.mainWindow = window
   registerService()
-   initDirectory()
+  initDirectory()
   if (isDev) {
     window.webContents.openDevTools()
     window.loadURL('http://localhost:8889')

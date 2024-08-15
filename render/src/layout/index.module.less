@@ -1,14 +1,13 @@
 .container {
   height: 100vh;
   display: flex;
-  background-color: #000;
 }
 
 .menu_container {
+  gap: 32px;
   border-right: 1px solid #c9c9c963;
   -webkit-app-region: drag;
   color: #fff;
-  background-color: #000;
   img {
     filter: invert(0.1);
   }
@@ -19,7 +18,6 @@
   width: 72px;
   .menu_item {
     background-color: #e6ffee;
-
     font-weight: 600;
     padding: 12px 24px;
     font-size: 18px;
@@ -36,17 +34,12 @@
   padding-left: 0;
 }
 .menu_icon {
-  color: #fff;
   width: 50px;
   display: flex;
   justify-content: center;
   border-radius: 8px;
   height: 50px;
   transition: all 0.3s;
-  &:hover {
-    color: @primary-color;
-    background-color: rgba(52, 199, 89, 0.2);
-  }
 }
 .menu_item_active {
   color: @primary-color;
