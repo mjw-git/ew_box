@@ -6,7 +6,7 @@ export default function exposePasswordBoxApi() {
     enter: (key: string) => ipcRenderer.invoke(ENTER_TYPE, key),
     create: (options: EnterPasswordBoxType) => ipcRenderer.invoke(CREATE_TYPE, options),
     getList: () => ipcRenderer.invoke(GET_PWD_LIST_TYPE),
-    decrypt: (time: number) => ipcRenderer.invoke(DECRYPT_PWD_TYPE, time),
+    decrypt: (time: number, key: string) => ipcRenderer.invoke(DECRYPT_PWD_TYPE, time, key),
     delete: (time: number) => ipcRenderer.invoke(DELETE_PWD_TYPE, time),
   })
 }

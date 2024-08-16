@@ -4,12 +4,11 @@ import { join, resolve } from 'path'
 import crypto from 'crypto'
 import electronIsDev from 'electron-is-dev'
 import { EnterPasswordBoxType } from './type'
-import sudo from 'sudo-prompt'
 import { pwdPath } from '@main/utils/path'
 
 const lastSecretKeyPath = electronIsDev ? join(__dirname, `../testImg/password`) : resolve(pwdPath, './secret_key')
 const lastPwdPath = electronIsDev ? join(__dirname, `../testImg/pwd`) : resolve(pwdPath, './pwd')
-const createSecretKey = async (key: string) => {
+const createSecretKey = async (key: string, first = true) => {
   const machineId = getMachineId()
 
   const isExist = await isExistFileOrDir(lastSecretKeyPath)
@@ -24,10 +23,14 @@ const createSecretKey = async (key: string) => {
       return false
     }
   } else {
-    const secretKey = encrypt(key, cKey)
+    if (first) {
+      const secretKey = encrypt(key, cKey)
 
-    fs.writeFileSync(lastSecretKeyPath, secretKey, 'utf-8')
-    return true
+      fs.writeFileSync(lastSecretKeyPath, secretKey, 'utf-8')
+      return true
+    } else {
+      return false
+    }
   }
 }
 const createPwd = (options: EnterPasswordBoxType) => {
@@ -50,31 +53,24 @@ const createPwd = (options: EnterPasswordBoxType) => {
   }
 }
 
-const decryptPwd = (time: number) => {
+const decryptPwd = async (time: number, key: string) => {
+  const correct = await createSecretKey(key, false)
+  if (!correct) return Promise.reject('error')
   const secretKey = fs.readFileSync(lastSecretKeyPath).toString()
   const cKey = Buffer.from(secretKey.slice(0, 32))
   const pwd = fs.readFileSync(lastPwdPath)
+
   const findPwd = pwd
     .toString()
     .split('\n')
-    .find((i) => i.includes(time + ''))
+    .find((i) => i.includes(String(time)))
+
   if (findPwd) {
     const [, , password] = findPwd.split('#')
-    const options = {
-      name: 'Pluto App',
-      icns: join(__dirname, '../assets/Icon.icns'), // macOS 上可以指定图标
-    }
 
-    return new Promise((resolve, reject) => {
-      sudo.exec('echo pluto!', options, (error) => {
-        if (error) {
-          reject(error)
-        } else {
-          resolve(decrypt(password, cKey))
-        }
-      })
-    })
+    return decrypt(password, cKey)
   }
+  return ''
 }
 const deletePwd = (time: number) => {
   const pwd = fs.readFileSync(lastPwdPath)

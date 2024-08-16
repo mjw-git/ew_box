@@ -22,8 +22,8 @@ function createGetPwdListChannel() {
 }
 function createDecryptPwdChannel() {
   const createDecryptPwdChannel = new Channel(DECRYPT_PWD_TYPE)
-  createDecryptPwdChannel.createTwoWayChannel(async (_, time) => {
-    return await decryptPwd(time)
+  createDecryptPwdChannel.createTwoWayChannel(async (_, time, key: string) => {
+    return await decryptPwd(time, key)
   })
 }
 function createDelPwdChannel() {

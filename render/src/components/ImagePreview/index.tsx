@@ -5,6 +5,7 @@ import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutl
 import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined'
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined'
+import SvgIcon from '../SvgIcon'
 interface ImagePreviewProps {
   imgList: string[]
   open: boolean
@@ -64,14 +65,14 @@ const ImagePreview = (props: ImagePreviewProps) => {
               setIdx((idx + 1) % imgList.length)
             }}
             className='absolute cursor-pointer z-[11] hover:text-primary left-10 text-white text-2xl'>
-            <ArrowBackIosNewOutlinedIcon fontSize='large' className='text-2xl' />
+            <SvgIcon name='left' />
           </span>
           <span
             onClick={() => {
               setIdx(idx + 1 >= imgList.length ? 0 : idx + 1)
             }}
             className='absolute cursor-pointer z-[11] hover:text-primary right-10 text-white text-2xl'>
-            <ArrowForwardIosOutlinedIcon fontSize='large' className='text-2xl' />
+            <SvgIcon name='right' />
           </span>
         </>
       )}
@@ -81,7 +82,7 @@ const ImagePreview = (props: ImagePreviewProps) => {
             setScaleCount(scaleCount - 0.1)
           }}
           className='text-white cursor-pointer hover:text-primary'>
-          <RemoveCircleOutlineOutlinedIcon fontSize='medium' />
+          <SvgIcon name='remove' />
         </span>
         <span className='text-white text-base'>{`${(scaleCount * 100).toFixed(0)}%`}</span>
         <span
@@ -89,11 +90,11 @@ const ImagePreview = (props: ImagePreviewProps) => {
             setScaleCount(scaleCount + 0.1)
           }}
           className='text-white cursor-pointer hover:text-primary'>
-          <AddCircleOutlineOutlinedIcon fontSize='medium' />
+          <SvgIcon name='add' />
         </span>
       </div>
       <span className='absolute cursor-pointer z-[11] right-10 top-10 text-white' onClick={onClose}>
-        <CancelOutlinedIcon />
+        <SvgIcon name='cancel' />
       </span>
       <div className='text-white' style={{ transform: `scale(${scaleCount})` }}>
         <img className='w-[50vw]' src={`${currentImg}`} alt='no pic' />

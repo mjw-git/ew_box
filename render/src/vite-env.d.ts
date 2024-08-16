@@ -17,7 +17,7 @@ interface Window {
     getList: () => Promise<{ name: string; username: string; time: number }[]>
     create: (options: { name: string; username: string; password: string }) => Promise<boolean>
     enter: (key: string) => Promise<boolean>
-    decrypt: (time: number) => Promise<string>
+    decrypt: (time: number, key: string) => Promise<string>
     delete: (time: number) => Promise<void>
   }
 }

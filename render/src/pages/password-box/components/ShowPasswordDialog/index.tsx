@@ -7,20 +7,19 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { useState } from 'react'
+import SvgIcon from '@/components/SvgIcon'
 
 const FormSchema = z.object({
-  name: z.string().min(1, {
-    message: 'Please input name',
-  }),
-  username: z.string().min(2, {
-    message: 'Please input username',
-  }),
   password: z.string().min(1, {
     message: 'Please input password',
   }),
 })
-const AddPasswordDialog = (props: { onSuccess: () => void }) => {
-  const { onSuccess } = props
+interface ShowPasswordDialogProps {
+  time: number
+  onSuccess: (pwd: string) => void
+}
+const ShowPasswordDialog = (props: ShowPasswordDialogProps) => {
+  const { onSuccess, time } = props
 
   const [open, setOpen] = useState(false)
 
@@ -29,26 +28,24 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: '',
       password: '',
-      username: '',
     },
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { name, username, password } = data
-    const isSuccess = await window.passwordBoxApi.create({ name, username, password })
-
-    if (isSuccess) {
+    const { password } = data
+    try {
+      const pwd = await window.passwordBoxApi.decrypt(time, password)
       form.reset()
       setOpen(false)
       toast({
-        description: 'create succeed',
+        description: 'succeed',
       })
-      onSuccess?.()
-    } else {
+      onSuccess?.(pwd)
+    } catch (error) {
       toast({
-        description: 'create failed',
+        variant: 'destructive',
+        description: 'password is wrong',
       })
     }
   }
@@ -65,9 +62,24 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
         }
       }}>
       <DialogTrigger asChild>
-        <div onClick={() => setOpen(true)} className='rounded-[20px] p-[20px] border-[1px] flex items-center justify-center cursor-pointer border-border border-solid  text-primary font-bold text-4xl text-center'>
-          Add
-        </div>
+        <SvgIcon
+          onClick={() => {
+            setOpen(true)
+          }}
+          name='hide_eye'
+          // onClick={async () => {
+          //   clearTimeout(timeRef.current)
+          //   const pwd = await window.passwordBoxApi.decrypt(item.time)
+          //   setDecryptPwd(pwd)
+          //   setVisibleId(item.time)
+          //   timeRef.current = setTimeout(() => {
+          //     setDecryptPwd('')
+          //     setVisibleId(0)
+          //     clearTimeout(timeRef.current)
+          //   }, 30000)
+          // }}
+          className='text-black w-[24px] h-[24px] hover:text-primary cursor-pointer'
+        />
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
@@ -75,32 +87,6 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='w-2/3 space-y-6'>
-            <FormField
-              control={form.control}
-              name='name'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>name</FormLabel>
-                  <FormControl>
-                    <Input className='w-[380px]' placeholder='name' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name='username'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input className='w-[380px]' placeholder='username' {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
             <FormField
               control={form.control}
               name='password'
@@ -114,13 +100,11 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
                 </FormItem>
               )}
             />
-            {/* <DialogClose asChild> */}
             <Button type='submit'>Submit</Button>
-            {/* </DialogClose> */}
           </form>
         </Form>
       </DialogContent>
     </Dialog>
   )
 }
-export default AddPasswordDialog
+export default ShowPasswordDialog

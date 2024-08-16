@@ -61,7 +61,7 @@ const PasswordInput = (props: PasswordInputProps) => {
             }
           }}
           value={values[index]}
-          className='outline-none text-center text-primary  leading-[50px]  h-[50px] w-[50px] text-3xl bg-white border-solid border-[1px] rounded-[4px] border-primary'
+          className='outline-none text-center text-primary  leading-[50px]  h-[50px] w-[50px] text-3xl bg-white border-solid border-[2px] rounded-[4px] border-primary'
           key={index}
         />
       ))}
