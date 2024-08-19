@@ -30,6 +30,7 @@ const ImageCompress = () => {
       setEntered(true)
     } else {
       toast({
+        variant: 'destructive',
         description: 'password error',
       })
     }
@@ -129,7 +130,7 @@ const ImageCompress = () => {
     </div>
   ) : (
     <div className='flex flex-col gap-[40px] items-center justify-center h-full'>
-      <h3 className='text-primary text-xl'>Please enter the password to open this password box</h3>
+      <div className='text-primary text-xl'>Please enter the password to open this password box</div>
       <PasswordInput value={password} onChange={(e) => setPassword(e)} count={6} />
       <Button onClick={handleEnter} className='w-[120px] shadow-2xl  mt-[80px] border-solid border-[1px] border-primary'>
         Enter

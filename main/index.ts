@@ -5,6 +5,7 @@ import registerService from './ipc'
 import Channel from './interface/channel'
 import { initDirectory } from './utils/init'
 import electronIsDev from 'electron-is-dev'
+import startServer from './server'
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
     alwaysOnTop: false,
@@ -25,6 +26,7 @@ function createWindow() {
   Channel.mainWindow = window
   registerService()
   initDirectory()
+  // startServer()
   if (isDev) {
     window.webContents.openDevTools()
     window.loadURL('http://localhost:8889')
@@ -47,7 +49,10 @@ app.on('ready', () => {
   process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
 })
 app.whenReady().then(() => {
-  createWindow()
+  startServer(() => {
+    createWindow()
+  })
+
   // 这个需要在app.ready触发之后使用
   registerProtocol()
 })

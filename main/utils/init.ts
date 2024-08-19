@@ -1,6 +1,9 @@
 import fs from 'fs'
 import { pwdPath, sharpPath } from './path'
+import { PrismaClient } from '@prisma/client'
+const prismaInstance = new PrismaClient()
 const initDirectory = () => {
+  // prisma
   const pathList = [pwdPath, sharpPath]
 
   pathList.forEach((item) => {
@@ -9,4 +12,4 @@ const initDirectory = () => {
     }
   })
 }
-export { initDirectory }
+export { initDirectory, prismaInstance }
