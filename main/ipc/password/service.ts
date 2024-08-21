@@ -5,107 +5,112 @@ import crypto from 'crypto'
 import electronIsDev from 'electron-is-dev'
 import { EnterPasswordBoxType } from './type'
 import { pwdPath } from '@main/utils/path'
+import { prismaInstance } from '@main/utils/init'
+import logger from '@main/utils/log'
 
 const lastSecretKeyPath = electronIsDev ? join(__dirname, `../testImg/password`) : resolve(pwdPath, './secret_key')
 const lastPwdPath = electronIsDev ? join(__dirname, `../testImg/pwd`) : resolve(pwdPath, './pwd')
 const createSecretKey = async (key: string, first = true) => {
   const machineId = getMachineId()
-
-  const isExist = await isExistFileOrDir(lastSecretKeyPath)
+  const secretKey = await prismaInstance.config.findUnique({
+    where: {
+      key: 'pwd_secret',
+    },
+  })
   const cKey = crypto.pbkdf2Sync(key, machineId, 100000, 32, 'sha256')
-  if (isExist) {
-    const secretKey = fs.readFileSync(lastSecretKeyPath)
+  if (secretKey) {
     try {
-      decrypt(secretKey.toString(), cKey)
+      decrypt(secretKey.value.toString(), cKey)
 
       return true
     } catch (error) {
+      logger.error('密码错误', error)
       return false
     }
   } else {
     if (first) {
       const secretKey = encrypt(key, cKey)
-
-      fs.writeFileSync(lastSecretKeyPath, secretKey, 'utf-8')
+      await prismaInstance.config.create({
+        data: {
+          key: 'pwd_secret',
+          value: secretKey,
+        },
+      })
       return true
     } else {
       return false
     }
   }
 }
-const createPwd = (options: EnterPasswordBoxType) => {
-  const { password, username, name } = options
+const createPwd = async (options: EnterPasswordBoxType) => {
+  const { password, username, remark } = options
 
-  const secretKey = fs.readFileSync(lastSecretKeyPath).toString()
+  const secretKey = await prismaInstance.config.findUnique({
+    where: {
+      key: 'pwd_secret',
+    },
+  })
 
   if (!secretKey) return false
 
   try {
-    const cKey = Buffer.from(secretKey.slice(0, 32))
+    const cKey = Buffer.from(secretKey.value.slice(0, 32))
     const encryptPassword = encrypt(password, cKey)
     const encryptUsername = encrypt(username, cKey)
-    const pwd = `${name}#${encryptUsername}#${encryptPassword}#${Math.floor(new Date().getTime() / 1000)}\n`
+    await prismaInstance.password.create({
+      data: {
+        create_tm: Math.floor(new Date().getTime() / 1000),
+        username: encryptUsername,
+        password: encryptPassword,
+        remark: remark,
+      },
+    })
 
-    fs.appendFileSync(lastPwdPath, pwd)
     return true
   } catch (err) {
+    logger.error('save error', err)
     return false
   }
 }
 
-const decryptPwd = async (time: number, key: string) => {
+const decryptPwd = async (id: number, key: string) => {
   const correct = await createSecretKey(key, false)
   if (!correct) return Promise.reject('error')
-  const secretKey = fs.readFileSync(lastSecretKeyPath).toString()
-  const cKey = Buffer.from(secretKey.slice(0, 32))
-  const pwd = fs.readFileSync(lastPwdPath)
+  const secretKey = await prismaInstance.config.findUnique({
+    where: {
+      key: 'pwd_secret',
+    },
+  })
+  const cKey = Buffer.from(secretKey.value.slice(0, 32))
+  const item = await prismaInstance.password.findUnique({ where: { id: id } })
 
-  const findPwd = pwd
-    .toString()
-    .split('\n')
-    .find((i) => i.includes(String(time)))
-
-  if (findPwd) {
-    const [, , password] = findPwd.split('#')
+  if (item) {
+    const password = item.password
 
     return decrypt(password, cKey)
   }
   return ''
 }
-const deletePwd = (time: number) => {
-  const pwd = fs.readFileSync(lastPwdPath)
-  const pwdList = pwd
-    .toString()
-    .split('\n')
-    .filter((i) => i)
-  const findPwdIdx = pwdList.findIndex((i) => i.includes(time + ''))
-  if (findPwdIdx !== -1) {
-    pwdList.splice(findPwdIdx, 1)
-    fs.writeFileSync(lastPwdPath, pwdList.join('\n') + '\n')
-  }
+const deletePwd = async (id: number) => {
+  await prismaInstance.password.delete({
+    where: { id },
+  })
 }
 
-const getPwdList = () => {
-  const secretKey = fs.readFileSync(lastSecretKeyPath).toString()
+const getPwdList = async () => {
+  const secretKey = await prismaInstance.config.findUnique({ where: { key: 'pwd_secret' } })
 
   try {
-    const cKey = Buffer.from(secretKey.slice(0, 32))
-    const pwd = fs.readFileSync(lastPwdPath)
-    const pwdList = pwd
-      .toString()
-      .split('\n')
-      .filter((i) => i)
-      .map((item) => {
-        const [name, username, , time] = item.split('#')
-
-        return {
-          name,
-          username: decrypt(username, cKey),
-          time: +time,
-        }
-      })
-
-    return pwdList
+    const cKey = Buffer.from(secretKey.value.slice(0, 32))
+    const pwdList = await prismaInstance.password.findMany({
+      select: {
+        create_tm: true,
+        id: true,
+        username: true,
+        remark: true,
+      },
+    })
+    return pwdList.map((i) => ({ ...i, username: decrypt(i.username, cKey) }))
   } catch (error) {
     return []
   }

@@ -6,5 +6,5 @@ export const DECRYPT_PWD_TYPE = 'DECRYPT_PWD'
 export interface EnterPasswordBoxType {
   username: string
   password: string
-  name: string
+  remark: string
 }

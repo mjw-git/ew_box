@@ -54,18 +54,18 @@ const ImageCompress = () => {
     <div className='grid grid-cols-4 gap-4'>
       <AddPasswordDialog onSuccess={getList} />
       {pwdList?.map((item) => (
-        <div key={item.time} className='rounded-[20px] gap-4 flex flex-col justify-between  pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:border-primary '>
+        <div key={item.id} className='rounded-[20px]  flex flex-col   pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:border-primary '>
           <div className='text-[24px] items-center flex justify-between text-primary'>
-            <span>{item.name}</span>
+            <span>{item.username}</span>
             <div className='flex gap-1'>
-              {visibleId !== item.time ? (
+              {visibleId !== item.id ? (
                 <ShowPasswordDialog
-                  time={item.time}
+                  id={item.id}
                   onSuccess={(pwd) => {
                     clearTimeout(timeRef.current)
                     //   const pwd = await window.passwordBoxApi.decrypt(item.time)
                     setDecryptPwd(pwd)
-                    setVisibleId(item.time)
+                    setVisibleId(item.id)
                     timeRef.current = setTimeout(() => {
                       setDecryptPwd('')
                       setVisibleId(0)
@@ -107,7 +107,7 @@ const ImageCompress = () => {
                     <DialogClose asChild>
                       <Button
                         onClick={async () => {
-                          await window.passwordBoxApi.delete(item.time)
+                          await window.passwordBoxApi.delete(item.id)
                           getList()
                           toast({
                             description: 'delete succeed',
@@ -122,8 +122,12 @@ const ImageCompress = () => {
               </Dialog>
             </div>
           </div>
-          <div className='text-[14px] text-foreground'>
-            <span>{dayjs(+item.time * 1000).format('YYYY-MM-DD HH:mm:ss')} created</span>
+          <div className='text-[12px] text-foreground'>
+            <span>remark:</span>
+            <span className='ml-2'>{item.username}</span>
+          </div>
+          <div className='text-[12px] text-foreground'>
+            <span>{dayjs(+item.create_tm * 1000).format('YYYY-MM-DD HH:mm:ss')} created</span>
           </div>
         </div>
       ))}

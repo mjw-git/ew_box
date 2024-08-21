@@ -15,11 +15,11 @@ const FormSchema = z.object({
   }),
 })
 interface ShowPasswordDialogProps {
-  time: number
+  id: number
   onSuccess: (pwd: string) => void
 }
 const ShowPasswordDialog = (props: ShowPasswordDialogProps) => {
-  const { onSuccess, time } = props
+  const { onSuccess, id } = props
 
   const [open, setOpen] = useState(false)
 
@@ -35,7 +35,7 @@ const ShowPasswordDialog = (props: ShowPasswordDialogProps) => {
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     const { password } = data
     try {
-      const pwd = await window.passwordBoxApi.decrypt(time, password)
+      const pwd = await window.passwordBoxApi.decrypt(id, password)
       form.reset()
       setOpen(false)
       toast({

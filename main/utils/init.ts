@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { resolve, join } from 'path'
 import { fork } from 'child_process'
-import { pwdPath, sharpPath } from './path'
+import { sharpPath } from './path'
 import { PrismaClient } from '@prisma/client'
 import { app } from 'electron'
 import electronIsDev from 'electron-is-dev'
@@ -77,7 +77,7 @@ export const initDb = async () => {
 }
 const initDirectory = () => {
   // prisma
-  const pathList = [pwdPath, sharpPath]
+  const pathList = [sharpPath]
 
   pathList.forEach((item) => {
     if (!fs.existsSync(item)) {

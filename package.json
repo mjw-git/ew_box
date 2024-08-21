@@ -6,7 +6,7 @@
   "scripts": {
     "pri": "prisma generate",
     "start:main": "tsc -w --p tsconfig.main.json",
-    "start:react": "bash start.sh&&vite",
+    "start:react": "bash start.sh && vite",
     "build:react": "vite build",
     "build:main": "tsc --p tsconfig.main.json",
     "start:electron": "electron ./main-dist/index",

@@ -9,7 +9,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { useState } from 'react'
 
 const FormSchema = z.object({
-  name: z.string().min(1, {
+  remark: z.string().min(1, {
     message: 'Please input name',
   }),
   username: z.string().min(2, {
@@ -29,15 +29,15 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: '',
+      remark: '',
       password: '',
       username: '',
     },
   })
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { name, username, password } = data
-    const isSuccess = await window.passwordBoxApi.create({ name, username, password })
+    const { remark, username, password } = data
+    const isSuccess = await window.passwordBoxApi.create({ remark, username, password })
 
     if (isSuccess) {
       form.reset()
@@ -77,7 +77,7 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
           <form onSubmit={form.handleSubmit(onSubmit)} className='w-2/3 space-y-6'>
             <FormField
               control={form.control}
-              name='name'
+              name='remark'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>name</FormLabel>
