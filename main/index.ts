@@ -3,9 +3,9 @@ import isDev from 'electron-is-dev'
 import { resolve, normalize } from 'path'
 import registerService from './ipc'
 import Channel from './interface/channel'
-import { initDirectory } from './utils/init'
+import { initDb, initDirectory } from './utils/init'
 import electronIsDev from 'electron-is-dev'
-import startServer from './server'
+
 function createWindow() {
   const window: BrowserWindow = new BrowserWindow({
     alwaysOnTop: false,
@@ -16,7 +16,7 @@ function createWindow() {
     frame: false,
     titleBarStyle: 'hidden',
     webPreferences: {
-      devTools: isDev,
+      // devTools: isDev,
       preload: resolve(__dirname, './preload/index.js'),
       webSecurity: false,
       contextIsolation: true,
@@ -26,7 +26,6 @@ function createWindow() {
   Channel.mainWindow = window
   registerService()
   initDirectory()
-  // startServer()
   if (isDev) {
     window.webContents.openDevTools()
     window.loadURL('http://localhost:8889')
@@ -48,9 +47,12 @@ if (electronIsDev) {
 app.on('ready', () => {
   process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
 })
-app.whenReady().then(() => {
-  startServer(() => {
-    createWindow()
+app.whenReady().then(async () => {
+  await initDb()
+  import('./server/index').then((res) => {
+    res.default(() => {
+      createWindow()
+    })
   })
 
   // 这个需要在app.ready触发之后使用

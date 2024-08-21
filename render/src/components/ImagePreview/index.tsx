@@ -1,10 +1,6 @@
 import './index.less'
 import { WheelEvent, useEffect, useState } from 'react'
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
-import ArrowForwardIosOutlinedIcon from '@mui/icons-material/ArrowForwardIosOutlined'
-import ArrowBackIosNewOutlinedIcon from '@mui/icons-material/ArrowBackIosNewOutlined'
-import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined'
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined'
+
 import SvgIcon from '../SvgIcon'
 interface ImagePreviewProps {
   imgList: string[]

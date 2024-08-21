@@ -5,6 +5,7 @@ declare namespace Sharp {
     create_tm: number
     items: [
       {
+        status: string
         img_name: string
         task_id: number
         size: number

@@ -52,14 +52,12 @@ async function compressImageList(imgList: string[], options: CompressOptions) {
           .then((res) => {
             console.log('success', res)
           })
-        updateItem('task_img_item', { ...temp, status: COMPRESS_STATUS.SUCCESS, compressed_size: size })
       })
       .catch(() => {
         prismaInstance.taskItem.update({
           data: { status: COMPRESS_STATUS.FAIL },
           where: { id: task_item.id },
         })
-        updateItem('task_img_item', { ...temp, status: COMPRESS_STATUS.WAITING })
       })
   }
 }

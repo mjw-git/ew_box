@@ -1,6 +1,5 @@
 import React, { forwardRef, useImperativeHandle } from 'react'
 import { useRequest } from 'ahooks'
-import { getIndexDBData } from '@/indexdb/operate'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { useToast } from '@/components/ui/use-toast'
 import BaseElliTip from '@/components/BaseElliTip'
@@ -10,13 +9,27 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/h
 import './index.css'
 import SvgIcon from '@/components/SvgIcon'
 import { convertBytes } from '@/utils'
+import { Button } from '@/components/ui/button'
 export interface TaskRefType {
   getList?: () => void
 }
 
-const Task = (_: any, ref: React.Ref<TaskRefType>) => {
+const Task = (_, ref: React.Ref<TaskRefType>) => {
   const { toast } = useToast()
-  const { data: taskList, run: getList } = useRequest(getTaskList)
+  const { data: taskList, run: getList } = useRequest(getTaskList, {
+    onSuccess: (res) => {
+      const processItem = res
+        .map((i) => i.items)
+        .flat()
+        .find((i) => i.status === 'processing')
+      if (processItem) {
+        let timer = setTimeout(() => {
+          getList()
+          clearTimeout(timer)
+        }, 2000)
+      }
+    },
+  })
 
   useImperativeHandle(ref, () => {
     return {
@@ -25,6 +38,19 @@ const Task = (_: any, ref: React.Ref<TaskRefType>) => {
   }, [])
   return (
     <Table>
+      <Button
+        onClick={async () => {
+          await window.systemApi.openPath('processResource')
+        }}>
+        process
+      </Button>
+
+      <Button
+        onClick={async () => {
+          await window.systemApi.openPath('appPath')
+        }}>
+        app
+      </Button>
       <TableHeader>
         <TableRow>
           <TableHead className='w-[100px]'>id</TableHead>
