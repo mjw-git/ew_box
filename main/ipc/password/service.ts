@@ -1,15 +1,9 @@
-import { decrypt, encrypt, getMachineId, isExistFileOrDir } from '@main/utils'
-import fs from 'fs'
-import { join, resolve } from 'path'
+import { decrypt, encrypt, getMachineId } from '@main/utils'
 import crypto from 'crypto'
-import electronIsDev from 'electron-is-dev'
 import { EnterPasswordBoxType } from './type'
-import { pwdPath } from '@main/utils/path'
 import { prismaInstance } from '@main/utils/init'
 import logger from '@main/utils/log'
 
-const lastSecretKeyPath = electronIsDev ? join(__dirname, `../testImg/password`) : resolve(pwdPath, './secret_key')
-const lastPwdPath = electronIsDev ? join(__dirname, `../testImg/pwd`) : resolve(pwdPath, './pwd')
 const createSecretKey = async (key: string, first = true) => {
   const machineId = getMachineId()
   const secretKey = await prismaInstance.config.findUnique({
