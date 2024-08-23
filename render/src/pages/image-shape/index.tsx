@@ -74,7 +74,7 @@ const ImageShape = () => {
                     <SelectItem value='webp'>webp</SelectItem>
                     <SelectItem value='jpeg'>jpg(jpeg)</SelectItem>
                     <SelectItem value='png'>png</SelectItem>
-                    <SelectItem value='self'>self </SelectItem>
+                    <SelectItem value='self'>Self Type</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>

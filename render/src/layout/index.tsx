@@ -1,7 +1,6 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import styles from './index.module.less'
 import logo from '../assets/images/pluto.png'
-import useInitLocalApi from '../hook/useInitLocalApi'
 import SvgIcon from '@/components/SvgIcon'
 import './index.less'
 import { routes } from '@/config/route'
@@ -12,10 +11,7 @@ import { Toaster } from '@/components/ui/toaster'
 const Layout = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-  // const [value, setValue] = useState('')
-  // const [open, setOpen] = useState(false)
 
-  useInitLocalApi()
   return (
     <div>
       <div className={styles.container}>
@@ -23,20 +19,31 @@ const Layout = () => {
           <div className='flex flex-col justify-center gap-1'>
             <img width={48} src={logo} alt='pluto' />
           </div>
-          <div className='flex flex-col justify-center gap-4 mt-3'>
-            {routes.map((route) => (
-              <SvgIcon
-                onClick={() => {
-                  navigate(route.path)
-                }}
-                key={route.path}
-                className={classNames(styles.menu_icon, { 'bg-muted': pathname === route.path }, 'text-foreground', 'hover:bg-muted')}
-                width={28}
-                height={30}
-                name={route.icon}
-              />
-            ))}
+          <div className='flex flex-col justify-center gap-4 mt-3 relative'>
+            {routes
+              .filter((i) => !i.hideInMenu)
+              .map((route) => (
+                <SvgIcon
+                  onClick={() => {
+                    navigate(route.path)
+                  }}
+                  key={route.path}
+                  className={classNames(styles.menu_icon, { 'bg-muted': pathname === route.path }, 'text-foreground', 'hover:bg-muted')}
+                  width={28}
+                  height={30}
+                  name={route.icon}
+                />
+              ))}
           </div>
+          <SvgIcon
+            onClick={() => {
+              navigate('setting')
+            }}
+            name='setting'
+            width={28}
+            height={30}
+            className={classNames(styles.menu_icon, { 'bg-muted': pathname === '/setting' }, 'text-foreground', 'hover:bg-muted', 'absolute', 'bottom-5')}
+          />
         </nav>
         <main className={styles.main_container}>
           <Toaster />

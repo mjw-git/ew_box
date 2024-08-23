@@ -1,7 +1,7 @@
 {
-  "name": "pluto",
+  "name": "ew",
   "version": "1.0.0",
-  "description": "electron of react",
+  "description": "Ew Box",
   "main": "./main-dist/index.js",
   "scripts": {
     "pri": "prisma generate",
@@ -43,10 +43,10 @@
       "**/node_modules/sharp/**/*",
       "**/node_modules/@img/**/*"
     ],
-    "productName": "test",
-    "appId": "org.react.vas",
+    "productName": "Ew Box",
+    "appId": "org.xiaoming.developer",
     "mac": {
-      "icon": "assets/icon.icns",
+      "icon": "assets/ew.icns",
       "type": "distribution",
       "target": [
         "dmg",
