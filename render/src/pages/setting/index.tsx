@@ -51,7 +51,7 @@ const Setting = () => {
                     onClick={() => {
                       clearRun()
                     }}>
-                    Continue
+                    Confirm
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
@@ -80,7 +80,7 @@ const Setting = () => {
                     onClick={() => {
                       clearPwdRun()
                     }}>
-                    Continue
+                    Confirm
                   </AlertDialogAction>
                 </AlertDialogFooter>
               </AlertDialogContent>
