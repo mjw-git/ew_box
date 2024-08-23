@@ -37,7 +37,7 @@ const Layout = () => {
           </div>
           <SvgIcon
             onClick={() => {
-              navigate('setting')
+              navigate('/setting')
             }}
             name='setting'
             width={28}

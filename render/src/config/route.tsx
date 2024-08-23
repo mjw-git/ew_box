@@ -13,6 +13,6 @@ export const routes = [
     path: '/setting',
     hideInMenu: true,
     icon: 'setting',
-    components: <Setting />,
+    component: <Setting />,
   },
 ]
