@@ -88,18 +88,19 @@ const Setting = () => {
           </CardFooter>
         </Card>
       </div>
-      <div className='flex gap-3'>
+      <div className='flex gap-3 mt-2'>
         <Button
           onClick={async () => {
             await window.systemApi.openPath('processResource')
           }}>
-          open log dir
+          Open Resource Dir
         </Button>
         <Button
+          variant='outline'
           onClick={async () => {
             await window.systemApi.openPath('appPath')
           }}>
-          open resources dir
+          Open UserData Dir
         </Button>
       </div>
     </div>
