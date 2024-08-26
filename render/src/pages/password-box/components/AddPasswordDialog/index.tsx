@@ -12,9 +12,7 @@ const FormSchema = z.object({
   remark: z.string().min(1, {
     message: 'Please input name',
   }),
-  username: z.string().min(2, {
-    message: 'Please input username',
-  }),
+  username: z.string(),
   password: z.string().min(1, {
     message: 'Please input password',
   }),

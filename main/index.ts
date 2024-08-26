@@ -16,7 +16,7 @@ function createWindow() {
     frame: false,
     titleBarStyle: 'hidden',
     webPreferences: {
-      // devTools: isDev,
+      devTools: isDev,
       preload: resolve(__dirname, './preload/index.js'),
       webSecurity: false,
       contextIsolation: true,

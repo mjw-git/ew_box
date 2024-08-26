@@ -56,7 +56,7 @@ const ImageCompress = () => {
       {pwdList?.map((item) => (
         <div key={item.id} className='rounded-[20px]  flex flex-col   pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:border-primary '>
           <div className='text-[24px] items-center flex justify-between text-primary'>
-            <span>{item.username}</span>
+            <span>{item.remark}</span>
             <div className='flex gap-1'>
               {visibleId !== item.id ? (
                 <ShowPasswordDialog
@@ -122,10 +122,12 @@ const ImageCompress = () => {
               </Dialog>
             </div>
           </div>
-          <div className='text-[12px] text-foreground'>
-            <span>remark:</span>
-            <span className='ml-2'>{item.username}</span>
-          </div>
+          {item.username && (
+            <div className='text-[12px] text-foreground'>
+              <span>username</span>
+              <span className='ml-2'>{item.username || '-'}</span>
+            </div>
+          )}
           <div className='text-[12px] text-foreground'>
             <span>{dayjs(+item.create_tm * 1000).format('YYYY-MM-DD HH:mm:ss')} created</span>
           </div>
