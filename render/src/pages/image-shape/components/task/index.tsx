@@ -38,19 +38,6 @@ const Task = (_, ref: React.Ref<TaskRefType>) => {
   }, [])
   return (
     <Table>
-      <Button
-        onClick={async () => {
-          await window.systemApi.openPath('processResource')
-        }}>
-        process
-      </Button>
-
-      <Button
-        onClick={async () => {
-          await window.systemApi.openPath('appPath')
-        }}>
-        app
-      </Button>
       <TableHeader>
         <TableRow>
           <TableHead className='w-[100px]'>id</TableHead>
