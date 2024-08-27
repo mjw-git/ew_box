@@ -54,7 +54,7 @@ const ImageCompress = () => {
     <div className='grid grid-cols-4 gap-4'>
       <AddPasswordDialog onSuccess={getList} />
       {pwdList?.map((item) => (
-        <div key={item.id} className='rounded-[20px]  flex flex-col   pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:border-primary '>
+        <div key={item.id} className='rounded-[20px]  flex flex-col   pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:shadow-md '>
           <div className='text-[24px] items-center flex justify-between text-primary'>
             <span>{item.remark}</span>
             <div className='flex gap-1'>
