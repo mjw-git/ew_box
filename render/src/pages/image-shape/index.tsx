@@ -35,7 +35,7 @@ const ImageShape = () => {
     <>
       <div className='flex gap-[20px]'>
         <div className='w-[50%]'>
-          <div className='border-border border-[1px] rounded-xl p-5'>
+          <div className='shadow-md border-border border-[1px] rounded-xl p-5'>
             <Button className='float-right' size='lg' onClick={handleCompress}>
               Start
             </Button>
@@ -93,7 +93,7 @@ const ImageShape = () => {
               />
             </div>
           </div>
-          <div className='mt-[20px] border-solid border-border max-h-[600px] overflow-auto rounded-[12px] border-[1px] p-[8px]'>
+          <div className='shadow-md mt-[20px] border-solid border-border max-h-[600px] overflow-auto rounded-[12px] border-[1px] p-[8px]'>
             <div className='text-primary font-bold'> Compress Task</div>
             <Task ref={taskRef} />
             <ImagePreview
@@ -107,7 +107,7 @@ const ImageShape = () => {
           </div>
         </div>
 
-        <div className='border-border p-3 border-[1px] rounded-[12px] overflow-auto w-[50%]'>
+        <div className='shadow-md border-border p-3 border-[1px] rounded-[12px] overflow-auto w-[50%]'>
           <div className='text-primary text-2xl'>Preview</div>
           <div className={styles.img_list}>
             {imgList.map((item, index) => {

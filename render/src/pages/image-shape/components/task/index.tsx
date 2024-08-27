@@ -10,6 +10,7 @@ import './index.css'
 import SvgIcon from '@/components/SvgIcon'
 import { convertBytes } from '@/utils'
 import { Button } from '@/components/ui/button'
+import Empty from '@/components/Empty'
 export interface TaskRefType {
   getList?: () => void
 }
@@ -36,7 +37,9 @@ const Task = (_, ref: React.Ref<TaskRefType>) => {
       getList: getList,
     }
   }, [])
-  return (
+  return (taskList ?? []).length === 0 ? (
+    <Empty />
+  ) : (
     <Table>
       <TableHeader>
         <TableRow>
@@ -45,6 +48,7 @@ const Task = (_, ref: React.Ref<TaskRefType>) => {
           <TableHead className='w-[120px]'>Operator</TableHead>
         </TableRow>
       </TableHeader>
+
       <TableBody>
         {(taskList ?? []).map((i) => {
           return (
