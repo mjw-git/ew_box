@@ -1357,6 +1357,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/koa-bodyparser@^4.3.12":
+  version "4.3.12"
+  resolved "https://registry.yarnpkg.com/@types/koa-bodyparser/-/koa-bodyparser-4.3.12.tgz#c19355e504422fd2a8fdb3496a32da48cd29133c"
+  integrity sha512-hKMmRMVP889gPIdLZmmtou/BijaU1tHPyMNmcK7FAHAdATnRcGQQy78EqTTxLH1D4FTsrxIzklAQCso9oGoebQ==
+  dependencies:
+    "@types/koa" "*"
+
 "@types/koa-compose@*":
   version "3.2.8"
   resolved "https://registry.yarnpkg.com/@types/koa-compose/-/koa-compose-3.2.8.tgz#dec48de1f6b3d87f87320097686a915f1e954b57"
@@ -2309,7 +2316,7 @@ clsx@^2.1.1:
   resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.1.tgz#eed397c9fd8bd882bfb18deab7102049a2f32999"
   integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
 
-co-body@^6.1.0:
+co-body@^6.0.0, co-body@^6.1.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/co-body/-/co-body-6.2.0.tgz#afd776d60e5659f4eee862df83499698eb1aea1b"
   integrity sha512-Kbpv2Yd1NdL1V/V4cwLVxraHDV6K8ayohr2rmH0J87Er8+zJjcTa6dAn9QMPC9CRgU8+aNajKbSf1TzDB1yKPA==
@@ -2499,6 +2506,11 @@ copy-to-clipboard@^3.3.3:
   integrity sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==
   dependencies:
     toggle-selection "^1.0.6"
+
+copy-to@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/copy-to/-/copy-to-2.0.1.tgz#2680fbb8068a48d08656b6098092bdafc906f4a5"
+  integrity sha512-3DdaFaU/Zf1AnpLiFDeNCD4TOWe3Zl2RZaTzUvWiIk5ERzcCodOE20Vqq4fzCbNoHURFHT4/us/Lfq+S2zyY4w==
 
 core-util-is@1.0.2:
   version "1.0.2"
@@ -4535,6 +4547,15 @@ koa-body@^6.0.1:
     co-body "^6.1.0"
     formidable "^2.0.1"
     zod "^3.19.1"
+
+koa-bodyparser@^4.4.1:
+  version "4.4.1"
+  resolved "https://registry.yarnpkg.com/koa-bodyparser/-/koa-bodyparser-4.4.1.tgz#a908d848e142cc57d9eece478e932bf00dce3029"
+  integrity sha512-kBH3IYPMb+iAXnrxIhXnW+gXV8OTzCu8VPDqvcDHW9SQrbkHmqPQtiZwrltNmSq6/lpipHnT7k7PsjlVD7kK0w==
+  dependencies:
+    co-body "^6.0.0"
+    copy-to "^2.0.1"
+    type-is "^1.6.18"
 
 koa-compose@^4.1.0:
   version "4.1.0"
@@ -6871,7 +6892,7 @@ type-fest@^0.13.1:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.13.1.tgz#0172cb5bce80b0bd542ea348db50c7e21834d934"
   integrity sha512-34R7HTnG0XIJcBSn5XhDd7nNFPRcXYRZrBB2O2jdKqYODldSzBAqzsWoZYYvduky73toYS/ESqxPvkDf/F0XMg==
 
-type-is@^1.6.16:
+type-is@^1.6.16, type-is@^1.6.18:
   version "1.6.18"
   resolved "https://registry.yarnpkg.com/type-is/-/type-is-1.6.18.tgz#4e552cd05df09467dcbc4ef739de89f2cf37c131"
   integrity sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==

@@ -4,7 +4,7 @@ import sharpRouter from './router/sharp'
 import passwordRouter from './router/password'
 import todoRouter from './router/todo'
 import logger from '@main/utils/log'
-import koaBody from 'koa-body'
+import koaBody from 'koa-bodyparser'
 const app = new koa()
 
 const catchError = async (ctx: BaseContext, next) => {

@@ -1,6 +1,6 @@
 import request from '../request'
 
 export const clearPassword = () =>
-  request('password', {
+  request('/password', {
     method: 'DELETE',
   })

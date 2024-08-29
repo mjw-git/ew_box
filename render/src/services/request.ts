@@ -1,17 +1,24 @@
 import { toast } from '@/components/ui/use-toast'
 import { stringify } from 'qs'
-const PREFIX = 'http://localhost:31117/api/v1/'
-const request = async <T>(url: string, options: RequestInit = {}): Promise<T> => {
+const PREFIX = 'http://localhost:31117/api/v1'
+const request = async <T>(url: string, options: Omit<RequestInit, 'body'> & { body?: Record<string, any> } = {}): Promise<T> => {
   const method = options.method || 'GET'
+  console.log(options, '==')
+
   let compileUrl = `${PREFIX}${url}`
   if (method.toLowerCase() === 'get') {
     compileUrl = `${compileUrl}${options.body ? `?${stringify(options.body ?? {})}` : ''}`
     Reflect.deleteProperty(options, 'body')
   }
   if (options.body) {
-    options.body = JSON.stringify(options.body)
+    options.body = JSON.stringify(options.body) as any
   }
-  return fetch(compileUrl, options)
+  options.headers = {
+    'Content-Type': 'application/json',
+  }
+  console.log(options.body, 'options')
+
+  return fetch(compileUrl, options as RequestInit)
     .then(async (res) => {
       if (res.status !== 200) {
         toast({

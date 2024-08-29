@@ -12,8 +12,10 @@ enum TODO_STATUS {
 }
 router.prefix('/api/v1')
 router.post('/todo', async (ctx) => {
-  const body = ctx.request.body
+  const body = ctx.request.body as { todo: string; type?: number }
+
   const { todo = 'default', type = TODO_TYPE.LIST } = body
+
   const data = await prismaInstance.todo.create({
     data: {
       todo: todo,
@@ -33,7 +35,7 @@ router.get('/todo/list', async (ctx) => {
   if (isFinished) {
     const list = await prismaInstance.todo.findMany({
       orderBy: {
-        create_tm: 'desc',
+        finished_tm: 'desc',
       },
       where: {
         status: isFinished,
@@ -42,8 +44,11 @@ router.get('/todo/list', async (ctx) => {
     })
     ctx.body = {
       code: 200,
-      list: list,
+      data: {
+        list: list,
+      },
     }
+    return
   }
   const today = await prismaInstance.todo.findMany({
     orderBy: {
@@ -92,7 +97,7 @@ router.get('/todo/list', async (ctx) => {
 })
 
 router.put('/todo/finished', async (ctx) => {
-  const body = ctx.request.body
+  const body = ctx.request.body as { id: number }
   const { id } = body
   if (!id) throw '请传入id'
   const data = await prismaInstance.todo.update({
@@ -100,6 +105,20 @@ router.put('/todo/finished', async (ctx) => {
       status: TODO_STATUS.FINISHED,
       finished_tm: Math.floor(new Date().getTime() / 1000),
     },
+    where: {
+      id: id,
+    },
+  })
+  ctx.body = {
+    code: 200,
+    data: data.id,
+  }
+})
+router.delete('/todo', async (ctx) => {
+  const body = ctx.request.body as { id: number }
+  const { id } = body
+  if (!id) throw '请传入id'
+  const data = await prismaInstance.todo.delete({
     where: {
       id: id,
     },
