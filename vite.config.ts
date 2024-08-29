@@ -20,7 +20,7 @@ export default defineConfig(({ mode }) => ({
       iconDirs: [path.resolve(process.cwd(), 'render/src/assets/svg')], //svg地址
       symbolId: 'icon-[dir]-[name]',
     }),
-    ViteImgToBase64()
+    ViteImgToBase64(),
   ],
   resolve: {
     alias: {

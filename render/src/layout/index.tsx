@@ -13,7 +13,7 @@ const Layout = () => {
   const navigate = useNavigate()
 
   return (
-    <div>
+    <div className='font-mono'>
       <div className={styles.container}>
         <nav className={styles.menu_container}>
           <div className='flex flex-col justify-center gap-1'>

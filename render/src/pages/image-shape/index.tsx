@@ -59,7 +59,7 @@ const ImageShape = () => {
             </div>
 
             <div className='flex items-center flex-row mt-2 gap-3'>
-              <span className='text-primary text-[16px] inline-block w-[120px]'>Compress Type</span>
+              <span className='text-primary text-[16px] inline-block w-[140px]'>Compress Type</span>
               <Select
                 value={type}
                 onValueChange={(v) => {
