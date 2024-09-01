@@ -30,8 +30,28 @@ router.post('/todo', async (ctx) => {
   }
 })
 
+router.get('/todo/list/calendar', async (ctx) => {
+  const { create_tm_start, create_tm_end } = ctx.request.query ?? {}
+  const list = await prismaInstance.todo.findMany({
+    where: {
+      create_tm: {
+        gte: +create_tm_start,
+        lte: +create_tm_end,
+      },
+      type: {
+        in: [TODO_TYPE.CALENDAR, TODO_TYPE.LIST],
+      },
+    },
+  })
+  ctx.body = {
+    code: 200,
+    data: {
+      list,
+    },
+  }
+})
 router.get('/todo/list', async (ctx) => {
-  const isFinished = ctx.request.query.finished ? TODO_STATUS.FINISHED : TODO_STATUS.UNFINISHED
+  const isFinished = ctx.request.query.finished ? +ctx.request.query.finished : undefined
   if (isFinished) {
     const list = await prismaInstance.todo.findMany({
       orderBy: {

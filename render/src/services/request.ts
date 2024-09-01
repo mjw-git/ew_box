@@ -3,7 +3,6 @@ import { stringify } from 'qs'
 const PREFIX = 'http://localhost:31117/api/v1'
 const request = async <T>(url: string, options: Omit<RequestInit, 'body'> & { body?: Record<string, any> } = {}): Promise<T> => {
   const method = options.method || 'GET'
-  console.log(options, '==')
 
   let compileUrl = `${PREFIX}${url}`
   if (method.toLowerCase() === 'get') {
@@ -16,7 +15,6 @@ const request = async <T>(url: string, options: Omit<RequestInit, 'body'> & { bo
   options.headers = {
     'Content-Type': 'application/json',
   }
-  console.log(options.body, 'options')
 
   return fetch(compileUrl, options as RequestInit)
     .then(async (res) => {

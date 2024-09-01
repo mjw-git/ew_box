@@ -13,17 +13,20 @@ const BaseElliTip = (props: BaseElliTipProps) => {
   useEffect(() => {
     const displayNoneWidth = displayNoneRef.current.getBoundingClientRect().width
     const totalWidth = containerRef.current.getBoundingClientRect().width
+    console.log(displayNoneWidth, totalWidth)
     if (displayNoneWidth > totalWidth) {
+      console.log(displayNoneWidth, totalWidth)
+
       setShowTooltip(true)
     }
   }, [text])
-  const mergeCls = classNames('w-[100%] text-ellipsis line-clamp-1 break-all', className)
+  const mergeCls = classNames('w-full text-ellipsis line-clamp-1 break-all', className)
   return (
-    <>
+    <div className='w-full relative'>
       {showTooltip ? (
         <TooltipProvider delayDuration={0}>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger className='w-full'>
               <div ref={containerRef} className={mergeCls} {...rest}>
                 {text}
               </div>
@@ -39,10 +42,10 @@ const BaseElliTip = (props: BaseElliTipProps) => {
         </div>
       )}
 
-      <div ref={displayNoneRef} className={classNames(mergeCls, 'absolute top-0 z-[-1] opacity-0')}>
+      <div ref={displayNoneRef} className={classNames('w-fit', 'absolute top-0 z-[-1] opacity-0')}>
         {text}
       </div>
-    </>
+    </div>
   )
 }
 export default BaseElliTip

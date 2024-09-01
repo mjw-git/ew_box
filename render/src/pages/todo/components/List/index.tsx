@@ -5,16 +5,15 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/components/ui/use-toast'
 import { addTodoItem, deleteToDo, finishToDo, getToDoList } from '@/services/todo'
 import { useRequest } from 'ahooks'
-import dayjs from 'dayjs'
 import { useState } from 'react'
+import dayjs from 'dayjs'
 
 const List = () => {
   const { toast } = useToast()
   const [collapsed, setCollapsed] = useState('today')
   const [todo, setTodo] = useState('')
-  const { data: unFinishedTodoList, run: getUnFinishedList } = useRequest(getToDoList)
+  const { data: unFinishedTodoList, run: getUnFinishedList } = useRequest(() => getToDoList({ finished: 0 }))
   const { data: finishedTodoList, run: getFinishedList } = useRequest(() => getToDoList({ finished: 1 }))
-  console.log(finishedTodoList)
 
   const { run: createTodo } = useRequest(addTodoItem, {
     manual: true,

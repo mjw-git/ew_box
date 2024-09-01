@@ -6,7 +6,11 @@ export const addTodoItem = (body: any) => {
     body: body,
   })
 }
-
+export const getCalendarToDoList = (body?: Record<string, any>) =>
+  request<{ list?: Todo.TodoItem[] }>('/todo/list/calendar', {
+    method: 'GET',
+    body,
+  })
 export const getToDoList = (body?: Record<string, any>) =>
   request<{ today: Todo.TodoItem[]; yesterday: Todo.TodoItem[]; earlier: Todo.TodoItem[]; list?: Todo.TodoItem[] }>('/todo/list', {
     method: 'GET',
