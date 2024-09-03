@@ -39,13 +39,13 @@ const ShowPasswordDialog = (props: ShowPasswordDialogProps) => {
       form.reset()
       setOpen(false)
       toast({
-        description: 'succeed',
+        description: 'Succeed',
       })
       onSuccess?.(pwd)
     } catch (error) {
       toast({
         variant: 'destructive',
-        description: 'password is wrong',
+        description: 'Password Is Wrong',
       })
     }
   }

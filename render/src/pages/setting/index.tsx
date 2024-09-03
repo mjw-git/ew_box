@@ -12,7 +12,7 @@ const Setting = () => {
     manual: true,
     onSuccess: () => {
       toast({
-        description: 'clear success',
+        description: 'Clear Success',
       })
     },
   })
@@ -20,7 +20,7 @@ const Setting = () => {
     manual: true,
     onSuccess: () => {
       toast({
-        description: 'clear success',
+        description: 'Clear Success',
       })
     },
   })

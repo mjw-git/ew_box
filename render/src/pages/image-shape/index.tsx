@@ -21,7 +21,7 @@ const ImageShape = () => {
   const handleCompress = async () => {
     if (imgList.length === 0) return
     toast({
-      description: 'starting',
+      description: 'Starting',
     })
     await window.sharpApi.compress(
       imgList.map((i) => i.path),

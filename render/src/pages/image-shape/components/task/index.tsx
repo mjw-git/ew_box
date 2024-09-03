@@ -95,7 +95,7 @@ const Task = (_, ref: React.Ref<TaskRefType>) => {
                     const result = await window.systemApi.openPath(i.path)
                     if (result === 'error') {
                       toast({
-                        description: 'fold not exits',
+                        description: 'Fold Not Exits',
                       })
                     }
                   }}>

@@ -1,0 +1,5 @@
+.wrapper:hover .operation {
+    display: flex;
+    gap: 4px;
+
+}

@@ -12,16 +12,17 @@ enum TODO_STATUS {
 }
 router.prefix('/api/v1')
 router.post('/todo', async (ctx) => {
-  const body = ctx.request.body as { todo: string; type?: number }
+  const body = ctx.request.body as { todo: string; type?: number; start_tm?: number }
 
-  const { todo = 'default', type = TODO_TYPE.LIST } = body
-
+  const { todo = 'default', start_tm, type = TODO_TYPE.LIST } = body
+  const nowTime = Math.floor(new Date().getTime() / 1000)
   const data = await prismaInstance.todo.create({
     data: {
       todo: todo,
       type: type,
+      start_tm: start_tm || nowTime,
       status: TODO_STATUS.UNFINISHED,
-      create_tm: Math.floor(new Date().getTime() / 1000),
+      create_tm: nowTime,
     },
   })
   ctx.body = {
@@ -31,12 +32,12 @@ router.post('/todo', async (ctx) => {
 })
 
 router.get('/todo/list/calendar', async (ctx) => {
-  const { create_tm_start, create_tm_end } = ctx.request.query ?? {}
+  const { start_tm_start, start_tm_end } = ctx.request.query ?? {}
   const list = await prismaInstance.todo.findMany({
     where: {
-      create_tm: {
-        gte: +create_tm_start,
-        lte: +create_tm_end,
+      start_tm: {
+        gte: +start_tm_start,
+        lte: +start_tm_end,
       },
       type: {
         in: [TODO_TYPE.CALENDAR, TODO_TYPE.LIST],
@@ -72,12 +73,12 @@ router.get('/todo/list', async (ctx) => {
   }
   const today = await prismaInstance.todo.findMany({
     orderBy: {
-      create_tm: 'desc',
+      start_tm: 'desc',
     },
     where: {
       status: isFinished,
       type: TODO_TYPE.LIST,
-      create_tm: {
+      start_tm: {
         lt: dayjs().endOf('date').unix(),
         gt: dayjs().startOf('date').unix(),
       },

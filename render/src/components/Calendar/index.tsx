@@ -6,11 +6,12 @@ import { ReactNode, useEffect } from 'react'
 const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 interface CalendarProps {
+  renderOpt?: (cal: CalendarItem) => ReactNode
   onChange?: (cal: CalendarItem[]) => void
   renderExtra?: (time: CalendarItem) => ReactNode
 }
 const Calendar = (props: CalendarProps) => {
-  const { renderExtra, onChange } = props
+  const { renderExtra, onChange, renderOpt } = props
   const { tDate, tMonth, tYear, calendar, pre, next, changeCurrentDay } = useCalendar()
 
   useEffect(() => {
@@ -49,8 +50,11 @@ const Calendar = (props: CalendarProps) => {
           {calendar.map((i, index) => (
             <div key={index} className={`border-r-[1px] relative ${i.year === tYear && i.month === tMonth && i.day === tDate ? 'bg-blue-50' : ''} ${i.isCurrentMonth ? '' : 'bg-muted text-slate-400'} cursor-pointer p-2 box-border border-b-[1px] h-full border-border`}>
               <div className='group absolute left-0 flex flex-col p-1 top-0 w-full h-full'>
-                <div className='h-8'>
-                  {i.day === 1 && i.isCurrentMonth && <span>{months[tMonth]}</span>} <span className={`${i.isCurrentMonth && i.day === tDate ? 'bg-green-500 rounded-sm p-1 text-white' : ''}`}>{i.day}</span>
+                <div className='h-8 flex items-center'>
+                  <span>
+                    {i.day === 1 && i.isCurrentMonth && <span>{months[tMonth]}</span>} <span className={`${i.isCurrentMonth && i.day === tDate ? 'bg-green-500 rounded-sm p-1 text-white' : ''}`}>{i.day}</span>
+                  </span>
+                  <span className='flex-1'>{renderOpt?.(i)}</span>
                 </div>
                 {renderExtra?.(i)}
               </div>

@@ -41,12 +41,12 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
       form.reset()
       setOpen(false)
       toast({
-        description: 'create succeed',
+        description: 'Create Succeed',
       })
       onSuccess?.()
     } else {
       toast({
-        description: 'create failed',
+        description: 'Create Failed',
       })
     }
   }

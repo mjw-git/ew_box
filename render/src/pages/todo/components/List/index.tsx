@@ -40,7 +40,7 @@ const List = () => {
     onSuccess: () => {
       getUnFinishedList()
       getFinishedList()
-      toast({ description: 'finish success' })
+      toast({ description: 'Finish Success' })
     },
   })
   return (
@@ -49,7 +49,7 @@ const List = () => {
         value={todo}
         onKeyDown={(e) => {
           if (e.code === 'Enter' && todo.trim()) {
-            createTodo({ todo: todo })
+            createTodo({ todo: todo, start_tm: Math.floor(new Date().getTime() / 1000) })
           }
         }}
         onChange={(e) => {
@@ -209,7 +209,7 @@ const List = () => {
                       name='close'
                     />
                   </div>
-                  <div className='text-red-300 text-sm'>{dayjs((item.finished_tm || 0) * 1000).format('YYYY-MM-DD HH:mm:ss')} Finished</div>
+                  <div className='text-red-300 text-sm'>{dayjs((item.finished_tm || 0) * 1000).format('YYYY-MM-DD HH:mm:ss')} Done</div>
                 </div>
               ))
             )}
