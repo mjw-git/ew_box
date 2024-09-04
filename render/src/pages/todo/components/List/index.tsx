@@ -7,9 +7,12 @@ import { addTodoItem, deleteToDo, finishToDo, getToDoList } from '@/services/tod
 import { useRequest } from 'ahooks'
 import { useState } from 'react'
 import dayjs from 'dayjs'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
 
 const List = () => {
   const { toast } = useToast()
+  const [onlyUnTodo, setOnlyUnTodo] = useState(false)
   const [collapsed, setCollapsed] = useState('today')
   const [todo, setTodo] = useState('')
   const { data: unFinishedTodoList, run: getUnFinishedList } = useRequest(() => getToDoList({ finished: 0 }))
@@ -61,133 +64,180 @@ const List = () => {
       <div className='mt-2'></div>
       <div className='grid w-full grid-cols-2 mt-4 gap-5'>
         <div>
-          <div className='font-bold'>Unfinished</div>
-          <Accordion
-            onValueChange={(e) => {
-              setCollapsed(e)
-            }}
-            type='single'
-            value={collapsed}
-            collapsible
-            className='w-full'>
-            <AccordionItem value='today'>
-              <AccordionTrigger className='flex'>
-                <span className='bg-green-400 px-2 rounded-sm'>Today</span>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className='flex flex-col gap-1'>
-                  {(unFinishedTodoList?.today ?? []).length === 0 ? (
-                    <Empty />
-                  ) : (
-                    (unFinishedTodoList?.today ?? []).map((item) => (
-                      <div className='group flex items-center space-x-2 justify-between cursor-pointer hover:shadow-md  border-border border-[1px] px-2 py-3 rounded-md' key={item.id}>
-                        <div className='flex items-center gap-1 '>
-                          <Checkbox
-                            onCheckedChange={(e) => {
-                              if (e) {
-                                runFinish({ id: item.id })
-                              }
+          <div className='font-bold gap-4 flex'>
+            Unfinished
+            <div className='flex items-center space-x-2'>
+              <Switch
+                checked={onlyUnTodo}
+                onCheckedChange={(e) => {
+                  setOnlyUnTodo(e)
+                }}
+                id='airplane-mode'
+              />
+              <Label htmlFor='airplane-mode'>Only UnFinished</Label>
+            </div>
+          </div>
+          {!onlyUnTodo ? (
+            <Accordion
+              onValueChange={(e) => {
+                setCollapsed(e)
+              }}
+              type='single'
+              value={collapsed}
+              collapsible
+              className='w-full'>
+              <AccordionItem value='today'>
+                <AccordionTrigger className='flex'>
+                  <span className='bg-green-400 px-2 rounded-sm'>Today</span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className='flex flex-col gap-1'>
+                    {(unFinishedTodoList?.today ?? []).length === 0 ? (
+                      <Empty />
+                    ) : (
+                      (unFinishedTodoList?.today ?? []).map((item) => (
+                        <div className='group flex items-center space-x-2 justify-between cursor-pointer hover:shadow-md  border-border border-[1px] px-2 py-3 rounded-md' key={item.id}>
+                          <div className='flex items-center gap-1 '>
+                            <Checkbox
+                              onCheckedChange={(e) => {
+                                if (e) {
+                                  runFinish({ id: item.id })
+                                }
+                              }}
+                              id='terms'
+                            />
+                            <label htmlFor='terms' className='text-sm font-medium cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                              {item.todo}
+                            </label>
+                          </div>
+                          <SvgIcon
+                            onClick={() => {
+                              runDeleteTodo({ id: item.id })
                             }}
-                            id='terms'
+                            className='hidden group-hover:block hover:text-green-400'
+                            width={12}
+                            height={12}
+                            name='close'
                           />
-                          <label htmlFor='terms' className='text-sm font-medium cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                            {item.todo}
-                          </label>
                         </div>
-                        <SvgIcon
-                          onClick={() => {
-                            runDeleteTodo({ id: item.id })
-                          }}
-                          className='hidden group-hover:block hover:text-green-400'
-                          width={12}
-                          height={12}
-                          name='close'
-                        />
-                      </div>
-                    ))
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value='yesterday'>
-              <AccordionTrigger>
-                <span className='bg-yellow-400 px-2 rounded-sm'>Yesterday</span>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className='flex flex-col gap-1'>
-                  {(unFinishedTodoList?.yesterday ?? []).length === 0 ? (
-                    <Empty />
-                  ) : (
-                    (unFinishedTodoList?.yesterday ?? []).map((item) => (
-                      <div className='group flex items-center space-x-2 justify-between cursor-pointer hover:shadow-md  border-border border-[1px] px-2 py-3 rounded-md' key={item.id}>
-                        <div className='flex items-center gap-1 '>
-                          <Checkbox
-                            onCheckedChange={(e) => {
-                              if (e) {
-                                runFinish({ id: item.id })
-                              }
+                      ))
+                    )}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value='yesterday'>
+                <AccordionTrigger>
+                  <span className='bg-yellow-400 px-2 rounded-sm'>Yesterday</span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className='flex flex-col gap-1'>
+                    {(unFinishedTodoList?.yesterday ?? []).length === 0 ? (
+                      <Empty />
+                    ) : (
+                      (unFinishedTodoList?.yesterday ?? []).map((item) => (
+                        <div className='group flex items-center space-x-2 justify-between cursor-pointer hover:shadow-md  border-border border-[1px] px-2 py-3 rounded-md' key={item.id}>
+                          <div className='flex items-center gap-1 '>
+                            <Checkbox
+                              onCheckedChange={(e) => {
+                                if (e) {
+                                  runFinish({ id: item.id })
+                                }
+                              }}
+                              id='terms'
+                            />
+                            <label htmlFor='terms' className='text-sm font-medium cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                              {item.todo}
+                            </label>
+                          </div>
+                          <SvgIcon
+                            onClick={() => {
+                              runDeleteTodo({ id: item.id })
                             }}
-                            id='terms'
+                            className='hidden group-hover:block hover:text-green-400'
+                            width={12}
+                            height={12}
+                            name='close'
                           />
-                          <label htmlFor='terms' className='text-sm font-medium cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                            {item.todo}
-                          </label>
                         </div>
-                        <SvgIcon
-                          onClick={() => {
-                            runDeleteTodo({ id: item.id })
-                          }}
-                          className='hidden group-hover:block hover:text-green-400'
-                          width={12}
-                          height={12}
-                          name='close'
-                        />
-                      </div>
-                    ))
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-            <AccordionItem value='earlier'>
-              <AccordionTrigger>
-                <span className='bg-slate-400 px-2 rounded-sm'>Earlier</span>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className='flex flex-col gap-1'>
-                  {(unFinishedTodoList?.earlier ?? []).length === 0 ? (
-                    <Empty />
-                  ) : (
-                    (unFinishedTodoList?.earlier ?? []).map((item) => (
-                      <div className='group flex items-center space-x-2 justify-between cursor-pointer hover:shadow-md  border-border border-[1px] px-2 py-3 rounded-md' key={item.id}>
-                        <div className='flex items-center gap-1 '>
-                          <Checkbox
-                            onCheckedChange={(e) => {
-                              if (e) {
-                                runFinish({ id: item.id })
-                              }
+                      ))
+                    )}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value='earlier'>
+                <AccordionTrigger>
+                  <span className='bg-slate-400 px-2 rounded-sm'>Earlier</span>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className='flex flex-col gap-1'>
+                    {(unFinishedTodoList?.earlier ?? []).length === 0 ? (
+                      <Empty />
+                    ) : (
+                      (unFinishedTodoList?.earlier ?? []).map((item) => (
+                        <div className='group flex items-center space-x-2 justify-between cursor-pointer hover:shadow-md  border-border border-[1px] px-2 py-3 rounded-md' key={item.id}>
+                          <div className='flex items-center gap-1 '>
+                            <Checkbox
+                              onCheckedChange={(e) => {
+                                if (e) {
+                                  runFinish({ id: item.id })
+                                }
+                              }}
+                              id='terms'
+                            />
+                            <label htmlFor='terms' className='text-sm font-medium cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                              {item.todo}
+                            </label>
+                          </div>
+                          <SvgIcon
+                            onClick={() => {
+                              runDeleteTodo({ id: item.id })
                             }}
-                            id='terms'
+                            className='hidden group-hover:block hover:text-green-400'
+                            width={12}
+                            height={12}
+                            name='close'
                           />
-                          <label htmlFor='terms' className='text-sm font-medium cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
-                            {item.todo}
-                          </label>
                         </div>
-                        <SvgIcon
-                          onClick={() => {
-                            runDeleteTodo({ id: item.id })
-                          }}
-                          className='hidden group-hover:block hover:text-green-400'
-                          width={12}
-                          height={12}
-                          name='close'
-                        />
-                      </div>
-                    ))
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+                      ))
+                    )}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ) : (
+            <div className='flex mt-2 flex-col gap-1'>
+              {(unFinishedTodoList?.un_todo ?? []).length === 0 ? (
+                <Empty />
+              ) : (
+                (unFinishedTodoList?.un_todo ?? []).map((item) => (
+                  <div className='group flex items-center space-x-2 justify-between cursor-pointer hover:shadow-md  border-border border-[1px] px-2 py-3 rounded-md' key={item.id}>
+                    <div className='flex items-center gap-1 '>
+                      <Checkbox
+                        onCheckedChange={(e) => {
+                          if (e) {
+                            runFinish({ id: item.id })
+                          }
+                        }}
+                        id='terms'
+                      />
+                      <label htmlFor='terms' className='text-sm font-medium cursor-pointer leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70'>
+                        {item.todo}
+                      </label>
+                    </div>
+                    <SvgIcon
+                      onClick={() => {
+                        runDeleteTodo({ id: item.id })
+                      }}
+                      className='hidden group-hover:block hover:text-green-400'
+                      width={12}
+                      height={12}
+                      name='close'
+                    />
+                  </div>
+                ))
+              )}
+            </div>
+          )}
         </div>
         <div>
           <div className='font-bold'>Finished</div>

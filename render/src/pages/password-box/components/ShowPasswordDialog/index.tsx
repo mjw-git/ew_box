@@ -11,7 +11,7 @@ import SvgIcon from '@/components/SvgIcon'
 
 const FormSchema = z.object({
   password: z.string().min(1, {
-    message: 'Please input password',
+    message: 'Please Input Password',
   }),
 })
 interface ShowPasswordDialogProps {
