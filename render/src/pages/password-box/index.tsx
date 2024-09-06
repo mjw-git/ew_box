@@ -31,7 +31,7 @@ const ImageCompress = () => {
     } else {
       toast({
         variant: 'destructive',
-        description: 'password error',
+        description: 'Password Error',
       })
     }
   }
@@ -56,14 +56,13 @@ const ImageCompress = () => {
       {pwdList?.map((item) => (
         <div key={item.id} className='rounded-[20px]  flex flex-col   pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:shadow-md '>
           <div className='text-[24px] items-center flex justify-between text-primary'>
-            <span>{item.remark}</span>
-            <div className='flex gap-1'>
+            <span className='text-slate-600'>{item.remark}</span>
+            <div className='flex gap-1 items-center'>
               {visibleId !== item.id ? (
                 <ShowPasswordDialog
                   id={item.id}
                   onSuccess={(pwd) => {
                     clearTimeout(timeRef.current)
-                    //   const pwd = await window.passwordBoxApi.decrypt(item.time)
                     setDecryptPwd(pwd)
                     setVisibleId(item.id)
                     timeRef.current = setTimeout(() => {
@@ -85,7 +84,7 @@ const ImageCompress = () => {
                             description: 'copy succeed',
                           })
                         }}
-                        className='w-[20px] h-[20px] cursor-pointer'
+                        className='w-[14px] h-[14px] cursor-pointer'
                       />
                     </TooltipTrigger>
                     <TooltipContent>
@@ -98,7 +97,7 @@ const ImageCompress = () => {
               )}
               <Dialog>
                 <DialogTrigger asChild>
-                  <SvgIcon name='delete' className='w-[24px] h-[24px] cursor-pointer' />
+                  <SvgIcon name='delete' className='w-[16px] h-[16px] cursor-pointer' />
                 </DialogTrigger>
                 <DialogContent>
                   <DialogTitle>onConfirm</DialogTitle>
@@ -110,7 +109,7 @@ const ImageCompress = () => {
                           await window.passwordBoxApi.delete(item.id)
                           getList()
                           toast({
-                            description: 'delete succeed',
+                            description: 'Delete Succeed',
                           })
                         }}
                         type='submit'>
@@ -129,7 +128,7 @@ const ImageCompress = () => {
             </div>
           )}
           <div className='text-[12px] text-foreground'>
-            <span>{dayjs(+item.create_tm * 1000).format('YYYY-MM-DD HH:mm:ss')} created</span>
+            <span>{dayjs(+item.create_tm * 1000).format('YYYY-MM-DD HH:mm:ss')} Created</span>
           </div>
         </div>
       ))}

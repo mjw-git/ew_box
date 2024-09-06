@@ -78,23 +78,23 @@ const ShowPasswordDialog = (props: ShowPasswordDialogProps) => {
           //     clearTimeout(timeRef.current)
           //   }, 30000)
           // }}
-          className='text-black w-[24px] h-[24px] hover:text-primary cursor-pointer'
+          className='text-black w-[14px] h-[14px] hover:text-primary cursor-pointer'
         />
       </DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Password</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='w-2/3 space-y-6'>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='w-full'>
             <FormField
               control={form.control}
               name='password'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type='password' className='w-[380px]' placeholder='password' {...field} />
+                  <FormControl className='mb-4'>
+                    <Input type='password' placeholder='password' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
