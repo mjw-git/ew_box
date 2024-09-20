@@ -5,9 +5,10 @@ import registerService from './ipc'
 import Channel from './interface/channel'
 import { initDb, initDirectory } from './utils/init'
 import electronIsDev from 'electron-is-dev'
+import initTray from './utils/tray'
 
 function createWindow() {
-  const window: BrowserWindow = new BrowserWindow({
+  Channel.mainWindow = new BrowserWindow({
     alwaysOnTop: false,
     height: 800,
     width: 1200,
@@ -23,16 +24,23 @@ function createWindow() {
       nodeIntegration: true,
     },
   })
-  Channel.mainWindow = window
   registerService()
   initDirectory()
   if (isDev) {
-    window.webContents.openDevTools()
-    window.loadURL('http://localhost:8889')
+    Channel.mainWindow.webContents.openDevTools()
+    Channel.mainWindow.loadURL('http://localhost:8889')
   } else {
-    window.loadFile(resolve(__dirname, '../render/dist/index.html'))
+    Channel.mainWindow.loadFile(resolve(__dirname, '../render/dist/index.html'))
   }
-  return window
+  Channel.mainWindow.on('close', (e) => {
+    e.preventDefault()
+    Channel.mainWindow.hide()
+  })
+  Channel.mainWindow.on('closed', () => {
+    Channel.mainWindow = null
+  })
+
+  return Channel.mainWindow
 }
 function registerProtocol() {
   protocol.registerFileProtocol('atom', (request, callback) => {
@@ -47,11 +55,21 @@ if (electronIsDev) {
 app.on('ready', () => {
   process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
 })
+app.on('before-quit', () => {
+  Channel.mainWindow?.removeAllListeners('close')
+  Channel.mainWindow = null
+})
+app.on('activate', () => {
+  Channel.mainWindow?.show()
+})
+app.setName('A' + app.getName())
 app.whenReady().then(async () => {
   await initDb()
+
   import('./server/index').then((res) => {
     res.default(() => {
       createWindow()
+      // initTray()
     })
   })
 

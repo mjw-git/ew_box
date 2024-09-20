@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Label } from '@/components/ui/label'
 import { useOpen } from '@/hook/useOpen'
-const randomColor = ['bg-blue-500', 'bg-pink-500', 'bg-slate-500', 'bg-red-500', 'bg-orange-500']
+const randomColor = ['bg-blue-400', 'bg-pink-500', 'bg-slate-500', 'bg-red-500', 'bg-orange-500']
 const AddTodoPopOverCard = (props: { day: Dayjs; onSuccess?: () => void }) => {
   const { day, onSuccess } = props
 

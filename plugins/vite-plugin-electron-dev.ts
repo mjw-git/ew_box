@@ -14,27 +14,48 @@ import chokidar from 'chokidar'
 
 // 引入esbuild,把 electron 的 ts 打包成 js
 import esbuild from 'esbuild'
+import { debounce } from 'lodash'
 const OUT_DIR = path.join(__dirname, '../main-dist')
 
-const lockFilePath = path.resolve(__dirname, '../electron.lock');
-function createElectron() {
-  const runElectron = () => {
-    let electronProcess = spawn(`${electron}`, [path.join(__dirname, '../main-dist/index.js')], { stdio: 'inherit' }) as ChildProcess
-    fs.writeFileSync(lockFilePath, `${electronProcess.pid}`)
-  }
-  const exit = fs.existsSync(lockFilePath);
+const lockFilePath = path.resolve(__dirname, '../electron.lock')
+let isWatch = false
+const runElectron = () => {
+  const exit = fs.existsSync(lockFilePath)
   if (exit) {
     const pid = fs.readFileSync(lockFilePath, 'utf-8').toString()
     if (pid) {
       try {
         process.kill(+pid, 'SIGTERM')
-      } catch (error) {
-
-      }
+      } catch (error) {}
     }
   }
-  runElectron()
 
+  let electronProcess = spawn(`${electron}`, [path.join(__dirname, '../main-dist/index.js')], { stdio: 'inherit' }) as ChildProcess
+
+  fs.writeFileSync(lockFilePath, `${electronProcess.pid}`)
+}
+
+function createElectron() {
+  // const exit = fs.existsSync(lockFilePath)
+  // if (exit) {
+  //   const pid = fs.readFileSync(lockFilePath, 'utf-8').toString()
+  //   if (pid) {
+  //     try {
+  //       process.kill(+pid, 'SIGTERM')
+  //     } catch (error) {}
+  //   }
+  // }
+  // runElectron()
+  if (!isWatch) {
+    const mainDir = path.join(__dirname, '../main-dist')
+    const debouncedCreateElectron = debounce(() => {
+      runElectron()
+    }, 200)
+    chokidar.watch(mainDir, { ignoreInitial: true }).on('change', (e, file) => {
+      debouncedCreateElectron()
+    })
+    isWatch = true
+  }
 }
 
 // 手动定义一个方法，用于进行打包的工作
@@ -56,7 +77,6 @@ const electronBuild2Js = async () => {
 
 // 自定义的插件的逻辑
 export const ElectronDevPlugin = (): Plugin => {
-
   return {
     name: 'electron-dev-plugin',
     //配置服务的钩子
@@ -74,9 +94,6 @@ export const ElectronDevPlugin = (): Plugin => {
         if (!fs.existsSync(mainDir)) {
           fs.mkdirSync(mainDir)
         }
-        chokidar.watch(mainDir).on('all', (e, file) => {
-          createElectron()
-        })
       })
     },
   }

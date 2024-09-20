@@ -24,7 +24,7 @@ const List = () => {
       getUnFinishedList()
       setTodo('')
       toast({
-        description: 'create success',
+        description: 'Create Success',
       })
     },
   })
@@ -248,7 +248,7 @@ const List = () => {
               (finishedTodoList?.list ?? []).map((item) => (
                 <div className='bg-gray-100 group cursor-pointer hover:shadow-md p-2 rounded-md' key={item.id}>
                   <div className='flex items-center  justify-between'>
-                    <span className='text-slate-500'>{item.todo}</span>
+                    <span className='text-gray-950'>{item.todo}</span>
                     <SvgIcon
                       onClick={() => {
                         runDeleteTodo({ id: item.id })
@@ -259,7 +259,7 @@ const List = () => {
                       name='close'
                     />
                   </div>
-                  <div className='text-red-300 text-sm'>{dayjs((item.finished_tm || 0) * 1000).format('YYYY-MM-DD HH:mm:ss')} Done</div>
+                  <div className='text-red-400 text-sm'>{dayjs((item.finished_tm || 0) * 1000).format('YYYY-MM-DD HH:mm:ss')} Done</div>
                 </div>
               ))
             )}
