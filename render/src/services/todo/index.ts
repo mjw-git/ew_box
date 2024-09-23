@@ -6,7 +6,12 @@ export const addTodoItem = (body: any) => {
     body: body,
   })
 }
-
+export const starToDoItem = (body: any) => {
+  return request('/todo/star', {
+    method: 'PUT',
+    body: body,
+  })
+}
 export const getEventBookToDoList = (body?: Record<string, any>) =>
   request<{ list?: Todo.TodoItem[] }>('/todo/list/event', {
     method: 'GET',

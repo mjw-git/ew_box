@@ -31,11 +31,32 @@ router.post('/todo', async (ctx) => {
     data: data.id,
   }
 })
+
+router.put('/todo/star', async (ctx) => {
+  const body = ctx.request.body as { id: number; is_star: number }
+  const { id } = body
+  if (!id) throw '请传入id'
+  const todoItem = await prismaInstance.todo.findUnique({
+    where: { id },
+  })
+  if (!todoItem) throw '未找到数据'
+  const data = await prismaInstance.todo.update({
+    where: { id },
+    data: {
+      is_star: todoItem.is_star === 1 ? 0 : 1,
+    },
+  })
+  ctx.body = {
+    code: 200,
+    data: data.id,
+  }
+})
 router.get('/todo/list/event', async (ctx) => {
   const list = await prismaInstance.todo.findMany({
     where: {
       type: TODO_TYPE.EVENT,
     },
+    orderBy: [{ is_star: 'desc' }, { create_tm: 'asc' }],
   })
   ctx.body = {
     code: 200,

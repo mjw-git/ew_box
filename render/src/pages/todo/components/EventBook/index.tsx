@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
-import { addTodoItem, deleteToDo, getEventBookToDoList } from '@/services/todo'
+import { addTodoItem, deleteToDo, getEventBookToDoList, starToDoItem } from '@/services/todo'
 import { randomColor } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRequest } from 'ahooks'
@@ -23,6 +23,7 @@ const FormSchema = z.object({
   }),
   start_tm: z.date(),
 })
+
 const EventBook = () => {
   const [open, setOpen] = useState(false)
   const { toast } = useToast()
@@ -33,6 +34,15 @@ const EventBook = () => {
     },
   })
   const { data: eventData, run: getEventList } = useRequest(getEventBookToDoList)
+  const { run: runStar } = useRequest(starToDoItem, {
+    manual: true,
+    onSuccess: () => {
+      toast({
+        title: 'Operation Success',
+      })
+      getEventList()
+    },
+  })
   const { run: runDelete } = useRequest(deleteToDo, {
     manual: true,
     onSuccess: () => {
@@ -58,6 +68,21 @@ const EventBook = () => {
       type: 3,
       start_tm: Math.floor(data.start_tm.getTime() / 1000),
     })
+  }
+  const renderDays = (start_tm: number) => {
+    const days = dayjs().diff(dayjs(dayjs.unix(start_tm)), 'day') + 1
+    if (days <= 365) {
+      return <span className='text-green-600'>{days} Days</span>
+    }
+    if (days > 365) {
+      return <span className='text-purple-700'>{days} Days</span>
+    }
+    if (days >= 1000) {
+      return <span className='text-red-700'>{days} Days</span>
+    }
+    if (days >= 2000) {
+      return <span className='text-rose-950'>{days} Days</span>
+    }
   }
   return (
     <div>
@@ -141,9 +166,21 @@ const EventBook = () => {
       </Dialog>
       <div className='mt-3 grid grid-cols-4 gap-4 '>
         {(eventData?.list ?? []).map((item) => (
-          <div key={item.id} className='border-border hover:shadow-md cursor-pointer border-[1px] p-1 rounded-lg'>
+          <div key={item.id} className='border-border hover:shadow-md  border-[1px] p-2 rounded-lg'>
             <div className='text-[24px] flex justify-between items-center'>
-              {item.todo}
+              <div className='flex items-center gap-2'>
+                <SvgIcon
+                  onClick={() => {
+                    runStar({ id: item.id })
+                  }}
+                  className={`${item.is_star ? 'text-yellow-400' : 'text-gray-400'} cursor-pointer`}
+                  width={16}
+                  height={16}
+                  name='star'
+                />{' '}
+                <span className='text-[16px]'> {item.todo}</span>
+              </div>
+
               <Dialog>
                 <DialogTrigger asChild>
                   <span className='opacity-0 group-hover:opacity-100'>
@@ -167,7 +204,7 @@ const EventBook = () => {
                 </DialogContent>
               </Dialog>
             </div>
-            <div className={`flex justify-end  ${'text-' + randomColor[Math.floor(Math.random() * randomColor.length)]}`}>{dayjs().diff(dayjs(dayjs.unix(item.start_tm)), 'day') + 1} Days</div>
+            <div className={`flex justify-end`}>{renderDays(item.start_tm)} </div>
           </div>
         ))}
       </div>

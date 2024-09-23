@@ -42,6 +42,7 @@ model Todo {
   id          Int    @id @default(autoincrement())
   todo        String
   start_tm    Int?
+  is_star     Int    @default(0)
   create_tm   Int
   status      Int
   type        Int

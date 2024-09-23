@@ -1,5 +1,6 @@
 declare namespace Todo {
   interface TodoItem {
+    is_star: number
     start_tm: number
     id: number
     todo: string
