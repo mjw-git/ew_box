@@ -141,7 +141,7 @@ const EventBook = () => {
       </Dialog>
       <div className='mt-3 grid grid-cols-4 gap-4 '>
         {(eventData?.list ?? []).map((item) => (
-          <div key={item.id} className=' group border-border hover:shadow-sm border-[1px] p-1 rounded-lg'>
+          <div key={item.id} className='border-border hover:shadow-md cursor-pointer border-[1px] p-1 rounded-lg'>
             <div className='text-[24px] flex justify-between items-center'>
               {item.todo}
               <Dialog>
