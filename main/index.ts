@@ -1,11 +1,10 @@
-import { BrowserWindow, app, protocol } from 'electron'
+import { BrowserWindow, app, net, protocol } from 'electron'
 import isDev from 'electron-is-dev'
 import { resolve, normalize } from 'path'
 import registerService from './ipc'
 import Channel from './interface/channel'
 import { initDb, initDirectory } from './utils/init'
 import electronIsDev from 'electron-is-dev'
-import initTray from './utils/tray'
 
 function createWindow() {
   Channel.mainWindow = new BrowserWindow({
@@ -27,7 +26,7 @@ function createWindow() {
   registerService()
   initDirectory()
   if (isDev) {
-    Channel.mainWindow.webContents.openDevTools()
+    // Channel.mainWindow.webContents.openDevTools()
     Channel.mainWindow.loadURL('http://localhost:8889')
   } else {
     Channel.mainWindow.loadFile(resolve(__dirname, '../render/dist/index.html'))
@@ -43,10 +42,15 @@ function createWindow() {
   return Channel.mainWindow
 }
 function registerProtocol() {
-  protocol.registerFileProtocol('atom', (request, callback) => {
+  protocol.handle('atom', (request) => {
     const url = request.url.substring(7)
+    console.log(request)
 
-    callback(decodeURI(normalize(url.split('?')[0])))
+    const filePath = decodeURI(normalize(url.split('?')[0]))
+    console.log(filePath)
+
+    return net.fetch('file://' + filePath)
+    // callback(decodeURI(normalize(url.split('?')[0])))
   })
 }
 if (electronIsDev) {
@@ -62,7 +66,7 @@ app.on('before-quit', () => {
 app.on('activate', () => {
   Channel.mainWindow?.show()
 })
-app.setName('A' + app.getName())
+// app.setName('A' + app.getName())
 app.whenReady().then(async () => {
   await initDb()
 

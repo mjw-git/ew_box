@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/use-toast'
 import SvgIcon from '@/components/SvgIcon'
 
 const ImageShape = () => {
-  const [imgList, setImgList] = useState<File[]>([])
+  const [imgList, setImgList] = useState<string[]>([])
   const [type, setType] = useState('self')
   const [open, setOpen] = useState(false)
   const { toast } = useToast()
@@ -24,7 +24,7 @@ const ImageShape = () => {
       description: 'Starting',
     })
     await window.sharpApi.compress(
-      imgList.map((i) => i.path),
+      imgList.map((i) => i),
       { type: type, quality: quality },
     )
     taskRef.current?.getList?.()
@@ -44,18 +44,17 @@ const ImageShape = () => {
                 <SvgIcon className='w-[20px] h-[20px]' name='upload' />
               </span>
               <div className='text-primary  font-semibold'>Upload</div>
-              <input
+              <div
                 className='opacity-0 text-[0] cursor-pointer whitespace-nowrap w-[100%] h-[100%] overflow-hidden absolute left-0 bottom-0'
-                title=''
-                multiple
-                onChange={(e) => {
-                  if (e.target.files!.length > 0) {
-                    setImgList(Array.from(e.target.files!))
-                  }
-                  e.target.value = ''
-                }}
-                accept='image/png,image/jpg,image/webp'
-                type='file'></input>
+                onClick={async () => {
+                  const result = await window.systemApi.openFileDialog({
+                    properties: ['openFile'],
+                    title: 'Upload',
+                    buttonLabel: 'Upload',
+                    filters: [{ name: 'Images', extensions: ['png', 'jpg', 'webp'] }],
+                  })
+                  setImgList(result)
+                }}></div>
             </div>
 
             <div className='flex items-center flex-row mt-2 gap-3'>
@@ -102,7 +101,7 @@ const ImageShape = () => {
                 setOpen(false)
               }}
               currentIdx={previewIdx}
-              imgList={imgList.map((i) => `${PIC_PATH_PREFIX}${i.path}`)}
+              imgList={imgList.map((i) => `${PIC_PATH_PREFIX}${i}`)}
             />
           </div>
         </div>
@@ -112,7 +111,7 @@ const ImageShape = () => {
           <div className={styles.img_list}>
             {imgList.map((item, index) => {
               return (
-                <div key={item.path} className='w-[100%] relative bg-muted'>
+                <div key={item} className='w-[100%] relative bg-muted'>
                   <div className='text-foreground cursor-pointer absolute top-0 w-[100%] flex justify-between text-[12px]'>
                     <span
                       onClick={() => {
@@ -132,7 +131,7 @@ const ImageShape = () => {
                       delete
                     </span>
                   </div>
-                  <img loading='lazy' className={styles.img_item} src={'atom:///' + item.path} alt='' />
+                  <img loading='lazy' className={styles.img_item} src={'atom:///' + item} alt='' />
                 </div>
               )
             })}

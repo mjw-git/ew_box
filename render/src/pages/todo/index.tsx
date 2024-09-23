@@ -2,6 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useState } from 'react'
 import List from './components/List'
 import CalendarContent from './components/CalendarContent'
+import EventBook from './components/EventBook'
 
 const Todo = () => {
   const [currentValue, setCurrentValue] = useState('list')
@@ -16,7 +17,7 @@ const Todo = () => {
         <TabsList className='grid w-full grid-cols-3'>
           <TabsTrigger value='list'>List</TabsTrigger>
           <TabsTrigger value='calendar'>Calendar</TabsTrigger>
-          <TabsTrigger value='plan'>Plan</TabsTrigger>
+          <TabsTrigger value='event'>Event Book</TabsTrigger>
         </TabsList>
         <TabsContent value='list'>
           <List />
@@ -24,7 +25,9 @@ const Todo = () => {
         <TabsContent value='calendar'>
           <CalendarContent />
         </TabsContent>
-        <TabsContent value='plan'>Plan</TabsContent>
+        <TabsContent value='event'>
+          <EventBook />
+        </TabsContent>
       </Tabs>
     </div>
   )

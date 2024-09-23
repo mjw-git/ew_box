@@ -1,8 +1,9 @@
 import { isExistFileOrDir } from 'main/utils'
 import Channel from '../../interface/channel'
-import { DIR_OPEN } from './types'
-import { shell } from 'electron'
+import { DIR_OPEN, GET_FILE_PATH, OPEN_FILE_DIALOG } from './types'
+import { dialog, shell } from 'electron'
 import { appUserPath } from '@main/utils/path'
+import { resolve } from 'path'
 
 function createSystemChannel() {
   const sharpChannel = new Channel(DIR_OPEN)
@@ -23,7 +24,15 @@ function createSystemChannel() {
     }
   })
 }
+function createOpenFileDialogChannel() {
+  const filePathChannel = new Channel(OPEN_FILE_DIALOG)
+  filePathChannel.createTwoWayChannel(async (_, options) => {
+    const result = await dialog.showOpenDialog(options)
+    return result.filePaths
+  })
+}
 function createSystemService() {
+  createOpenFileDialogChannel()
   createSystemChannel()
 }
 export default createSystemService

@@ -11,6 +11,7 @@ interface Window {
     onDelete: (callback: (e: Electron.IpcRendererEvent, params: string) => void) => void
   }
   systemApi: {
+    openFileDialog: (options: Electron.OpenDialogOptions) => Promise<string[]>
     openPath: (path: string) => Promise<string>
   }
   passwordBoxApi: {

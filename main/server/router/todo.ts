@@ -5,6 +5,7 @@ const router = new Router()
 enum TODO_TYPE {
   LIST = 1,
   CALENDAR,
+  EVENT,
 }
 enum TODO_STATUS {
   UNFINISHED,

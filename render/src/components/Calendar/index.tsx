@@ -46,7 +46,7 @@ const Calendar = (props: CalendarProps) => {
             </div>
           ))}
         </div>
-        <div className='grid flex-1 grid-cols-7 grid-rows-5'>
+        <div className='grid flex-1 grid-cols-7'>
           {calendar.map((i, index) => (
             <div key={index} className={`border-r-[1px] relative ${i.year === tYear && i.month === tMonth && i.day === tDate ? 'bg-blue-50' : ''} ${i.isCurrentMonth ? '' : 'bg-muted text-slate-400'} cursor-pointer p-2 box-border border-b-[1px] h-full border-border`}>
               <div className='group absolute left-0 flex flex-col p-1 top-0 w-full h-full'>
