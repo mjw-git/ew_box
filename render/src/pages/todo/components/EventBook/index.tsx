@@ -1,14 +1,20 @@
 import SvgIcon from '@/components/SvgIcon'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
+import { addTodoItem, deleteToDo, getEventBookToDoList } from '@/services/todo'
+import { randomColor } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRequest } from 'ahooks'
 import { format } from 'date-fns'
+import dayjs from 'dayjs'
 import { Calendar as CalendarIcon } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 const FormSchema = z.object({
@@ -18,23 +24,55 @@ const FormSchema = z.object({
   start_tm: z.date(),
 })
 const EventBook = () => {
+  const [open, setOpen] = useState(false)
+  const { toast } = useToast()
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: '',
     },
   })
+  const { data: eventData, run: getEventList } = useRequest(getEventBookToDoList)
+  const { run: runDelete } = useRequest(deleteToDo, {
+    manual: true,
+    onSuccess: () => {
+      toast({
+        title: 'Delete Event Success',
+      })
+      getEventList()
+    },
+  })
+  const { run: runAdd } = useRequest(addTodoItem, {
+    manual: true,
+    onSuccess: () => {
+      setOpen(false)
+      getEventList()
+      toast({
+        title: 'Add Event Success',
+      })
+    },
+  })
   const onSubmit = (data: z.infer<typeof FormSchema>) => {
-    console.log(data)
+    runAdd({
+      todo: data.name,
+      type: 3,
+      start_tm: Math.floor(data.start_tm.getTime() / 1000),
+    })
   }
   return (
     <div>
       <Dialog
-        onOpenChange={() => {
+        open={open}
+        onOpenChange={(v) => {
+          if (!v) {
+            setOpen(v)
+          }
           form.reset()
         }}>
         <DialogTrigger asChild>
-          <Button variant='outline'>Add Event</Button>
+          <Button onClick={() => setOpen(true)} variant='default'>
+            Add Event
+          </Button>
         </DialogTrigger>
         <DialogContent className='sm:max-w-[425px]'>
           <DialogHeader>
@@ -97,11 +135,42 @@ const EventBook = () => {
               <DialogFooter>
                 <Button type='submit'>Save</Button>
               </DialogFooter>
-              {/* <Button type='submit'>Submit</Button> */}
             </form>
           </Form>
         </DialogContent>
       </Dialog>
+      <div className='mt-3 grid grid-cols-4 gap-4 '>
+        {(eventData?.list ?? []).map((item) => (
+          <div key={item.id} className=' group border-border hover:shadow-sm border-[1px] p-1 rounded-lg'>
+            <div className='text-[24px] flex justify-between items-center'>
+              {item.todo}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <span className='opacity-0 group-hover:opacity-100'>
+                    <SvgIcon width={16} height={16} name='close' />
+                  </span>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogTitle>onConfirm</DialogTitle>
+                  <div>Confirm delete this event?</div>
+                  <DialogFooter>
+                    <DialogClose asChild>
+                      <Button
+                        onClick={async () => {
+                          runDelete({ id: item.id })
+                        }}
+                        type='submit'>
+                        yes
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            </div>
+            <div className={`flex justify-end  ${'text-' + randomColor[Math.floor(Math.random() * randomColor.length)]}`}>{dayjs().diff(dayjs(dayjs.unix(item.start_tm)), 'day') + 1} Days</div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

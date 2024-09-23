@@ -6,6 +6,13 @@ export const addTodoItem = (body: any) => {
     body: body,
   })
 }
+
+export const getEventBookToDoList = (body?: Record<string, any>) =>
+  request<{ list?: Todo.TodoItem[] }>('/todo/list/event', {
+    method: 'GET',
+    body,
+  })
+
 export const getCalendarToDoList = (body?: Record<string, any>) =>
   request<{ list?: Todo.TodoItem[] }>('/todo/list/calendar', {
     method: 'GET',

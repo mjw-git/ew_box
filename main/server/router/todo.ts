@@ -31,7 +31,17 @@ router.post('/todo', async (ctx) => {
     data: data.id,
   }
 })
-
+router.get('/todo/list/event', async (ctx) => {
+  const list = await prismaInstance.todo.findMany({
+    where: {
+      type: TODO_TYPE.EVENT,
+    },
+  })
+  ctx.body = {
+    code: 200,
+    data: { list },
+  }
+})
 router.get('/todo/list/calendar', async (ctx) => {
   const { start_tm_start, start_tm_end } = ctx.request.query ?? {}
   const list = await prismaInstance.todo.findMany({

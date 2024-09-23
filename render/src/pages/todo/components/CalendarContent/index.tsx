@@ -11,7 +11,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Label } from '@/components/ui/label'
 import { useOpen } from '@/hook/useOpen'
-const randomColor = ['bg-blue-400', 'bg-pink-500', 'bg-slate-500', 'bg-red-500', 'bg-orange-500']
+import { randomColor } from '@/utils'
 const AddTodoPopOverCard = (props: { day: Dayjs; onSuccess?: () => void }) => {
   const { day, onSuccess } = props
 
@@ -124,7 +124,7 @@ const CalendarContent = () => {
           return (
             <div className='mt-2 z-10 bg-white flex overflow-hidden group-hover:overflow-visible group-hover:pb-3 flex-col gap-1'>
               {currentDays.map((item, index) => (
-                <div key={item.id} className={`wrapper ${randomColor[index % randomColor.length]} relative items-center gap-1 w-full flex p-[2px] box-border rounded-sm text-sm text-white`}>
+                <div key={item.id} className={`wrapper ${'bg-' + randomColor[index % randomColor.length]} relative items-center gap-1 w-full flex p-[2px] box-border rounded-sm text-sm text-white`}>
                   <div className={`w-[6px] ${item.status ? 'bg-green-400' : 'bg-muted'} h-[6px] bg-green-400 rounded-[6px]`}></div>
                   <BaseElliTip className='text-left cursor-auto' text={item.todo} />
                   <div className={`absolute   hidden operation  bottom-[-12px] z-10`}>
