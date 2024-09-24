@@ -2,9 +2,8 @@ import dayjs from 'dayjs'
 import SvgIcon from '../SvgIcon'
 import useCalendar, { CalendarItem } from '@/hook/useCalendar'
 import { ReactNode, useEffect } from 'react'
+import { days, months } from '@/utils'
 
-const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
-const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 interface CalendarProps {
   renderOpt?: (cal: CalendarItem) => ReactNode
   onChange?: (cal: CalendarItem[]) => void
