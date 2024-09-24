@@ -2,6 +2,7 @@ import PasswordBox from '@/pages/password-box'
 import ImageShape from '@/pages/image-shape'
 import Setting from '@/pages/setting'
 import Todo from '@/pages/todo'
+import Book from '@/pages/book'
 
 export const routes = [
   { icon: 'pic', path: '/shape', component: <ImageShape /> },
@@ -20,5 +21,10 @@ export const routes = [
     path: '/todo',
     icon: 'todo',
     component: <Todo />,
+  },
+  {
+    path: '/book',
+    icon: 'book',
+    component: <Book />,
   },
 ]
