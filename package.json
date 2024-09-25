@@ -67,6 +67,9 @@
       "createStartMenuShortcut": false
     }
   },
+  "engines": {
+    "node": "21.1.0"
+  },
   "keywords": [],
   "author": "xiaoming",
   "license": "ISC",

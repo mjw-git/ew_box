@@ -16,6 +16,7 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
   const { data: trendData, run: runGetTrendData } = useRequest(() => getBookTrend({ type: value }), {
     refreshDeps: [value],
   })
+
   useImperativeHandle(
     ref,
     () => ({
@@ -51,9 +52,7 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
             <CartesianGrid vertical={false} />
             <XAxis dataKey='key' tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip content={<ChartTooltipContent />} />
-            {/* <ChartLegend content={<ChartLegendContent />} /> */}
             <Bar dataKey='value' fill='skyblue' radius={4} />
-            {/* <Bar dataKey='mobile' fill='var(--color-mobile)' radius={4} /> */}
           </BarChart>
         </ChartContainer>
       </div>
