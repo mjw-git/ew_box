@@ -4,6 +4,8 @@
   "description": "Ew Box",
   "main": "./main-dist/index.js",
   "scripts": {
+    "lint": "eslint ./render",
+    "lint:fix": "eslint ./render --fix",
     "pri": "prisma generate",
     "start:main": "tsc -w --p tsconfig.main.json",
     "start:react": "bash start.sh && vite --config vite.config.ts",
@@ -68,7 +70,7 @@
     }
   },
   "engines": {
-    "node": "21.1.0"
+    "node": ">=21.1.0"
   },
   "keywords": [],
   "author": "xiaoming",
@@ -81,6 +83,8 @@
     "@types/lodash-es": "^4.17.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^8.7.0",
+    "@typescript-eslint/parser": "^8.7.0",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.19",
     "chokidar": "^3.6.0",
@@ -89,8 +93,16 @@
     "electron": "32.1.2",
     "electron-builder": "^24.13.3",
     "electron-reloader": "^1.2.1",
+    "eslint": "^9.11.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.30.0",
+    "eslint-plugin-jsx-a11y": "^6.10.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.36.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
     "fast-glob": "^3.3.2",
     "file-loader": "^6.2.0",
+    "globals": "^15.9.0",
     "html-webpack-plugin": "^5.3.2",
     "less": "^4.2.0",
     "less-loader": "^10.0.1",
@@ -101,6 +113,7 @@
     "tailwindcss": "^3.4.4",
     "ts-loader": "^9.2.6",
     "typescript": "^5.4.5",
+    "typescript-eslint": "^8.7.0",
     "url-loader": "^4.1.1",
     "vite": "^5.2.11",
     "vite-plugin-svg-icons": "^2.0.1"
