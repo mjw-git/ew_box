@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react'
 const getDaysInMonth = (year: number, month: number) => {
   return new Date(year, month, 0).getDate()
 }
-interface currentDate {
+export interface currentDate {
   month: string
   year: string
   date: string
@@ -59,13 +59,17 @@ const FullDateSelect = (props: Props) => {
         onClick={() => {
           if (currentDate.month && !currentDate.date) {
             setCurrentDate({ ...currentDate, month: '', date: '' })
+            onChange({ ...currentDate, month: '', date: '' })
           }
           if (currentDate.month && currentDate.date) {
             setCurrentDate({ ...currentDate, date: '' })
+            onChange({ ...currentDate, date: '' })
           }
         }}
         className='cursor-pointer'>
-        <Button disabled={!currentDate.month && !currentDate.date}>Back To {currentDate.month && !currentDate.date ? 'Year' : 'Month'}</Button>
+        <Button size='sm' disabled={!currentDate.month && !currentDate.date}>
+          Back To {currentDate.month && !currentDate.date ? 'Year' : 'Month'}
+        </Button>
       </span>
       <Select
         onValueChange={(value) => {
@@ -137,6 +141,15 @@ const FullDateSelect = (props: Props) => {
           </SelectContent>
         </Select>
       }
+      <Button
+        size='sm'
+        onClick={() => {
+          setCurrentDate({ ...currentDate, year: String(year), month: String(month), date: String(date) })
+          onChange({ ...currentDate, year: String(year), month: String(month), date: String(date) })
+        }}
+        variant='secondary'>
+        Back To Today
+      </Button>
     </div>
   )
 }

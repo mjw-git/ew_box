@@ -48,3 +48,13 @@ model Todo {
   type        Int
   finished_tm Int?
 }
+
+model Book {
+  id        Int     @id @default(autoincrement())
+  unix      Int
+  create_tm Int
+  desc      String
+  type      Int
+  price     Int
+  tag       String?
+}
