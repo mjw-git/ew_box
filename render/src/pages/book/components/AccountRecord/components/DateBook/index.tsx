@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { bookIcon } from '@/utils'
 import { useRequest } from 'ahooks'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { addBookItem, getBookList } from '@/services/book'
 import { useToast } from '@/components/ui/use-toast'
 
@@ -33,19 +33,35 @@ const DateBook = (props: Props) => {
   const { toast } = useToast()
 
   const [addItem, setAddItem] = useState<AddItem>(initAddItem)
-  const { data: bookList } = useRequest(() => getBookList(currentDate), {
+  const { data: bookList, run: runGetBookList } = useRequest(() => getBookList(currentDate), {
     refreshDeps: [currentDate],
   })
   const { run: runAdd } = useRequest(addBookItem, {
     manual: true,
     onSuccess: () => {
       setAddItem(initAddItem)
+      runGetBookList()
       toast({
         description: 'Add success',
       })
     },
   })
-
+  const paymentPrice = useMemo(() => {
+    return bookList?.list?.reduce((prev, cur) => {
+      if (cur.type === 1) {
+        return prev + cur.price
+      }
+      return prev
+    }, 0)
+  }, [bookList])
+  const incomePrice = useMemo(() => {
+    return bookList?.list?.reduce((prev, cur) => {
+      if (cur.type === 2) {
+        return prev + cur.price
+      }
+      return prev
+    }, 0)
+  }, [bookList])
   return (
     <div>
       <div className=' mt-1 border-[1px] border-border rounded-md p-2'>
@@ -134,35 +150,26 @@ const DateBook = (props: Props) => {
         </div>
       </div>
       <div className='bg-green-200 mt-2 p-1 rounded-md flex gap-3'>
-        total: <Badge variant='destructive'>payment xxx</Badge>
-        <Badge className='bg-green-500'>income xxx</Badge>
+        total: <Badge variant='destructive'>payment {paymentPrice}</Badge>
+        <Badge className='bg-green-500'>income {incomePrice}</Badge>
       </div>
       <div className='grid grid-cols-2 mt-2 gap-2'>
-        <div className='border-[1px] border-border rounded-md p-2'>
-          <div className=' items-center flex justify-between'>
-            <span>吃饭</span>
-            <span className='flex items-center gap-2'>
-              <Badge variant='destructive'>payment</Badge>
-              <span className='text-red-500'>15</span>
-            </span>
+        {(bookList?.list ?? []).map((item) => (
+          <div className='border-[1px] border-border rounded-md p-2' key={item.id}>
+            <div className=' items-center flex justify-between'>
+              <span>{item.desc}</span>
+              <span className='flex items-center gap-2'>
+                {item.type === 1 ? <Badge variant='destructive'>payment</Badge> : <Badge className='bg-green-500'>income</Badge>}
+                <span className={item.type === 1 ? 'text-red-500' : 'text-green-500'}>{item.price}</span>
+              </span>
+            </div>
+            {item.tag && (
+              <div>
+                <SvgIcon className='text-green-600' width={16} height={16} name={item.tag} />
+              </div>
+            )}
           </div>
-          <div>
-            <SvgIcon className='text-green-600' width={16} height={16} name='car' />
-          </div>
-        </div>
-
-        <div className='border-[1px] border-border rounded-md p-2'>
-          <div className=' items-center flex justify-between'>
-            <span>吃饭</span>
-            <span className='flex items-center gap-2'>
-              <Badge className='bg-green-500'>payment</Badge>
-              <span className='text-red-500'>15</span>
-            </span>
-          </div>
-          <div>
-            <SvgIcon className='text-green-600' width={16} height={16} name='car' />
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   )

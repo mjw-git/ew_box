@@ -5,7 +5,11 @@ export const getBookList = (body?: Record<string, any>) =>
     method: 'GET',
     body,
   })
-
+export const getBookMonthYear = (body?: Record<string, any>) =>
+  request<{ result?: Record<string, Book.BookMonthYearRes> }>('/book/month-year', {
+    method: 'GET',
+    body,
+  })
 export const addBookItem = (body: Book.AddBookReq) =>
   request('/book/add', {
     method: 'POST',

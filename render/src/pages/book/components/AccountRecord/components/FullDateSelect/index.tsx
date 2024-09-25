@@ -57,6 +57,10 @@ const FullDateSelect = (props: Props) => {
     <div className='flex items-center'>
       <span
         onClick={() => {
+          if (!currentDate.month && !currentDate.date) {
+            setCurrentDate({ ...currentDate, year: '' })
+            onChange({ ...currentDate, year: '' })
+          }
           if (currentDate.month && !currentDate.date) {
             setCurrentDate({ ...currentDate, month: '', date: '' })
             onChange({ ...currentDate, month: '', date: '' })
@@ -78,7 +82,7 @@ const FullDateSelect = (props: Props) => {
         }}
         value={String(currentDate.year)}>
         <SelectTrigger className='w-fit border-none'>
-          <SelectValue placeholder='Select a type' />
+          <SelectValue placeholder='Year' />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
@@ -101,7 +105,7 @@ const FullDateSelect = (props: Props) => {
           }}
           value={String(currentDate.month)}>
           <SelectTrigger className='w-fit border-none'>
-            <SelectValue placeholder='Select a Month' />
+            <SelectValue placeholder='Month' />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -126,7 +130,7 @@ const FullDateSelect = (props: Props) => {
           }}
           value={String(currentDate.date)}>
           <SelectTrigger className='w-fit border-none'>
-            <SelectValue placeholder='Select a Date' />
+            <SelectValue placeholder='Date' />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

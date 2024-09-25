@@ -32,19 +32,8 @@ interface AddItem {
   price: string
 }
 router.prefix('/api/v1')
-router.get('/book/list', async (ctx) => {
+router.get('/book/month-year', async (ctx) => {
   const { month, year, date } = ctx.query
-  if (date) {
-    const list = await prismaInstance.book.findMany({
-      where: {
-        unix: dayjs(year + '-' + month + '-' + date).unix(),
-      },
-    })
-    return (ctx.body = {
-      code: 200,
-      data: { list },
-    })
-  }
   if (!date && month) {
     const start = dayjs(year + '-' + month).startOf('month')
     const end = dayjs(year + '-' + month).endOf('month')
@@ -80,11 +69,9 @@ router.get('/book/list', async (ctx) => {
       {} as Record<string, BookRes>,
     )
 
-    // 将对象转换为数组形式
-
     return (ctx.body = {
       code: 200,
-      data: { list: groupedByUnix },
+      data: { result: groupedByUnix },
     })
   }
   if (!month && year) {
@@ -120,9 +107,24 @@ router.get('/book/list', async (ctx) => {
     )
     return (ctx.body = {
       code: 200,
-      data: { list: groupedByUnix },
+      data: { result: groupedByUnix },
     })
   }
+})
+router.get('/book/list', async (ctx) => {
+  const { month, year, date } = ctx.query
+  if (!date) {
+    throw new Error('date is required')
+  }
+  const list = await prismaInstance.book.findMany({
+    where: {
+      unix: dayjs(year + '-' + month + '-' + date).unix(),
+    },
+  })
+  return (ctx.body = {
+    code: 200,
+    data: { list },
+  })
 })
 router.post('/book/add', async (ctx) => {
   const { unix, desc, price, type, tag } = ctx.request.body as Book.AddBookReq

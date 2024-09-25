@@ -10,8 +10,6 @@ const AccountRecord = () => {
   const year = now.year()
   const date = now.date()
   const [currentDate, setCurrentDate] = useState({ year: String(year), month: String(month), date: String(date) })
-  //判断是第几个月
-  const monthArrays = currentDate.year === String(year) ? new Array(month).fill(0) : new Array(12).fill(0)
 
   return (
     <div>
@@ -22,7 +20,7 @@ const AccountRecord = () => {
         }}
       />
 
-      {currentDate.year && currentDate.month && !currentDate.date && <YearAndMonthBook currentDate={currentDate} />}
+      {(currentDate.year || currentDate.month) && !currentDate.date && <YearAndMonthBook currentDate={currentDate} />}
       {currentDate.date && <DateBook currentDate={currentDate} />}
     </div>
   )
