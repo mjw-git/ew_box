@@ -26,7 +26,9 @@ const runElectron = () => {
     if (pid) {
       try {
         process.kill(+pid, 'SIGTERM')
-      } catch (error) {}
+      } catch (error) {
+        console.log('关闭electron进程失败')
+      }
     }
   }
 
@@ -36,16 +38,6 @@ const runElectron = () => {
 }
 
 function createElectron() {
-  // const exit = fs.existsSync(lockFilePath)
-  // if (exit) {
-  //   const pid = fs.readFileSync(lockFilePath, 'utf-8').toString()
-  //   if (pid) {
-  //     try {
-  //       process.kill(+pid, 'SIGTERM')
-  //     } catch (error) {}
-  //   }
-  // }
-  // runElectron()
   if (!isWatch) {
     const mainDir = path.join(__dirname, '../main-dist')
     const debouncedCreateElectron = debounce(() => {
@@ -81,13 +73,11 @@ export const ElectronDevPlugin = (): Plugin => {
     name: 'electron-dev-plugin',
     //配置服务的钩子
     async configureServer(server) {
-      // 先把electron执行一下编译
       server.httpServer?.on('listening', async () => {
         let addressInfo = server.httpServer?.address() as AddressInfo
         const devUrl = `http://localhost:${addressInfo.port}`
         console.log('plugins-dev : 服务的完整地址 ： ', devUrl)
         await electronBuild2Js()
-        // 核心3 ： 进程传参，发送到electron的进程中
         createElectron()
 
         const mainDir = path.join(__dirname, '../main-dist')
