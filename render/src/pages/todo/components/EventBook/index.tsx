@@ -8,7 +8,6 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useToast } from '@/components/ui/use-toast'
 import { cn } from '@/lib/utils'
 import { addTodoItem, deleteToDo, getEventBookToDoList, starToDoItem } from '@/services/todo'
-import { randomColor } from '@/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRequest } from 'ahooks'
 import { format } from 'date-fns'

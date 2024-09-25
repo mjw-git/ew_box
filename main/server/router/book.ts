@@ -32,6 +32,40 @@ interface AddItem {
   price: string
 }
 router.prefix('/api/v1')
+router.get('/book/trend', async (ctx) => {
+  const { type = 'day' } = ctx.query
+  const start_tm = type == 'month' ? dayjs().subtract(12, 'month').startOf('month').unix() : dayjs().subtract(12, 'year').startOf('year').unix()
+
+  const end_tm = dayjs().endOf('date').unix()
+
+  const list = await prismaInstance.book.findMany({
+    where: {
+      type: Type.PAYMENT,
+      unix: {
+        gte: start_tm,
+        lte: end_tm,
+      },
+    },
+    orderBy: {
+      unix: 'asc',
+    },
+  })
+  const result = list.reduce((pre, next) => {
+    const month = dayjs.unix(next.unix).format(type === 'month' ? 'YYYY-MM' : 'YYYY-MM-DD')
+    const monthItem = pre.find((item) => item.key === month)
+    if (!monthItem) {
+      pre.push({ key: month, value: 0 })
+    }
+    const currentMonthItem = pre.find((item) => item.key === month)
+    currentMonthItem.value += next.price
+
+    return pre
+  }, [])
+  ctx.body = {
+    code: 200,
+    data: { result },
+  }
+})
 router.get('/book/month-year', async (ctx) => {
   const { month, year, date } = ctx.query
   if (!date && month) {

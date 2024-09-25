@@ -4,7 +4,7 @@ import FullDateSelect from './components/FullDateSelect'
 import YearAndMonthBook from './components/YearAndMonthBook'
 import DateBook from './components/DateBook'
 
-const AccountRecord = () => {
+const AccountRecord = (props: { addOnSuccess: () => void }) => {
   const now = dayjs()
   const month = now.month() + 1
   const year = now.year()
@@ -21,7 +21,7 @@ const AccountRecord = () => {
       />
 
       {(currentDate.year || currentDate.month) && !currentDate.date && <YearAndMonthBook currentDate={currentDate} />}
-      {currentDate.date && <DateBook currentDate={currentDate} />}
+      {currentDate.date && <DateBook currentDate={currentDate} addOnSuccess={props.addOnSuccess} />}
     </div>
   )
 }

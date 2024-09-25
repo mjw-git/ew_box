@@ -10,6 +10,7 @@ import { addBookItem, getBookList } from '@/services/book'
 import { useToast } from '@/components/ui/use-toast'
 
 interface Props {
+  addOnSuccess: () => void
   currentDate?: {
     year: string
     month: string
@@ -29,7 +30,7 @@ const initAddItem = {
   type: 1,
 }
 const DateBook = (props: Props) => {
-  const { currentDate } = props
+  const { currentDate, addOnSuccess } = props
   const { toast } = useToast()
 
   const [addItem, setAddItem] = useState<AddItem>(initAddItem)
@@ -39,6 +40,7 @@ const DateBook = (props: Props) => {
   const { run: runAdd } = useRequest(addBookItem, {
     manual: true,
     onSuccess: () => {
+      addOnSuccess?.()
       setAddItem(initAddItem)
       runGetBookList()
       toast({
