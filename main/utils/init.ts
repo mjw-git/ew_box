@@ -84,8 +84,11 @@ export const initDb = async () => {
   } catch (error) {
     logger.error('after pack', error)
   }
-
-  await runPrisma(['migrate', 'deploy'])
+  try {
+    await runPrisma(['migrate', 'deploy'])
+  } catch (error) {
+    logger.error('migrate deploy error', error)
+  }
 }
 const initDirectory = () => {
   // prisma

@@ -44,10 +44,8 @@ function createWindow() {
 function registerProtocol() {
   protocol.handle('atom', (request) => {
     const url = request.url.substring(7)
-    console.log(request)
 
     const filePath = decodeURI(normalize(url.split('?')[0]))
-    console.log(filePath)
 
     return net.fetch('file://' + filePath)
     // callback(decodeURI(normalize(url.split('?')[0])))

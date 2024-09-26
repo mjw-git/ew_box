@@ -18,7 +18,7 @@ const initTray = () => {
     const i = nativeImage.createFromPath(icon16Path)
     const resizedIcon = i.resize({ width: 16 * scaleFactor, height: 16 * scaleFactor })
     // i.setTemplateImage(true)
-    tray = new Tray(resizedIcon)
+    tray = new Tray(icon)
     const contextMenu = Menu.buildFromTemplate([
       { label: 'Item1', type: 'radio' },
       { label: 'Item2', type: 'radio' },
