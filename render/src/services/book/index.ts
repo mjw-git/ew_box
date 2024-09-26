@@ -10,6 +10,11 @@ export const getBookTrend = (body?: Record<string, any>) =>
     method: 'GET',
     body,
   })
+export const deleteBookItem = (body: { id: number }) =>
+  request('/book', {
+    method: 'DELETE',
+    body,
+  })
 export const getBookMonthYear = (body?: Record<string, any>) =>
   request<{ result?: Record<string, Book.BookMonthYearRes> }>('/book/month-year', {
     method: 'GET',

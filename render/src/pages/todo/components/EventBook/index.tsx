@@ -182,7 +182,7 @@ const EventBook = () => {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <span className='opacity-0 group-hover:opacity-100'>
+                  <span className='text-red-500'>
                     <SvgIcon width={16} height={16} name='close' />
                   </span>
                 </DialogTrigger>

@@ -6,8 +6,10 @@ import { bookIcon } from '@/utils'
 import { useRequest } from 'ahooks'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
-import { addBookItem, getBookList } from '@/services/book'
+import { addBookItem, deleteBookItem, getBookList } from '@/services/book'
 import { useToast } from '@/components/ui/use-toast'
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 interface Props {
   addOnSuccess: () => void
@@ -36,6 +38,16 @@ const DateBook = (props: Props) => {
   const [addItem, setAddItem] = useState<AddItem>(initAddItem)
   const { data: bookList, run: runGetBookList } = useRequest(() => getBookList(currentDate), {
     refreshDeps: [currentDate],
+  })
+  const { run: runDelete } = useRequest(deleteBookItem, {
+    manual: true,
+    onSuccess: () => {
+      addOnSuccess?.()
+      toast({
+        description: 'Delete success',
+      })
+      runGetBookList()
+    },
   })
   const { run: runAdd } = useRequest(addBookItem, {
     manual: true,
@@ -158,8 +170,32 @@ const DateBook = (props: Props) => {
       <div className='grid grid-cols-2 mt-2 gap-2'>
         {(bookList?.list ?? []).map((item) => (
           <div className='border-[1px] border-border rounded-md p-2' key={item.id}>
-            <div className=' items-center flex justify-between'>
-              <span>{item.desc}</span>
+            <div className=' items-center flex flex-wrap justify-between'>
+              <div className=' group flex justify-between items-center'>
+                <span>{item.desc}</span>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <span className='opacity-0 group-hover:opacity-100'>
+                      <SvgIcon width={16} height={16} name='close' />
+                    </span>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>onConfirm</DialogTitle>
+                    <div>Confirm delete this item?</div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button
+                          onClick={async () => {
+                            runDelete({ id: item.id })
+                          }}
+                          type='submit'>
+                          yes
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
               <span className='flex items-center gap-2'>
                 {item.type === 1 ? <Badge variant='destructive'>payment</Badge> : <Badge className='bg-green-500'>income</Badge>}
                 <span className={item.type === 1 ? 'text-red-500' : 'text-green-500'}>{item.price}</span>

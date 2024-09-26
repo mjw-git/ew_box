@@ -14,7 +14,7 @@ declare namespace Book {
     payment: number
   }
   interface BookItem {
-    id: string
+    id: number
     desc: string
     tag: string
     price: number

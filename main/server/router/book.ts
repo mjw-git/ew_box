@@ -66,6 +66,21 @@ router.get('/book/trend', async (ctx) => {
     data: { result },
   }
 })
+router.delete('/book', async (ctx) => {
+  const body = ctx.request.body as { id: number }
+  const { id } = body
+  if (!id) throw '请传入id'
+  const data = await prismaInstance.book.delete({
+    where: {
+      id: id,
+    },
+  })
+  ctx.body = {
+    code: 200,
+    data: data.id,
+  }
+})
+
 router.get('/book/month-year', async (ctx) => {
   const { month, year, date } = ctx.query
   if (!date && month) {
