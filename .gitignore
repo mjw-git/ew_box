@@ -6,6 +6,5 @@ node_modules
 .DS_Store
 testImg
 electron.lock
-prisma/migrations
 prisma/dev.db
 prisma/dev.db-journal

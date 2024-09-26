@@ -177,6 +177,8 @@ router.get('/book/list', async (ctx) => {
 })
 router.post('/book/add', async (ctx) => {
   const { unix, desc, price, type, tag } = ctx.request.body as Book.AddBookReq
+  console.log(price, Number(price))
+
   const data = await prismaInstance.book.create({
     data: {
       tag: tag,

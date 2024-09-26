@@ -55,6 +55,6 @@ model Book {
   create_tm Int
   desc      String
   type      Int
-  price     Int
+  price     Float
   tag       String?
 }
