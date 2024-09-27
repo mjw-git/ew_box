@@ -148,6 +148,7 @@
     "crypto": "^1.0.1",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.11",
+    "decimal.js": "^10.4.3",
     "electron-is-dev": "^2.0.0",
     "esbuild": "^0.21.3",
     "image-size": "^1.1.1",

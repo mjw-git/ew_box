@@ -1,6 +1,7 @@
 import { prismaInstance } from '@main/utils/init'
 import Router from 'koa-router'
 import dayjs from 'dayjs'
+import Decimal from 'decimal.js'
 const router = new Router()
 enum Type {
   PAYMENT = 1,
@@ -10,8 +11,8 @@ interface BookRes {
   unix?: number
   books: Book[]
   month?: number
-  income: number
-  payment: number
+  income: Decimal
+  payment: Decimal
 }
 interface Book {
   id: number
@@ -102,16 +103,16 @@ router.get('/book/month-year', async (ctx) => {
         const month = dayjs.unix(book.unix).month() + 1
         if (!acc[month]) {
           acc[month] = {
-            income: 0,
-            payment: 0,
+            income: new Decimal(0),
+            payment: new Decimal(0),
             books: [],
           }
         }
         acc[month].books.push(book)
         if (book.type === Type.INCOME) {
-          acc[month].income += book.price
+          acc[month].income = acc[month].income.plus(book.price)
         } else {
-          acc[month].payment += book.price
+          acc[month].payment = acc[month].payment.plus(book.price)
         }
         return acc
       },
@@ -139,16 +140,16 @@ router.get('/book/month-year', async (ctx) => {
         const year = dayjs.unix(book.unix).year()
         if (!acc[year]) {
           acc[year] = {
-            income: 0,
-            payment: 0,
+            income: new Decimal(0),
+            payment: new Decimal(0),
             books: [],
           }
         }
         acc[year].books.push(book)
         if (book.type === Type.INCOME) {
-          acc[year].income += book.price
+          acc[year].income = acc[year].income.plus(book.price)
         } else {
-          acc[year].payment += book.price
+          acc[year].payment = acc[year].payment.plus(book.price)
         }
         return acc
       },

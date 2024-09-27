@@ -4,6 +4,7 @@ import { currentDate } from '../FullDateSelect'
 import { useRequest } from 'ahooks'
 import { getBookMonthYear } from '@/services/book'
 import { useMemo } from 'react'
+import Decimal from 'decimal.js'
 
 const YearAndMonthBook = (props: { currentDate: currentDate }) => {
   const { currentDate } = props
@@ -13,15 +14,15 @@ const YearAndMonthBook = (props: { currentDate: currentDate }) => {
   })
 
   const totalPrice = useMemo(() => {
-    let income = 0
-    let payment = 0
+    let income = new Decimal(0)
+    let payment = new Decimal(0)
     Object.entries(data?.result ?? {}).forEach(([_, value]) => {
-      income += value.income
-      payment += value.payment
+      income = income.plus(value.income)
+      payment = payment.plus(value.payment)
     })
     return {
-      income,
-      payment,
+      income: income.toNumber(),
+      payment: payment.toNumber(),
     }
   }, [data])
 
