@@ -23,15 +23,7 @@ interface Book {
   price: number
   tag: string | null
 }
-interface AddItem {
-  tag: string
-  type: Type
-  month: string
-  year: string
-  date: string
-  desc: string
-  price: string
-}
+
 router.prefix('/api/v1')
 router.get('/book/trend', async (ctx) => {
   const { type = 'day' } = ctx.query
@@ -178,7 +170,6 @@ router.get('/book/list', async (ctx) => {
 })
 router.post('/book/add', async (ctx) => {
   const { unix, desc, price, type, tag } = ctx.request.body as Book.AddBookReq
-  console.log(price, Number(price))
 
   const data = await prismaInstance.book.create({
     data: {
