@@ -165,7 +165,7 @@ const EventBook = () => {
       </Dialog>
       <div className='mt-3 grid grid-cols-4 gap-4 '>
         {(eventData?.list ?? []).map((item) => (
-          <div key={item.id} className='border-border hover:shadow-md  border-[1px] p-2 rounded-lg'>
+          <div key={item.id} className=' group border-border hover:shadow-md  border-[1px] p-2 rounded-lg'>
             <div className='text-[24px] flex justify-between items-center'>
               <div className='flex items-center gap-2'>
                 <SvgIcon
@@ -182,7 +182,7 @@ const EventBook = () => {
 
               <Dialog>
                 <DialogTrigger asChild>
-                  <span className='text-red-500'>
+                  <span className='text-red-500 opacity-0 group-hover:opacity-100'>
                     <SvgIcon width={16} height={16} name='close' />
                   </span>
                 </DialogTrigger>
