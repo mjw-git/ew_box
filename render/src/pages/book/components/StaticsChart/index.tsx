@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { getBookTrend } from '@/services/book'
 import { useRequest } from 'ahooks'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
 
 const chartConfig = {
   key: {
@@ -52,7 +52,9 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
             <CartesianGrid vertical={false} />
             <XAxis dataKey='key' tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Bar dataKey='value' fill='skyblue' radius={4} />
+            <Bar dataKey='value' fill='skyblue' radius={4}>
+              <LabelList position='top' offset={12} className='fill-foreground' fontSize={12} />
+            </Bar>
           </BarChart>
         </ChartContainer>
       </div>

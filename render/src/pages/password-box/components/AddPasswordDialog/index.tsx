@@ -63,7 +63,7 @@ const AddPasswordDialog = (props: { onSuccess: () => void }) => {
         }
       }}>
       <DialogTrigger asChild>
-        <div onClick={() => setOpen(true)} className='rounded-[20px] p-[20px] border-[1px] flex items-center justify-center cursor-pointer border-border border-solid  text-primary font-bold text-4xl text-center'>
+        <div onClick={() => setOpen(true)} className='rounded-[20px] hover:text-blue-600 border-dashed  border-[1px] flex items-center justify-center cursor-pointer border-border  text-primary font-bold text-2xl mb-2 text-center'>
           Add
         </div>
       </DialogTrigger>

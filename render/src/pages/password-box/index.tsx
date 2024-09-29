@@ -51,88 +51,90 @@ const ImageCompress = () => {
   }, [password])
 
   return entered ? (
-    <div className='grid grid-cols-4 gap-4'>
+    <>
       <AddPasswordDialog onSuccess={getList} />
-      {pwdList?.map((item) => (
-        <div key={item.id} className='rounded-[20px]  flex flex-col   pl-[16px] pr-[16px] pt-[12px] pb-[12px] border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:shadow-md '>
-          <div className='text-[24px] items-center flex justify-between text-primary'>
-            <span className='text-slate-600'>{item.remark}</span>
-            <div className='flex gap-1 items-center'>
-              {visibleId !== item.id ? (
-                <ShowPasswordDialog
-                  id={item.id}
-                  onSuccess={(pwd) => {
-                    clearTimeout(timeRef.current)
-                    setDecryptPwd(pwd)
-                    setVisibleId(item.id)
-                    timeRef.current = setTimeout(() => {
-                      setDecryptPwd('')
-                      setVisibleId(0)
+      <div className='grid grid-cols-4 gap-4'>
+        {pwdList?.map((item) => (
+          <div key={item.id} className='rounded-[20px] flex flex-col  p-3 border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:shadow-md '>
+            <div className='text-[14px] items-center flex justify-between text-primary'>
+              <span className='text-blue-600'>{item.remark}</span>
+              <div className='flex gap-1 items-center'>
+                {visibleId !== item.id ? (
+                  <ShowPasswordDialog
+                    id={item.id}
+                    onSuccess={(pwd) => {
                       clearTimeout(timeRef.current)
-                    }, 30000)
-                  }}
-                />
-              ) : (
-                <TooltipProvider delayDuration={100}>
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <SvgIcon
-                        name='copy'
-                        onClick={() => {
-                          copy(decryptPwd)
-                          toast({
-                            description: 'copy succeed',
-                          })
-                        }}
-                        className='w-[14px] h-[14px] cursor-pointer'
-                      />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>
-                        decrypt:<span className='text-red-500'>{decryptPwd}</span>，you can click to copy
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              )}
-              <Dialog>
-                <DialogTrigger asChild>
-                  <SvgIcon name='delete' className='w-[16px] h-[16px] cursor-pointer' />
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogTitle>onConfirm</DialogTitle>
-                  <div>confirm delete this password?</div>
-                  <DialogFooter>
-                    <DialogClose asChild>
-                      <Button
-                        onClick={async () => {
-                          await window.passwordBoxApi.delete(item.id)
-                          getList()
-                          toast({
-                            description: 'Delete Succeed',
-                          })
-                        }}
-                        type='submit'>
-                        yes
-                      </Button>
-                    </DialogClose>
-                  </DialogFooter>
-                </DialogContent>
-              </Dialog>
+                      setDecryptPwd(pwd)
+                      setVisibleId(item.id)
+                      timeRef.current = setTimeout(() => {
+                        setDecryptPwd('')
+                        setVisibleId(0)
+                        clearTimeout(timeRef.current)
+                      }, 30000)
+                    }}
+                  />
+                ) : (
+                  <TooltipProvider delayDuration={100}>
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <SvgIcon
+                          name='copy'
+                          onClick={() => {
+                            copy(decryptPwd)
+                            toast({
+                              description: 'copy succeed',
+                            })
+                          }}
+                          className='w-[14px] h-[14px] cursor-pointer'
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          decrypt:<span className='text-red-500'>{decryptPwd}</span>，you can click to copy
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <SvgIcon name='delete' className='w-[16px] h-[16px] cursor-pointer' />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogTitle>onConfirm</DialogTitle>
+                    <div>confirm delete this password?</div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button
+                          onClick={async () => {
+                            await window.passwordBoxApi.delete(item.id)
+                            getList()
+                            toast({
+                              description: 'Delete Succeed',
+                            })
+                          }}
+                          type='submit'>
+                          yes
+                        </Button>
+                      </DialogClose>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              </div>
             </div>
-          </div>
-          {item.username && (
+            {item.username && (
+              <div className='text-[12px] text-foreground'>
+                <span>username</span>
+                <span className='ml-2'>{item.username || '-'}</span>
+              </div>
+            )}
             <div className='text-[12px] text-foreground'>
-              <span>username</span>
-              <span className='ml-2'>{item.username || '-'}</span>
+              <span>{dayjs(+item.create_tm * 1000).format('YYYY-MM-DD HH:mm:ss')} Created</span>
             </div>
-          )}
-          <div className='text-[12px] text-foreground'>
-            <span>{dayjs(+item.create_tm * 1000).format('YYYY-MM-DD HH:mm:ss')} Created</span>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   ) : (
     <div className='flex flex-col gap-[40px] items-center justify-center h-full'>
       <div className='text-primary text-xl'>Please enter the password to open this password box</div>
