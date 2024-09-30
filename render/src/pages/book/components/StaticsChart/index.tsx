@@ -55,7 +55,7 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
             <XAxis dataKey='key' tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Bar dataKey='value' fill='skyblue' radius={4}>
-              <LabelList position='top' offset={12} className='fill-foreground' fontSize={12} />
+              <LabelList position='centerTop' className='fill-foreground' fontSize={12} />
             </Bar>
           </BarChart>
         </ChartContainer>
