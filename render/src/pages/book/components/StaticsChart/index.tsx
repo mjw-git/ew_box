@@ -7,10 +7,11 @@ import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from 'recharts'
 
 const chartConfig = {
   key: {
-    label: 'Key',
+    label: 'key',
     color: '#2563eb',
   },
 } satisfies ChartConfig
+
 const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
   const [value, setValue] = useState('day')
   const { data: trendData, run: runGetTrendData } = useRequest(() => getBookTrend({ type: value }), {
@@ -46,6 +47,7 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
           </SelectContent>
         </Select>
       </div>
+
       <div>
         <ChartContainer config={chartConfig} className='min-h-[200px] w-full'>
           <BarChart accessibilityLayer data={trendData?.result ?? []}>

@@ -47,10 +47,10 @@ router.get('/book/trend', async (ctx) => {
     const month = dayjs.unix(next.unix).format(type === 'month' ? 'YYYY-MM' : 'YYYY-MM-DD')
     const monthItem = pre.find((item) => item.key === month)
     if (!monthItem) {
-      pre.push({ key: month, value: new Decimal(0) })
+      pre.push({ key: month, value: 0 })
     }
     const currentMonthItem = pre.find((item) => item.key === month)
-    currentMonthItem.value = currentMonthItem.value.plus(next.price)
+    currentMonthItem.value = new Decimal(currentMonthItem.value).plus(next.price).toNumber()
 
     return pre
   }, [])
