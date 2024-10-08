@@ -7,10 +7,14 @@ import { ViteLessGlobalVars } from './plugins/vite-less-global-vars'
 import { ViteImgToBase64 } from './plugins/vite-img-to-base64'
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  envDir: path.join(__dirname, './render'),
   root: path.join(__dirname, './render'),
   base: mode === 'production' ? './' : '/',
   server: {
     port: 8889,
+  },
+  define: {
+    'import.meta.env.PORT': JSON.stringify(process.env.PORT),
   },
   plugins: [
     react(),

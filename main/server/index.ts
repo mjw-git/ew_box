@@ -33,7 +33,7 @@ app.use(todoRouter.routes())
 app.use(bookRouter.routes())
 const startServer = (callback: () => void) => {
   app
-    .listen(31117, () => {
+    .listen(process.env.PORT || 31117, () => {
       callback?.()
     })
     .on('error', (err) => {

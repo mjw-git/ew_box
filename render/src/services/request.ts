@@ -1,6 +1,8 @@
 import { toast } from '@/components/ui/use-toast'
 import { stringify } from 'qs'
-const PREFIX = 'http://localhost:31117/api/v1'
+console.log(import.meta)
+
+const PREFIX = `http://localhost:${import.meta.env.PORT || 31117}/api/v1`
 const request = async <T>(url: string, options: Omit<RequestInit, 'body'> & { body?: Record<string, any> } = {}): Promise<T> => {
   const method = options.method || 'GET'
 
