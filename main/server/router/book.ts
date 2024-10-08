@@ -77,8 +77,8 @@ router.delete('/book', async (ctx) => {
 router.get('/book/month-year', async (ctx) => {
   const { month, year, date } = ctx.query
   if (!date && month) {
-    const start = dayjs(year + '-' + month).startOf('month')
-    const end = dayjs(year + '-' + month).endOf('month')
+    const start = dayjs(year + '-' + month).startOf('year')
+    const end = dayjs(year + '-' + month).endOf('year')
     const list = await prismaInstance.book.findMany({
       where: {
         unix: {
@@ -90,6 +90,7 @@ router.get('/book/month-year', async (ctx) => {
         unix: 'asc',
       },
     })
+
     const groupedByUnix = list.reduce(
       (acc, book) => {
         const month = dayjs.unix(book.unix).month() + 1
@@ -117,7 +118,7 @@ router.get('/book/month-year', async (ctx) => {
     })
   }
   if (!month && year) {
-    const start = dayjs(String(year)).startOf('year')
+    const start = dayjs(String(year)).subtract(2, 'year').startOf('year')
     const end = dayjs(String(year)).endOf('year')
     const list = await prismaInstance.book.findMany({
       where: {
