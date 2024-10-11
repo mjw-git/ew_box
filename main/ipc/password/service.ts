@@ -104,6 +104,7 @@ const getPwdList = async () => {
         username: true,
         remark: true,
       },
+      orderBy: [{ is_star: 'desc' }],
     })
     return pwdList.map((i) => ({ ...i, username: decrypt(i.username, cKey) }))
   } catch (error) {
