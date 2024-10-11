@@ -10,6 +10,8 @@ import { Dialog, DialogClose, DialogContent, DialogFooter, DialogTitle, DialogTr
 import { Button } from '@/components/ui/button'
 import SvgIcon from '@/components/SvgIcon'
 import ShowPasswordDialog from './components/ShowPasswordDialog'
+import BaseElliTip from '@/components/BaseElliTip'
+import { starPassword } from '@/services/password'
 const ImageCompress = () => {
   const [entered, setEntered] = useState(false)
   const [visibleId, setVisibleId] = useState(0)
@@ -22,7 +24,17 @@ const ImageCompress = () => {
     ready: entered,
     refreshDeps: [entered],
   })
+  console.log(pwdList, '==')
 
+  const { run: runStar } = useRequest(starPassword, {
+    manual: true,
+    onSuccess: () => {
+      toast({
+        title: 'Operation Success',
+      })
+      getList()
+    },
+  })
   const handleEnter = async () => {
     const checked = await window.passwordBoxApi.enter(password)
 
@@ -57,7 +69,19 @@ const ImageCompress = () => {
         {pwdList?.map((item) => (
           <div key={item.id} className='rounded-[20px] flex flex-col  p-3 border-[1px] cursor-pointer border-border border-solid hover:border-solid hover:shadow-md '>
             <div className='text-[14px] items-center flex justify-between text-primary'>
-              <span className='text-blue-600'>{item.remark}</span>
+              <span className='text-blue-600 flex items-center gap-2'>
+                {' '}
+                <SvgIcon
+                  onClick={() => {
+                    runStar({ id: item.id })
+                  }}
+                  className={`${item.is_star ? 'text-yellow-400' : 'text-gray-400'} cursor-pointer`}
+                  width={16}
+                  height={16}
+                  name='star'
+                />
+                {item.remark}
+              </span>
               <div className='flex gap-1 items-center'>
                 {visibleId !== item.id ? (
                   <ShowPasswordDialog
@@ -123,9 +147,11 @@ const ImageCompress = () => {
               </div>
             </div>
             {item.username && (
-              <div className='text-[12px] text-foreground'>
+              <div className='text-[12px] flex text-foreground'>
                 <span>username</span>
-                <span className='ml-2'>{item.username || '-'}</span>
+                <span className='ml-2'>
+                  <BaseElliTip text={item.username || '-'} />{' '}
+                </span>
               </div>
             )}
             <div className='text-[12px] text-foreground'>

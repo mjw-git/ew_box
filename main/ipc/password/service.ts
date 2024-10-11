@@ -98,6 +98,7 @@ const getPwdList = async () => {
     const cKey = Buffer.from(secretKey.value.slice(0, 32))
     const pwdList = await prismaInstance.password.findMany({
       select: {
+        is_star: true,
         create_tm: true,
         id: true,
         username: true,

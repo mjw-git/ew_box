@@ -15,7 +15,7 @@ interface Window {
     openPath: (path: string) => Promise<string>
   }
   passwordBoxApi: {
-    getList: () => Promise<{ remark: string; username: string; create_tm: number; id: number }[]>
+    getList: () => Promise<{ remark: string; username: string; create_tm: number; id: number; is_star?: number }[]>
     create: (options: { remark: string; username: string; password: string }) => Promise<boolean>
     enter: (key: string) => Promise<boolean>
     decrypt: (time: number, key: string) => Promise<string>

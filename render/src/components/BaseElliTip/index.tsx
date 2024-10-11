@@ -20,6 +20,8 @@ const BaseElliTip = (props: BaseElliTipProps) => {
       setShowTooltip(true)
     }
   }, [text])
+  console.log(showTooltip)
+
   const mergeCls = classNames('w-full text-ellipsis line-clamp-1 break-all', className)
   return (
     <div className='w-full relative'>
