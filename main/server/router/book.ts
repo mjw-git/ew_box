@@ -117,14 +117,12 @@ router.get('/book/statics', async (ctx) => {
     },
     {} as Record<string, Decimal>,
   )
-  //将value相加
+
   const totalValue = Object.values(priceMap).reduce((pre, next) => {
     return pre.plus(next)
   }, new Decimal(0))
-  // console.log(priceMap2, '==')
   const average = totalValue.div(Object.keys(priceMap).length).toNumber().toFixed(2)
-  //除以长度保留两位小数
-  // const average = payment.div(list.length).toNumber().toFixed(2)
+
   ctx.body = {
     code: 200,
     data: {
