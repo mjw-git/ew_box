@@ -73,7 +73,49 @@ router.delete('/book', async (ctx) => {
     data: data.id,
   }
 })
+router.get('/book/statics', async (ctx) => {
+  const start = dayjs().startOf('year').unix()
+  const end = dayjs().endOf('year').unix()
+  const list = await prismaInstance.book.findMany({
+    orderBy: { price: 'desc' },
+    where: {
+      type: Type.PAYMENT,
 
+      unix: {
+        gte: start,
+        lte: end,
+      },
+    },
+  })
+  if (list.length === 0) {
+    ctx.body = {
+      code: 200,
+      data: {
+        g: 0,
+        l: 0,
+        //平均
+        average: 0,
+      },
+    }
+    return
+  }
+  //计算所有的支出平均数
+  const payment = list.reduce((pre, next) => {
+    return pre.plus(next.price)
+  }, new Decimal(0))
+  //除以长度保留两位小数
+  const average = payment.div(list.length).toNumber().toFixed(2)
+  ctx.body = {
+    code: 200,
+    data: {
+      g: list[0].price,
+      l: list[list.length - 1].price,
+      average,
+      gFrom: list[0],
+      lFrom: list[list.length - 1],
+    },
+  }
+})
 router.get('/book/month-year', async (ctx) => {
   const { month, year, date } = ctx.query
   if (!date && month) {

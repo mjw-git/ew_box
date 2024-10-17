@@ -10,6 +10,11 @@ export const getBookTrend = (body?: Record<string, any>) =>
     method: 'GET',
     body,
   })
+export const getBookAverage = (body?: Record<string, any>) =>
+  request<{ average: number; g: number; l: number; gFrom: Book.BookItem; lFrom: Book.BookItem }>('/book/statics', {
+    method: 'GET',
+    body,
+  })
 export const deleteBookItem = (body: { id: number }) =>
   request('/book', {
     method: 'DELETE',
