@@ -6,7 +6,7 @@ import { getBookAverage, getBookTrend } from '@/services/book'
 import { useRequest } from 'ahooks'
 import dayjs from 'dayjs'
 import React, { forwardRef, useImperativeHandle, useState } from 'react'
-import { Bar, BarChart, CartesianGrid, LabelList, Line, LineChart, XAxis } from 'recharts'
+import { CartesianGrid, Line, LineChart, XAxis } from 'recharts'
 
 const chartConfig = {
   key: {
