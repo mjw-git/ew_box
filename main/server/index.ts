@@ -3,6 +3,7 @@ import cors from '@koa/cors'
 import sharpRouter from './router/sharp'
 import passwordRouter from './router/password'
 import todoRouter from './router/todo'
+import systemRouter from './router/system'
 import bookRouter from './router/book'
 import logger from '@main/utils/log'
 import koaBody from 'koa-bodyparser'
@@ -31,6 +32,7 @@ app.use(passwordRouter.routes())
 app.use(sharpRouter.routes())
 app.use(todoRouter.routes())
 app.use(bookRouter.routes())
+app.use(systemRouter.routes())
 const startServer = (callback: () => void) => {
   app
     .listen(process.env.PORT || 31117, () => {

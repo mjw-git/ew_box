@@ -4,6 +4,7 @@ import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@/comp
 import { useToast } from '@/components/ui/use-toast'
 import { clearPassword } from '@/services/password'
 import { clearCompressTask } from '@/services/sharp'
+import { exportData, importData } from '@/services/system'
 import { useRequest } from 'ahooks'
 
 const Setting = () => {
@@ -24,7 +25,14 @@ const Setting = () => {
       })
     },
   })
-
+  const { run: importRun } = useRequest(importData, {
+    manual: true,
+    onSuccess: () => {
+      toast({
+        description: 'Import Success',
+      })
+    },
+  })
   return (
     <div>
       <h1 className='text-black font-bold text-[32px] mb-3'>Setting</h1>
@@ -101,6 +109,28 @@ const Setting = () => {
             await window.systemApi.openPath('appPath')
           }}>
           Open UserData Dir
+        </Button>
+        <Button
+          variant='outline'
+          onClick={async () => {
+            await exportData()
+          }}>
+          Export All Data
+        </Button>
+        <Button
+          onClick={async () => {
+            const result = await window.systemApi.openFileDialog({
+              properties: ['openFile'],
+              title: 'Upload',
+              buttonLabel: 'Upload',
+              filters: [{ name: 'data', extensions: ['xlsx'] }],
+            })
+            if (result.length > 0) {
+              importRun({ filename: result[0] })
+            }
+            // console.log(result)
+          }}>
+          Import Data
         </Button>
       </div>
     </div>

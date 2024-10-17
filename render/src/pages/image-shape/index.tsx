@@ -48,7 +48,7 @@ const ImageShape = () => {
                 className='opacity-0 text-[0] cursor-pointer whitespace-nowrap w-[100%] h-[100%] overflow-hidden absolute left-0 bottom-0'
                 onClick={async () => {
                   const result = await window.systemApi.openFileDialog({
-                    properties: ['openFile'],
+                    properties: ['openFile', 'multiSelections'],
                     title: 'Upload',
                     buttonLabel: 'Upload',
                     filters: [{ name: 'Images', extensions: ['png', 'jpg', 'webp'] }],
