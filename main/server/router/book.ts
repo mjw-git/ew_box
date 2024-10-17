@@ -99,12 +99,32 @@ router.get('/book/statics', async (ctx) => {
     }
     return
   }
-  //计算所有的支出平均数
+
+  //计算所有的支出平均数,按每个月计算
+
   const payment = list.reduce((pre, next) => {
     return pre.plus(next.price)
   }, new Decimal(0))
+  console.log(payment, '==')
+  const priceMap = list.reduce(
+    (pre, next) => {
+      if (!pre[next.unix]) {
+        pre[next.unix] = new Decimal(0)
+        // count:0
+      }
+      pre[next.unix] = pre[next.unix].plus(next.price)
+      return pre
+    },
+    {} as Record<string, Decimal>,
+  )
+  //将value相加
+  const totalValue = Object.values(priceMap).reduce((pre, next) => {
+    return pre.plus(next)
+  }, new Decimal(0))
+  // console.log(priceMap2, '==')
+  const average = totalValue.div(Object.keys(priceMap).length).toNumber().toFixed(2)
   //除以长度保留两位小数
-  const average = payment.div(list.length).toNumber().toFixed(2)
+  // const average = payment.div(list.length).toNumber().toFixed(2)
   ctx.body = {
     code: 200,
     data: {
