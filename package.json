@@ -2,7 +2,6 @@
   "name": "ew",
   "version": "1.0.0",
   "description": "Ew Box",
-  "main": "./main-dist/index.js",
   "scripts": {
     "lint": "eslint ./render",
     "lint:fix": "eslint ./render --fix",
@@ -10,64 +9,10 @@
     "start:main": "tsc -w --p tsconfig.main.json",
     "start:react": "bash start.sh && cross-env PORT=31116 vite --config vite.config.ts",
     "build:react": "vite build",
+    "build:mac": "node scripts/build.js && vite build && cd app && electron-builder --mac",
     "build:main": "tsc --p tsconfig.main.json",
-    "start:electron": "electron ./main-dist/index",
-    "build:mac": "node scripts/build.js && vite build && electron-builder --mac",
-    "build:win": "electron-builder --win",
+    "start:electron": "electron ./app/main-dist/index",
     "postinstall": "electron-builder install-app-deps && electron-rebuild"
-  },
-  "build": {
-    "extraResources": [
-      {
-        "from": "node_modules/@prisma/engines/libquery_engine-darwin-arm64.dylib.node",
-        "to": "resources/engines/libquery_engine-darwin-arm64.dylib.node"
-      },
-      {
-        "from": "prisma/migrations",
-        "to": "resources/prisma/migrations"
-      },
-      {
-        "from": "prisma/schema.prisma",
-        "to": "resources/prisma/schema.prisma"
-      }
-    ],
-    "files": [
-      "package.json",
-      "prisma/migrations/**/*",
-      "main-dist/**/*",
-      "node_modules/**/*",
-      "render/dist/**/*"
-    ],
-    "asar": true,
-    "asarUnpack": [
-      "**/node_modules/prisma/**/*",
-      "**/node_modules/@prisma/**/*",
-      "**/node_modules/sharp/**/*",
-      "**/node_modules/@img/**/*"
-    ],
-    "productName": "Ew Box",
-    "appId": "org.xiaoming.developer",
-    "mac": {
-      "icon": "assets/ew.icns",
-      "type": "distribution",
-      "target": [
-        "dmg",
-        "zip"
-      ]
-    },
-    "win": {
-      "icon": "build/favicon.ico",
-      "target": [
-        "nsis"
-      ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": false
-    }
   },
   "engines": {
     "node": ">=21.1.0"
@@ -153,13 +98,10 @@
     "electron-is-dev": "^2.0.0",
     "esbuild": "^0.21.3",
     "exceljs": "^4.4.0",
-    "image-size": "^1.1.1",
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^12.0.1",
-    "localforage": "^1.10.0",
     "lodash": "^4.17.21",
-    "lodash-es": "^4.17.21",
     "log4js": "^6.9.1",
     "lucide-react": "^0.445.0",
     "node-machine-id": "^1.1.12",

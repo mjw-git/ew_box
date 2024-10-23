@@ -9,6 +9,7 @@ import { ViteImgToBase64 } from './plugins/vite-img-to-base64'
 export default defineConfig(({ mode }) => ({
   envDir: path.join(__dirname, './render'),
   root: path.join(__dirname, './render'),
+  outDir: path.join(__dirname, './app/render-dist'),
   base: mode === 'production' ? './' : '/',
   server: {
     port: 8889,

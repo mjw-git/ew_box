@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const path = require('path')
 const esbuild = require('esbuild')
-const OUT_DIR = path.join(__dirname, '../main-dist')
+const OUT_DIR = path.join(__dirname, '../app/main-dist')
 const electronBuild2Js = async () => {
   // 把electron 的 入口 ts 文件进行打包操作
   let context = await esbuild.context({

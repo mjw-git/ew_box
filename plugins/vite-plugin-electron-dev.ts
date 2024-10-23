@@ -15,7 +15,7 @@ import chokidar from 'chokidar'
 // 引入esbuild,把 electron 的 ts 打包成 js
 import esbuild from 'esbuild'
 import { debounce } from 'lodash'
-const OUT_DIR = path.join(__dirname, '../main-dist')
+const OUT_DIR = path.join(__dirname, '../app/main-dist')
 
 const lockFilePath = path.resolve(__dirname, '../electron.lock')
 let isWatch = false
@@ -32,14 +32,14 @@ const runElectron = () => {
     }
   }
 
-  let electronProcess = spawn(`${electron}`, [path.join(__dirname, '../main-dist/index.js')], { stdio: 'inherit' }) as ChildProcess
+  let electronProcess = spawn(`${electron}`, [path.join(__dirname, '../app/main-dist/index.js')], { stdio: 'inherit' }) as ChildProcess
 
   fs.writeFileSync(lockFilePath, `${electronProcess.pid}`)
 }
 
 function createElectron() {
   if (!isWatch) {
-    const mainDir = path.join(__dirname, '../main-dist')
+    const mainDir = path.join(__dirname, '../app/main-dist')
     const debouncedCreateElectron = debounce(() => {
       runElectron()
     }, 200)

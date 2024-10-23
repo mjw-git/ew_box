@@ -18,7 +18,6 @@ function createWindow() {
     webPreferences: {
       devTools: isDev,
       preload: resolve(__dirname, './preload/index.js'),
-      webSecurity: false,
       contextIsolation: true,
       nodeIntegration: true,
     },
@@ -26,10 +25,9 @@ function createWindow() {
   registerService()
   initDirectory()
   if (isDev) {
-    // Channel.mainWindow.webContents.openDevTools()
     Channel.mainWindow.loadURL('http://localhost:8889')
   } else {
-    Channel.mainWindow.loadFile(resolve(__dirname, '../render/dist/index.html'))
+    Channel.mainWindow.loadFile(resolve(__dirname, '../render-dist/index.html'))
   }
   Channel.mainWindow.on('close', (e) => {
     e.preventDefault()
@@ -48,7 +46,6 @@ function registerProtocol() {
     const filePath = decodeURI(normalize(url.split('?')[0]))
 
     return net.fetch('file://' + filePath)
-    // callback(decodeURI(normalize(url.split('?')[0])))
   })
 }
 if (electronIsDev) {
