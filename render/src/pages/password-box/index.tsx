@@ -24,7 +24,6 @@ const ImageCompress = () => {
     ready: entered,
     refreshDeps: [entered],
   })
-  console.log(pwdList, '==')
 
   const { run: runStar } = useRequest(starPassword, {
     manual: true,

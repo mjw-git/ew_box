@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+//将hex转变为rgb，输出三个值按逗号分隔
+
 module.exports = {
   darkMode: ['class'],
   content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}', './render/src/**/*.{js,ts,jsx,tsx}'],
@@ -17,7 +19,10 @@ module.exports = {
       },
       colors: {
         textColor: 'rgb(63, 145, 83)',
-        primary: 'hsl(var(--primary)',
+        'grey-1': `var(--menu-text-color-default)`,
+        'grey-2': 'var(--menu-bg)',
+        'grey-3': 'var(--menu-icon-bg)',
+        primary: 'var(--menu-text-color-active)',
         black: '#000',
         white: '#fff',
         border: 'hsl(var(--border))',
@@ -25,10 +30,7 @@ module.exports = {
         ring: 'hsl(var(--ring))',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
-        primary: {
-          DEFAULT: 'hsl(var(--primary) / <alpha-value>)',
-          foreground: 'hsl(var(--primary-foreground) / <alpha-value>)',
-        },
+
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',

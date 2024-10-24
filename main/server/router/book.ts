@@ -106,7 +106,6 @@ router.get('/book/statics', async (ctx) => {
   const payment = list.reduce((pre, next) => {
     return pre.plus(next.price)
   }, new Decimal(0))
-  console.log(payment, '==')
   const priceMap = list.reduce(
     (pre, next) => {
       if (!pre[next.unix]) {

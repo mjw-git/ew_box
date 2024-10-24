@@ -4,7 +4,6 @@ import { resolve, normalize } from 'path'
 import registerService from './ipc'
 import Channel from './interface/channel'
 import { initDb, initDirectory } from './utils/init'
-import electronIsDev from 'electron-is-dev'
 
 function createWindow() {
   Channel.mainWindow = new BrowserWindow({

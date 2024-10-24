@@ -64,7 +64,6 @@ export async function compressImg(options: { path: string; quality?: number; out
   if (!convertRxt) {
     return Promise.reject(new Error('type error'))
   }
-  console.log(basename(path), path, 'base')
 
   const savePath = `${removeLastSlash(output)}/${parse(basename(path)).name}.${convertRxt}`
 

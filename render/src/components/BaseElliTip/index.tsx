@@ -13,14 +13,10 @@ const BaseElliTip = (props: BaseElliTipProps) => {
   useEffect(() => {
     const displayNoneWidth = displayNoneRef.current.getBoundingClientRect().width
     const totalWidth = containerRef.current.getBoundingClientRect().width
-    console.log(displayNoneWidth, totalWidth)
     if (displayNoneWidth > totalWidth) {
-      console.log(displayNoneWidth, totalWidth)
-
       setShowTooltip(true)
     }
   }, [text])
-  console.log(showTooltip)
 
   const mergeCls = classNames('w-full text-ellipsis line-clamp-1 break-all', className)
   return (

@@ -29,8 +29,6 @@ const FullDateSelect = (props: Props) => {
   })
   useEffect(() => {
     if (value) {
-      console.log(value)
-
       setCurrentDate(value)
     }
   }, [value])
@@ -123,8 +121,6 @@ const FullDateSelect = (props: Props) => {
       {
         <Select
           onValueChange={(value) => {
-            console.log(value, '==')
-
             setCurrentDate({ ...currentDate, date: value })
             onChange({ ...currentDate, date: value })
           }}

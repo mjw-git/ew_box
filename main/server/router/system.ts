@@ -80,8 +80,6 @@ router.post('/system/import', async (ctx) => {
   const result = await workbook.xlsx.readFile(filename)
   const bookSheet = result.getWorksheet('book')
   const todoSheet = result.getWorksheet('todo')
-  console.log(todoSheet, bookSheet)
-  console.log(bookSheet.columns)
   if (!bookSheet && !todoSheet) {
     throw new Error('bookSheet or todoSheet is empty!')
   }
@@ -98,7 +96,6 @@ router.post('/system/import', async (ctx) => {
           ...(rowData as any),
         },
       })
-      console.log(rowData) // 输出每一行的数据对象
     })
   }
   if (todoSheet) {

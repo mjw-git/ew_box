@@ -4,8 +4,8 @@
 }
 
 .menu_container {
+  box-shadow: 0 0 10px 0 #f6f6f6;
   gap: 32px;
-  border-right: 1px solid #c9c9c963;
   -webkit-app-region: drag;
   color: #fff;
   img {
@@ -15,15 +15,7 @@
   flex-direction: column;
   align-items: center;
   padding: 40px 12px;
-  width: 72px;
-  .menu_item {
-    background-color: #e6ffee;
-    font-weight: 600;
-    padding: 12px 24px;
-    font-size: 18px;
-    text-align: left;
-    width: 200px;
-  }
+  width: 62px;
 }
 
 .main_container {
@@ -35,17 +27,8 @@
 }
 .menu_icon {
   -webkit-app-region: no-drag;
-  width: 50px;
-  display: flex;
-  justify-content: center;
-  border-radius: 8px;
-  height: 50px;
-  transition: all 0.3s;
 }
-.menu_item_active {
-  color: @primary-color;
-  background-color: rgba(52, 199, 89, 0.2);
-}
+
 .title {
   font-weight: bold;
   color: #333333;
