@@ -118,6 +118,10 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
             </div>
             <div className='text-red-500'>{averageData?.l}</div>
           </div>
+          <div className='w-1/3 p-1  border-border rounded-sm border-[1px]'>
+            <div className='flex items-center gap-1'>Total</div>
+            <div className='text-red-500'>{averageData?.total}</div>
+          </div>
         </div>
         {/* {averageData?.average} */}
       </div>

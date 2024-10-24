@@ -11,7 +11,7 @@ export const getBookTrend = (body?: Record<string, any>) =>
     body,
   })
 export const getBookAverage = (body?: Record<string, any>) =>
-  request<{ average: number; g: number; l: number; gFrom: Book.BookItem; lFrom: Book.BookItem }>('/book/statics', {
+  request<{ average: number; g: number; l: number; gFrom: Book.BookItem; lFrom: Book.BookItem; total: number }>('/book/statics', {
     method: 'GET',
     body,
   })

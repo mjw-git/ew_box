@@ -93,6 +93,7 @@ router.get('/book/statics', async (ctx) => {
       data: {
         g: 0,
         l: 0,
+        total: 0,
         //平均
         average: 0,
       },
@@ -129,6 +130,7 @@ router.get('/book/statics', async (ctx) => {
       g: list[0].price,
       l: list[list.length - 1].price,
       average,
+      total: payment.toNumber().toFixed(2),
       gFrom: list[0],
       lFrom: list[list.length - 1],
     },

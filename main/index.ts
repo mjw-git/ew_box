@@ -48,9 +48,9 @@ function registerProtocol() {
     return net.fetch('file://' + filePath)
   })
 }
-if (electronIsDev) {
-  app.dock.setIcon(resolve(__dirname, '../assets/icons.iconset/icon_512x512.png'))
-}
+// if (electronIsDev) {
+//   app.dock.setIcon(resolve(__dirname, '../assets/icons.iconset/icon_512x512.png'))
+// }
 app.on('ready', () => {
   process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true' //关闭web安全警告
 })
