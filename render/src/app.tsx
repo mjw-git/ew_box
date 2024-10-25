@@ -4,14 +4,27 @@ import Layout from './layout'
 import { routes } from './config/route'
 
 export default function App() {
+  const routerViews = (routerItems) => {
+    if (routerItems && routerItems.length) {
+      return routerItems.map(({ path, component, children, redirect }) => {
+        return children && children.length ? (
+          <Route path={path} key={path} element={component}>
+            {routerViews(children)}
+            {redirect ? <Route path={path} element={<Navigate to={redirect} />}></Route> : <Route path={path} element={<Navigate to={children[0].path} />}></Route>}
+          </Route>
+        ) : (
+          <Route key={path} path={path} element={component}></Route>
+        )
+      })
+    }
+  }
+
   return (
     <HashRouter>
       <Routes>
+        <Route index element={<Navigate to='/book/account' />} />
         <Route path='/' element={<Layout />}>
-          <Route index element={<Navigate to='/shape' />} />
-          {routes.map((item) => (
-            <Route key={item.path} path={item.path} element={item.component}></Route>
-          ))}
+          {routerViews(routes)}
         </Route>
       </Routes>
     </HashRouter>

@@ -18,13 +18,14 @@ module.exports = {
         DEFAULT: 'rgb(52, 199, 89)', // 默认环形颜色
       },
       colors: {
-        textColor: 'rgb(63, 145, 83)',
+        'icon-bg-1': '#FBC74E',
+        'container-bg': 'var(--container-bg)',
+        textColor: 'var(--text-color)',
         'grey-1': `var(--menu-text-color-default)`,
-        'grey-2': 'var(--menu-bg)',
+        'container-bg-2': 'var(--menu-bg)',
         'grey-3': 'var(--menu-icon-bg)',
         primary: 'var(--menu-text-color-active)',
         black: '#000',
-        white: '#fff',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

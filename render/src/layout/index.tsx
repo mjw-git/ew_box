@@ -11,11 +11,11 @@ import { Toaster } from '@/components/ui/toaster'
 const Layout = () => {
   const { pathname } = useLocation()
   const navigate = useNavigate()
-
+  const childrenMenu = routes.find((i) => pathname.startsWith(i.path))?.children ?? []
   return (
     <div className='font-mono'>
       <div className={styles.container}>
-        <nav className={classNames(styles.menu_container, 'bg-grey-2')}>
+        <nav className={classNames(styles.menu_container, 'bg-container-bg-2', 'border-grey border-r')}>
           <div className='flex flex-col justify-center gap-1'>
             <img width={48} src={logo} alt='pluto' />
           </div>
@@ -28,9 +28,9 @@ const Layout = () => {
                     navigate(route.path)
                   }}
                   key={route.path}
-                  className={classNames('flex flex-col gap-1 p-1 rounded-md justify-center items-center w-[50px]', { 'bg-grey-3 text-primary': pathname === route.path }, styles.menu_icon, 'hover:bg-grey-3', 'cursor-pointer')}>
-                  <SvgIcon key={route.path} className={classNames('text-grey-1', { 'bg-grey-3 text-primary': pathname === route.path }, 'hover:bg-grey-3')} width={15} height={15} name={route.icon} />
-                  <span className={classNames('text-[10px] text-grey-1', { 'text-primary': pathname === route.path })}>{route.name}</span>
+                  className={classNames('flex flex-col gap-1 p-1 rounded-md justify-center items-center w-[50px]', { 'bg-grey-3 text-primary': pathname.startsWith(route.path) }, styles.menu_icon, 'hover:bg-grey-3', 'cursor-pointer')}>
+                  <SvgIcon key={route.path} className={classNames('text-grey-1', { 'bg-grey-3 text-primary': pathname.startsWith(route.path) }, 'hover:bg-grey-3')} width={15} height={15} name={route.icon} />
+                  <span className={classNames('text-[10px] text-grey-1', { 'text-primary': pathname.startsWith(route.path) })}>{route.name}</span>
                 </div>
               ))}
           </div>
@@ -43,7 +43,17 @@ const Layout = () => {
             <span className={classNames('text-[10px] text-grey-1', { 'text-primary': pathname === '/setting' })}>设置</span>
           </div>
         </nav>
-        <main className={styles.main_container}>
+        {childrenMenu.length > 0 && (
+          <div className='w-[50px] pt-3 bg-container-bg-2 border-r border-grey flex flex-col items-center'>
+            {childrenMenu.map((i) => (
+              <div key={i.path} className={classNames('flex flex-col gap-1 p-1 rounded-md justify-center items-center w-[40px]', { 'bg-grey-3 text-primary': pathname.startsWith(i.path) }, styles.menu_icon, 'hover:bg-grey-3', 'cursor-pointer')}>
+                <SvgIcon className={classNames('text-grey-1', { 'bg-grey-3 text-primary': pathname === i.path }, 'hover:bg-grey-3')} width={15} height={15} name={i.icon} />
+                <span className={classNames('text-[10px] text-grey-1', { 'text-primary': pathname === i.path })}>{i.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <main className={classNames(styles.main_container, 'bg-container-bg')}>
           <Toaster />
           <Outlet />
         </main>

@@ -29,6 +29,15 @@ export const routes = [
     path: '/book',
     icon: 'book',
     name: '记账',
-    component: <Book />,
+    redirect: '/book/account',
+    // component: <Book />,
+    children: [
+      {
+        path: '/book/account',
+        name: '账本',
+        icon: 'book_account',
+        component: <Book />,
+      },
+    ],
   },
 ]
