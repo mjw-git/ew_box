@@ -19,8 +19,10 @@ module.exports = {
       },
       colors: {
         'icon-bg-1': '#FBC74E',
+        'border-default': 'var(--border-default)',
         'container-bg': 'var(--container-bg)',
         textColor: 'var(--text-color)',
+        'select-menu-bg': 'var(--select-menu-bg)',
         'grey-1': `var(--menu-text-color-default)`,
         'container-bg-2': 'var(--menu-bg)',
         'grey-3': 'var(--menu-icon-bg)',
