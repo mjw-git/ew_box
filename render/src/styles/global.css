@@ -30,11 +30,14 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     /* 新增 */
+    --white: #fff;
     --select-menu-bg: #B6B7BB;
     --border-default: #EBEBEB;
     --icon-bg-orange: #FBC74E;
     --text-color: #000;
     --container-bg: #F4F4F4;
+    --red-default: #F06554;
+    --green-default: #32D54B;
     --menu-bg: #fff;
     --menu-icon-bg: #F7F7F7;
     --menu-text-color-active: #007AFF;
@@ -67,6 +70,9 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     /* 新增 */
+    --red-default: #F06554;
+    --green-default: #32D54B;
+    --white: #fff;
     --select-menu-bg: #B6B7BB;
     --border-default: #282828;
     --icon-bg-orange: #FBC74E;

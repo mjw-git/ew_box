@@ -1,15 +1,16 @@
 import SvgIcon from '@/components/SvgIcon'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useState } from 'react'
+import Statistics from './components/Statistics'
 
 const Book = () => {
   const [type, setType] = useState('week')
 
   return (
-    <div className='flex gap-1'>
+    <div>
       <div className='bg-container-bg-2 h-10 w-full flex justify-between items-center px-3'>
         <div className='flex items-center gap-2'>
-          <div className='bg-icon-bg-1 rounded-sm p-1'>
+          <div className='bg-icon-bg-1 rounded-sm p-[2px]'>
             <SvgIcon width={12} height={12} className='text-white' name='light' />
           </div>
           <div className='flex items-center gap-[2px] cursor-pointer'>
@@ -31,6 +32,9 @@ const Book = () => {
             </SelectGroup>
           </SelectContent>
         </Select>
+      </div>
+      <div className='flex'>
+        <Statistics />
       </div>
     </div>
   )
