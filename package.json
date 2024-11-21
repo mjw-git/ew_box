@@ -21,6 +21,7 @@
   "author": "xiaoming",
   "license": "ISC",
   "devDependencies": {
+    "esbuild": "^0.21.3",
     "@electron/rebuild": "^3.6.0",
     "@types/koa-bodyparser": "^4.3.12",
     "@types/koa-router": "^7.4.8",
@@ -96,7 +97,6 @@
     "dayjs": "^1.11.11",
     "decimal.js": "^10.4.3",
     "electron-is-dev": "^2.0.0",
-    "esbuild": "^0.21.3",
     "exceljs": "^4.4.0",
     "koa": "^2.15.3",
     "koa-bodyparser": "^4.4.1",
