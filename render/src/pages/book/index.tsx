@@ -2,6 +2,7 @@ import SvgIcon from '@/components/SvgIcon'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useState } from 'react'
 import Statistics from './components/Statistics'
+import BookDetail from './components/BookDetail'
 
 const Book = () => {
   const [type, setType] = useState('week')
@@ -14,11 +15,11 @@ const Book = () => {
             <SvgIcon width={12} height={12} className='text-white' name='light' />
           </div>
           <div className='flex items-center gap-[2px] cursor-pointer'>
-            <span className='text-textColor font-bold text-[12px]'>默认账本</span>
+            <span className='text-font-default font-bold text-[12px]'>默认账本</span>
             <SvgIcon width={14} height={14} className='text-primary' name='switch' />
           </div>
         </div>
-        <span className='text-textColor font-bold text-[14px]'>账本</span>
+        <span className='text-font-default font-bold text-[14px]'>账本</span>
 
         <Select value={type} onValueChange={setType}>
           <SelectTrigger>
@@ -35,6 +36,7 @@ const Book = () => {
       </div>
       <div className='flex'>
         <Statistics />
+        <BookDetail />
       </div>
     </div>
   )

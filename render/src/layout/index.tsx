@@ -36,6 +36,14 @@ const Layout = () => {
           </div>
           <div
             onClick={() => {
+              const html = document.getElementsByTagName('html')
+              html[0].classList.toggle('dark')
+            }}
+            className={classNames('text-black cursor-pointer', 'absolute', 'bottom-20', 'left-5', styles.menu_icon)}>
+            <SvgIcon width={20} className='cursor-pointer' height={20} name='sun' />
+          </div>
+          <div
+            onClick={() => {
               navigate('/setting')
             }}
             className={classNames('flex flex-col gap-1 p-1 rounded-md justify-center items-center w-[50px]', { 'bg-grey-3 text-primary': pathname === '/setting' }, styles.menu_icon, 'hover:bg-grey-3', 'cursor-pointer', 'absolute', 'bottom-5')}>

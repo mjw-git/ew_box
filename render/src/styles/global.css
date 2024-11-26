@@ -38,6 +38,8 @@
     --container-bg: #F4F4F4;
     --red-default: #F06554;
     --green-default: #32D54B;
+    --blue-default: #0073FF;
+    --yellow-default: #FFBD1C;
     --menu-bg: #fff;
     --menu-icon-bg: #F7F7F7;
     --menu-text-color-active: #007AFF;
@@ -70,6 +72,8 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
     /* 新增 */
+    --yellow-default: #FFBD1C;
+    --blue-default: #0073FF;
     --red-default: #F06554;
     --green-default: #32D54B;
     --white: #fff;
