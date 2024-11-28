@@ -22,6 +22,7 @@ module.exports = {
         red: 'var(--red-default)',
         blue: 'var(--blue-default)',
         yellow: 'var(--yellow-default)',
+        'container-bg-3': 'var(--container-bg-2)',
         'icon-bg-1': '#FBC74E',
         'border-default': 'var(--border-default)',
         'container-bg': 'var(--container-bg)',
