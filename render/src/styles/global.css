@@ -35,6 +35,7 @@
     --border-default: #EBEBEB;
     --icon-bg-orange: #FBC74E;
     --text-color: #000;
+    --grey-default: #999999;
     --container-bg: #F4F4F4;
     --red-default: #F06554;
     --green-default: #32D54B;
@@ -77,6 +78,7 @@
     --blue-default: #0073FF;
     --red-default: #F06554;
     --green-default: #32D54B;
+    --grey-default: #999999;
     --white: #fff;
     --container-bg-2: #232323;
     --select-menu-bg: #B6B7BB;

@@ -29,6 +29,10 @@ const YearBook = () => {
           ))}
         </div>
       </div>
+      <div className='w-full'>
+        <div className='text-grey text-[10px] mt-1'>11/25 星期一</div>
+        <div className='bg-container-bg-2 p-2 w-full'>1</div>
+      </div>
     </div>
   )
 }

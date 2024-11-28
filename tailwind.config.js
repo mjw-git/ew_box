@@ -18,6 +18,7 @@ module.exports = {
         DEFAULT: 'rgb(52, 199, 89)', // 默认环形颜色
       },
       colors: {
+        grey: 'var(--grey-default)',
         green: 'var(--green-default)',
         red: 'var(--red-default)',
         blue: 'var(--blue-default)',
