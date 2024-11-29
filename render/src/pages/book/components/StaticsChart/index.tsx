@@ -88,8 +88,8 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
                   </TooltipTrigger>
                   <TooltipContent>
                     <div className='text-sm'>
-                      <div>Desc: {averageData?.gFrom.desc}</div>
-                      <div>Tm: {dayjs.unix(averageData?.gFrom.unix || 0).format('YYYY-MM-DD')}</div>
+                      <div>Desc: {averageData?.gFrom?.desc}</div>
+                      <div>Tm: {dayjs.unix(averageData?.gFrom?.unix || 0).format('YYYY-MM-DD')}</div>
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -109,8 +109,8 @@ const StaticsChart = (_, ref: React.Ref<{ runGetTrendData: () => void }>) => {
                   </TooltipTrigger>
                   <TooltipContent>
                     <div className='text-sm'>
-                      <div>Desc: {averageData?.lFrom.desc}</div>
-                      <div>Tm: {dayjs.unix(averageData?.lFrom.unix || 0).format('YYYY-MM-DD')}</div>
+                      <div>Desc: {averageData?.lFrom?.desc}</div>
+                      <div>Tm: {dayjs.unix(averageData?.lFrom?.unix || 0).format('YYYY-MM-DD')}</div>
                     </div>
                   </TooltipContent>
                 </Tooltip>
