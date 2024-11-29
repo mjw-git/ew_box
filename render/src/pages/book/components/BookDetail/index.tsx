@@ -1,7 +1,7 @@
-import YearBook from './components/YearBook'
+import WeekBook from './components/WeekBook'
 
 const BookDetail = () => {
-  return <YearBook />
+  return <WeekBook />
 }
 
 export default BookDetail

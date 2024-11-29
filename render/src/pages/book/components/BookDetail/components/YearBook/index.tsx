@@ -1,20 +1,19 @@
 import Modal from '@/components/Modal'
 import SvgIcon from '@/components/SvgIcon'
 import { useOpen } from '@/hook/useOpen'
+import { yearOptions } from '@/utils'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
 
 const YearBook = () => {
   const currentYear = dayjs().year()
 
-  const yearOptions = Array.from({ length: (currentYear - 2018) * 2 }).map((_, index) => 2018 + index)
-
   const { open, openModal, closeModal } = useOpen()
   const currentMonth = dayjs().month() + 1
   return (
     <div className='w-2/5 m-2'>
-      <Modal showCancel={false} open={open} onCancel={closeModal}>
-        <div className='h-[300px] overflow-y-auto'>
+      <Modal showConfirm={false} open={open} onCancel={closeModal}>
+        <div className='h-[300px] overflow-y-auto '>
           {yearOptions.map((item) => (
             <div
               onClick={() => {
@@ -52,9 +51,15 @@ const YearBook = () => {
       </div>
       <div className='w-full'>
         <div className='text-grey text-[10px] mt-1'>11/25 星期一</div>
-        <div className='bg-container-bg-2 p-2 rounded-md w-full'>
-          <div className='text-[14px] font-bold'>吃饭</div>
-          <div className='text-[10px] text-grey mt-1'>备注</div>
+        <div className='bg-container-bg-2  p-2 rounded-md w-full'>
+          <div className='text-[14px] flex justify-between font-bold'>
+            <span className='text-[12px]'>吃饭</span>
+            <span className='text-[10px] font-normal'>支出 ¥22.2</span>
+          </div>
+          <div className='text-[10px] flex justify-between text-grey mt-1'>
+            <span>默认账本</span>
+            <span>备注</span>
+          </div>
         </div>
       </div>
     </div>

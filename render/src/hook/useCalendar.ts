@@ -1,6 +1,9 @@
 import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useMemo, useState } from 'react'
+import { Lunar } from 'lunar-typescript'
 export interface CalendarItem {
+  chineseMonth: string
+  chineseDay: string
   day: number
   month: number
   year: number
@@ -31,6 +34,9 @@ const useCalendar = (time?: Dayjs) => {
     const calendarList: CalendarItem[] = []
     while (currentDay.isBefore(calendarEndDate) || currentDay.isSame(calendarEndDate)) {
       calendarList.push({
+        chineseDay: Lunar.fromDate(currentDay.toDate()).getDayInChinese(),
+        chineseMonth: Lunar.fromDate(currentDay.toDate()).getMonthInChinese(),
+        // chineseDay: Foto.fromYmd(currentDay.year(), currentDay.month() + 1, currentDay.date()).getDayInChinese(),
         date: currentDay,
         day: currentDay.date(),
         year: currentDay.year(),

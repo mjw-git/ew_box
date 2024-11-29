@@ -33,7 +33,7 @@ const runElectron = () => {
   }
 
   let electronProcess = spawn(`${electron}`, [path.join(__dirname, '../app/main-dist/index.js')], { stdio: 'inherit' }) as ChildProcess
-
+  console.log('electronProcess.pid', electronProcess.pid)
   fs.writeFileSync(lockFilePath, `${electronProcess.pid}`)
 }
 

@@ -1,3 +1,5 @@
+import dayjs from 'dayjs'
+
 export const PIC_PATH_PREFIX = 'atom:///'
 export const randomColor = ['blue-400', 'pink-500', 'slate-400', 'red-400', 'orange-400']
 export const bookIcon = ['game', 'shoe', 'car', 'rice', 'house']
@@ -13,5 +15,7 @@ export function convertBytes(bytes: number) {
 
   return `${bytes.toFixed(2)} ${units[i]}`
 }
-export const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+export const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+export const yearOptions = Array.from({ length: (dayjs().year() - 2018) * 2 }).map((_, index) => 2018 + index)

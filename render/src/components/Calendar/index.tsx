@@ -3,15 +3,18 @@ import SvgIcon from '../SvgIcon'
 import useCalendar, { CalendarItem } from '@/hook/useCalendar'
 import { ReactNode, useEffect } from 'react'
 import { days, months } from '@/utils'
+import { cn } from '@/lib/utils'
 
 interface CalendarProps {
+  showTopAction?: boolean
   renderOpt?: (cal: CalendarItem) => ReactNode
   onChange?: (cal: CalendarItem[]) => void
   renderExtra?: (time: CalendarItem) => ReactNode
 }
 const Calendar = (props: CalendarProps) => {
-  const { renderExtra, onChange, renderOpt } = props
+  const { renderExtra, onChange, renderOpt, showTopAction = true } = props
   const { tDate, tMonth, tYear, calendar, pre, next, changeCurrentDay } = useCalendar()
+  console.log(calendar)
 
   useEffect(() => {
     onChange?.(calendar)
@@ -19,44 +22,45 @@ const Calendar = (props: CalendarProps) => {
 
   return (
     <div>
-      <div className='flex'>
-        <div className='flex gap-3 items-center h-9'>
-          <div className='flex gap-1 items-center cursor-pointer'>
-            <SvgIcon onClick={pre} className='hover:text-green-700' width={24} height={24} name='left' />
-            <span
-              onClick={() => {
-                changeCurrentDay(dayjs())
-              }}
-              className='hover:text-green-700'>
-              Back To Today
+      {showTopAction && (
+        <div className='flex'>
+          <div className='flex gap-3 items-center h-9'>
+            <div className='flex gap-1 items-center cursor-pointer'>
+              <SvgIcon onClick={pre} className='hover:text-green-700' width={24} height={24} name='left' />
+              <span
+                onClick={() => {
+                  changeCurrentDay(dayjs())
+                }}
+                className='hover:text-green-700'>
+                Back To Today
+              </span>
+              <SvgIcon className='hover:text-green-700' onClick={next} width={24} height={24} name='right' />
+            </div>
+            <span>
+              {months[tMonth]} {tDate},{tYear}
             </span>
-            <SvgIcon className='hover:text-green-700' onClick={next} width={24} height={24} name='right' />
           </div>
-          <span>
-            {months[tMonth]} {tDate},{tYear}
-          </span>
         </div>
-      </div>
-      <div className='w-full flex flex-col h-[calc(100vh-112px)]  border-border border-t-[1px] border-l-[1px]'>
-        <div className='grid grid-cols-7'>
+      )}
+      <div className='w-full flex  rounded-md mt-2 flex-col  bg-container-bg-2'>
+        <div className='grid grid-cols-7  bg-container-bg-2'>
           {days.map((i) => (
-            <div className='text-center h-8 box-border leading-8 border-b-[1px] border-border border-r-[1px]' key={i}>
+            <div className='text-center h-8 box-border text-[12px] text-grey leading-8' key={i}>
               {i}
             </div>
           ))}
         </div>
         <div className='grid flex-1 grid-cols-7'>
           {calendar.map((i, index) => (
-            <div key={index} className={`border-r-[1px] relative ${i.year === tYear && i.month === tMonth && i.day === tDate ? 'bg-blue-50' : ''} ${i.isCurrentMonth ? '' : 'bg-muted text-slate-400'} cursor-pointer p-2 box-border border-b-[1px] h-full border-border`}>
-              <div className='group absolute left-0 flex flex-col p-1 top-0 w-full h-full'>
-                <div className='h-8 flex items-center'>
-                  <span>
-                    {i.day === 1 && i.isCurrentMonth && <span>{months[tMonth]}</span>} <span className={`${i.isCurrentMonth && i.day === tDate ? 'bg-green-500 rounded-sm p-1 text-white' : ''}`}>{i.day}</span>
-                  </span>
-                  <span className='flex-1'>{renderOpt?.(i)}</span>
-                </div>
-                {renderExtra?.(i)}
+            <div key={index}>
+              <div className={cn('m-1 rounded-md text-center text-[10px] bg-container-bg-3 h-10', { 'text-grey opacity-85': !i.isCurrentMonth }, { 'text-yellow': i.day === tDate && i.month === tMonth && i.year === tYear })}>
+                <div>{i.day}</div>
+                {/* <div className='text-[8px]'>{i.chineseDay}</div> */}
+                {/* {i.day === 29 && <div className='text-[8px] text-green'>+10.0</div>} */}
+                {i.day === 29 && <div className='text-[8px] text-red'>-10.0</div>}
               </div>
+
+              {/* {i.day} */}
             </div>
           ))}
         </div>

@@ -5806,6 +5806,11 @@ lucide-react@^0.445.0:
   resolved "https://registry.yarnpkg.com/lucide-react/-/lucide-react-0.445.0.tgz#35c42341e98fbf0475b2a6cf74fd25ef7cbfcd62"
   integrity sha512-YrLf3aAHvmd4dZ8ot+mMdNFrFpJD7YRwQ2pUcBhgqbmxtrMP4xDzIorcj+8y+6kpuXBF4JB0NOCTUWIYetJjgA==
 
+lunar-typescript@^1.7.6:
+  version "1.7.6"
+  resolved "https://registry.yarnpkg.com/lunar-typescript/-/lunar-typescript-1.7.6.tgz#00f039425557f2e4e50879ae279e6814a761d766"
+  integrity sha512-vrNRgzJ6UgK++P81jaOykV7YBCLemC8l/XDbsXE7MinojXolOKiIHm6sOZg5wdDMbJxCWP1ERAaqcBV9mhw2Bg==
+
 make-dir@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/make-dir/-/make-dir-2.1.0.tgz#5f0310e18b8be898cc07009295a30ae41e91e6f5"
