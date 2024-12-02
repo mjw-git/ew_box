@@ -1,4 +1,4 @@
-import dayjs from 'dayjs'
+import dayjs, { Dayjs } from 'dayjs'
 import SvgIcon from '../SvgIcon'
 import useCalendar, { CalendarItem } from '@/hook/useCalendar'
 import { ReactNode, useEffect } from 'react'
@@ -6,15 +6,19 @@ import { days, months } from '@/utils'
 import { cn } from '@/lib/utils'
 
 interface CalendarProps {
+  currentDay?: Dayjs
   showTopAction?: boolean
   renderOpt?: (cal: CalendarItem) => ReactNode
   onChange?: (cal: CalendarItem[]) => void
   renderExtra?: (time: CalendarItem) => ReactNode
+  onClickItem?: (time: Dayjs) => void
 }
 const Calendar = (props: CalendarProps) => {
-  const { renderExtra, onChange, renderOpt, showTopAction = true } = props
-  const { tDate, tMonth, tYear, calendar, pre, next, changeCurrentDay } = useCalendar()
-  console.log(calendar)
+  const { onChange, showTopAction = true, onClickItem, currentDay } = props
+  const { calendar, pre, next, changeCurrentDay } = useCalendar(currentDay)
+  const tYear = dayjs().year()
+  const tMonth = dayjs().month()
+  const tDate = dayjs().date()
 
   useEffect(() => {
     onChange?.(calendar)
@@ -52,15 +56,12 @@ const Calendar = (props: CalendarProps) => {
         </div>
         <div className='grid flex-1 grid-cols-7'>
           {calendar.map((i, index) => (
-            <div key={index}>
+            <div key={index} className='cursor-pointer' onClick={() => onClickItem?.(i.date)}>
               <div className={cn('m-1 rounded-md text-center text-[10px] bg-container-bg-3 h-10', { 'text-grey opacity-85': !i.isCurrentMonth }, { 'text-yellow': i.day === tDate && i.month === tMonth && i.year === tYear })}>
                 <div>{i.day}</div>
-                {/* <div className='text-[8px]'>{i.chineseDay}</div> */}
-                {/* {i.day === 29 && <div className='text-[8px] text-green'>+10.0</div>} */}
+                <div className='text-[8px]'>{i.chineseDay}</div>
                 {i.day === 29 && <div className='text-[8px] text-red'>-10.0</div>}
               </div>
-
-              {/* {i.day} */}
             </div>
           ))}
         </div>

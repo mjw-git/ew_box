@@ -1,15 +1,17 @@
 import Modal from '@/components/Modal'
 import SvgIcon from '@/components/SvgIcon'
 import { useOpen } from '@/hook/useOpen'
+import BookContext from '@/pages/book/bookContext'
 import { yearOptions } from '@/utils'
 import classNames from 'classnames'
 import dayjs from 'dayjs'
+import { useContext } from 'react'
 
 const YearBook = () => {
-  const currentYear = dayjs().year()
-
+  const { currentDay, setCurrentDay } = useContext(BookContext)
+  const currentYear = currentDay.year()
   const { open, openModal, closeModal } = useOpen()
-  const currentMonth = dayjs().month() + 1
+  const currentMonth = currentDay.month() + 1
   return (
     <div className='w-2/5 m-2'>
       <Modal showConfirm={false} open={open} onCancel={closeModal}>
@@ -17,6 +19,7 @@ const YearBook = () => {
           {yearOptions.map((item) => (
             <div
               onClick={() => {
+                setCurrentDay(dayjs(`${item}-${currentMonth}-${currentDay.date()}`))
                 closeModal()
               }}
               className={classNames('bg-container-bg-3 text-[10px] text-center mb-2 cursor-pointer p-2 rounded-md', { ['text-blue']: item === currentYear })}>
@@ -27,13 +30,21 @@ const YearBook = () => {
       </Modal>
       <div className='w-full p-2 h-10 flex items-center justify-between rounded-lg bg-container-bg-2'>
         <div className='flex items-center w-full justify-between'>
-          <div className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
+          <div
+            onClick={() => {
+              setCurrentDay(currentDay.subtract(1, 'year'))
+            }}
+            className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
             <SvgIcon width={10} className='text-white' height={10} name='left' />
           </div>
           <div className='text-[10px] cursor-pointer text-blue font-bold' onClick={() => openModal()}>
             {currentYear}年
           </div>
-          <div className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
+          <div
+            onClick={() => {
+              setCurrentDay(currentDay.add(1, 'year'))
+            }}
+            className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
             <SvgIcon width={10} className='text-white' height={10} name='right' />
           </div>
         </div>

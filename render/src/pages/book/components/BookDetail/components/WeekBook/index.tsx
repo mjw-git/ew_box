@@ -1,14 +1,16 @@
 import SvgIcon from '@/components/SvgIcon'
-import dayjs from 'dayjs'
 import { days as WeekDay } from '@/utils'
-import { Lunar } from 'lunar-typescript'
 import { cn } from '@/lib/utils'
+import BookContext from '@/pages/book/bookContext'
+import { useContext } from 'react'
+import dayjs from 'dayjs'
 const WeekBook = () => {
+  const { currentDay, setCurrentDay } = useContext(BookContext)
   //dayjs获取这一周的日期
-  const currentYear = dayjs().year()
-  const currentMonth = dayjs().month() + 1
-  const startDay = dayjs().startOf('week')
-  const endDay = dayjs().endOf('week')
+  const currentYear = currentDay.year()
+  const currentMonth = currentDay.month() + 1
+  const startDay = currentDay.startOf('week')
+  const endDay = currentDay.endOf('week')
   const days = Array.from({ length: 7 }, (_, i) => startDay.add(i, 'day')).map((item) => ({
     chineseMonth: 1,
     day: item.date(),
@@ -20,13 +22,21 @@ const WeekBook = () => {
     <div className='w-2/5 m-2'>
       <div className='w-full p-2 h-10 flex items-center justify-between rounded-lg bg-container-bg-2'>
         <div className='flex items-center w-full justify-between'>
-          <div className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
+          <div
+            onClick={() => {
+              setCurrentDay(currentDay.subtract(1, 'week'))
+            }}
+            className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
             <SvgIcon width={10} className='text-white' height={10} name='left' />
           </div>
           <div className='text-[10px] cursor-pointer text-blue font-bold'>
             {currentYear}年{currentMonth}月{startDay.date()}日~{endDay.date()}日
           </div>
-          <div className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
+          <div
+            onClick={() => {
+              setCurrentDay(currentDay.add(1, 'week'))
+            }}
+            className='w-3 h-3 flex items-center justify-center rounded-full bg-blue'>
             <SvgIcon width={10} className='text-white' height={10} name='right' />
           </div>
         </div>
@@ -44,12 +54,9 @@ const WeekBook = () => {
             <div key={index}>
               <div className={cn('m-1 rounded-md text-center text-[10px] bg-container-bg-3 h-10', { 'text-yellow': i.isToday })}>
                 <div>{i.day}</div>
-                {/* <div className='text-[8px]'>{i.chineseDay}</div> */}
                 {i.day === 29 && <div className='text-[8px] text-green'>+10.0</div>}
                 {i.day === 29 && <div className='text-[8px] text-red'>-10.0</div>}
               </div>
-
-              {/* {i.day} */}
             </div>
           ))}
         </div>

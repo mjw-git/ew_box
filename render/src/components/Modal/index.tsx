@@ -1,6 +1,7 @@
 import { DialogProps } from '@radix-ui/react-dialog'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 interface ModalProps extends DialogProps {
+  renderOk?: React.ReactNode
   showCancel?: boolean
   showConfirm?: boolean
   footer?: React.ReactNode
@@ -8,7 +9,7 @@ interface ModalProps extends DialogProps {
   onCancel?: () => void
 }
 const Modal = (props: ModalProps) => {
-  const { footer, children, showCancel = true, showConfirm = true, onConfirm, onCancel, ...rest } = props
+  const { footer, children, showCancel = true, showConfirm = true, onConfirm, onCancel, renderOk, ...rest } = props
   return (
     <Dialog
       onOpenChange={(open) => {
@@ -25,11 +26,14 @@ const Modal = (props: ModalProps) => {
               取消
             </span>
           )}
-          {showConfirm && (
-            <span className='text-blue cursor-pointer' onClick={onConfirm}>
-              确定
-            </span>
-          )}
+          {showConfirm &&
+            (renderOk ? (
+              renderOk
+            ) : (
+              <span className='text-blue cursor-pointer' onClick={onConfirm}>
+                确定
+              </span>
+            ))}
         </div>
         {children}
       </DialogContent>
