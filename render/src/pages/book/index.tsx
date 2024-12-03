@@ -11,7 +11,7 @@ const Book = () => {
   const [currentDay, setCurrentDay] = useState(dayjs())
   return (
     <BookContext.Provider value={{ type, setType, currentDay, setCurrentDay }}>
-      <div>
+      <div className='h-[calc(100vh-40px)] overflow-auto'>
         <div className='bg-container-bg-2 h-10 w-full flex justify-between items-center px-3'>
           <div className='flex items-center gap-2'>
             <div className='bg-icon-bg-1 rounded-sm p-[2px]'>

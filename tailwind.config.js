@@ -18,6 +18,8 @@ module.exports = {
         DEFAULT: 'rgb(52, 199, 89)', // 默认环形颜色
       },
       colors: {
+        'icon-bg-red': '#F06554',
+        'icon-bg-green': '#43C470',
         grey: 'var(--grey-default)',
         green: 'var(--green-default)',
         red: 'var(--red-default)',

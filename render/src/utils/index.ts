@@ -19,3 +19,111 @@ export const days = ['周日', '周一', '周二', '周三', '周四', '周五',
 export const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 export const yearOptions = Array.from({ length: (dayjs().year() - 2018) * 2 }).map((_, index) => 2018 + index)
+
+export const bookSettingOptions = [
+  {
+    label: '标签',
+    value: 'tag',
+  },
+  {
+    label: '外观',
+    value: 'css',
+  },
+]
+
+export const defaultPaymentTag = [
+  {
+    label: '餐饮',
+    value: 'cook',
+  },
+  {
+    label: '购物',
+    value: 'shop',
+  },
+  { label: '服饰', value: 'shirt' },
+  { label: '日用', value: 'daily' },
+  { label: '服饰', value: 'shirt2' },
+  { label: '日用', value: 'daily43' },
+  {
+    label: '数码',
+    value: 'figure',
+  },
+  {
+    label: '美妆',
+    value: 'beauty',
+  },
+  {
+    label: '应用程序',
+    value: 'app',
+  },
+  {
+    label: '住房',
+    value: 'house',
+  },
+  {
+    label: '娱乐',
+    value: 'game',
+  },
+  {
+    label: '医疗',
+    value: 'medical',
+  },
+  {
+    label: '办公',
+    value: 'office',
+  },
+  {
+    label: '运动',
+    value: 'sport',
+  },
+  {
+    label: '社交',
+    value: 'social',
+  },
+  {
+    label: '旅行',
+    value: 'travel',
+  },
+  {
+    label: '通讯',
+    value: 'phone',
+  },
+  {
+    label: '交通',
+    value: 'traffic',
+  },
+  {
+    label: '其他',
+    value: 'other',
+  },
+]
+export const defaultIncomeTag = [
+  {
+    label: '工资',
+    value: 'salary',
+  },
+  {
+    label: '奖金',
+    value: 'bonus',
+  },
+  {
+    label: '红包',
+    value: 'red',
+  },
+  {
+    label: '兼职',
+    value: 'part',
+  },
+  {
+    label: '退税',
+    value: 'refund',
+  },
+  {
+    label: '投资',
+    value: 'invest',
+  },
+  {
+    label: '其他',
+    value: 'other',
+  },
+]

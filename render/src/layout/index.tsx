@@ -52,9 +52,14 @@ const Layout = () => {
           </div>
         </nav>
         {childrenMenu.length > 0 && (
-          <div className='w-[50px] pt-3 bg-container-bg-2 border-r border-container-bg-3 flex flex-col items-center'>
+          <div className='w-[50px] pt-3 bg-container-bg-2 border-r border-container-bg-3 gap-4 flex flex-col items-center'>
             {childrenMenu.map((i) => (
-              <div key={i.path} className={classNames('flex flex-col gap-1 p-1 rounded-md justify-center items-center w-[40px]', { 'bg-grey-3 text-primary': pathname.startsWith(i.path) }, styles.menu_icon, 'hover:bg-grey-3', 'cursor-pointer')}>
+              <div
+                onClick={() => {
+                  navigate(i.path)
+                }}
+                key={i.path}
+                className={classNames('flex flex-col gap-1 p-1 rounded-md justify-center items-center w-[40px]', { 'bg-grey-3 text-primary': pathname.startsWith(i.path) }, styles.menu_icon, 'hover:bg-grey-3', 'cursor-pointer')}>
                 <SvgIcon className={classNames('text-grey-1', { 'bg-grey-3 text-primary': pathname === i.path }, 'hover:bg-grey-3')} width={15} height={15} name={i.icon} />
                 <span className={classNames('text-[10px] text-grey-1', { 'text-primary': pathname === i.path })}>{i.name}</span>
               </div>
