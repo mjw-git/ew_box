@@ -127,3 +127,13 @@ export const defaultIncomeTag = [
     value: 'other',
   },
 ]
+export const iconBgColors = [
+  { label: 'red', value: '#F06554' },
+  { label: 'blue', value: '#50ABF3' },
+  { label: 'purple', value: '#9B51E0' },
+  { label: 'green', value: '#43C470' },
+  { label: 'brown', value: '#8F7E4F' },
+  { label: 'yellow', value: '#FBC74E' },
+  { label: 'orange', value: '#F69934' },
+  { label: 'grey', value: '#5B6670' },
+]

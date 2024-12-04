@@ -5,19 +5,23 @@ import Statistics from './components/Statistics'
 import BookDetail from './components/BookDetail'
 import BookContext from './bookContext'
 import dayjs from 'dayjs'
+import ChangeAccountBookModal from './components/ChangeAccountBookModal'
+import { useOpen } from '@/hook/useOpen'
 
 const Book = () => {
   const [type, setType] = useState('month')
   const [currentDay, setCurrentDay] = useState(dayjs())
+  const { open, openModal, closeModal } = useOpen()
   return (
     <BookContext.Provider value={{ type, setType, currentDay, setCurrentDay }}>
       <div className='h-[calc(100vh-40px)] overflow-auto'>
+        <ChangeAccountBookModal open={open} onCancel={closeModal} />
         <div className='bg-container-bg-2 h-10 w-full flex justify-between items-center px-3'>
           <div className='flex items-center gap-2'>
-            <div className='bg-icon-bg-1 rounded-sm p-[2px]'>
+            <div className='bg-icon-bg-yellow rounded-sm p-[2px]'>
               <SvgIcon width={12} height={12} className='text-white' name='light' />
             </div>
-            <div className='flex items-center gap-[2px] cursor-pointer'>
+            <div onClick={openModal} className='flex items-center gap-[2px] cursor-pointer'>
               <span className='text-font-default font-bold text-[12px]'>默认账本</span>
               <SvgIcon width={14} height={14} className='text-primary' name='switch' />
             </div>

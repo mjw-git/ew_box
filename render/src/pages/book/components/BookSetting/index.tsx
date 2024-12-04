@@ -24,7 +24,7 @@ const BookSetting = () => {
               }}
               className={cn('text-[14px] mb-3 flex justify-between items-center w-full bg-container-bg-2 px-3 py-2 rounded-2xl cursor-pointer', { 'bg-container-bg-3': tag === item.value })}>
               <div className='flex items-center gap-2'>
-                <div className='w-4 h-4 bg-icon-bg-1 rounded-sm'>
+                <div className='w-4 h-4 bg-icon-bg-yellow rounded-sm'>
                   <SvgIcon name={item.value} width={16} height={16} />
                 </div>
                 <span>{item.label}</span>
