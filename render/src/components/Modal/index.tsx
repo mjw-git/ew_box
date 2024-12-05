@@ -1,5 +1,6 @@
 import { DialogProps } from '@radix-ui/react-dialog'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
+import { ReactNode } from 'react'
 export interface ModalProps extends DialogProps {
   renderCancel?: React.ReactNode
   renderOk?: React.ReactNode
@@ -9,7 +10,7 @@ export interface ModalProps extends DialogProps {
   footer?: React.ReactNode
   onConfirm?: () => void
   onCancel?: () => void
-  title?: string
+  title?: ReactNode
 }
 const Modal = (props: ModalProps) => {
   const { footer, children, title, contentClassName, renderCancel, showCancel = true, showConfirm = true, onConfirm, onCancel, renderOk, ...rest } = props
@@ -23,7 +24,7 @@ const Modal = (props: ModalProps) => {
       {...rest}>
       <DialogTrigger asChild></DialogTrigger>
       <DialogContent className={contentClassName}>
-        <div className='flex justify-between items-center mb-3 text-[10px] h-7 '>
+        <div className='flex justify-between items-start mb-3 text-[10px] h-7 '>
           {showCancel &&
             (renderCancel ? (
               renderCancel

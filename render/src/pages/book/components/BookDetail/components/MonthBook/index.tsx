@@ -63,7 +63,7 @@ const MonthBook = () => {
                           closeModal()
                         }}
                         className={cn('text-[10px]  bg-container-bg text-center px-1 py-3 rounded-md', {
-                          'text-yellow': year === dayjs().year() && item === dayjs().month() + 1,
+                          'text-yellow': year === currentDay.year() && item === currentDay.month() + 1,
                         })}>
                         {item}月
                       </div>

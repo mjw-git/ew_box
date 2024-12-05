@@ -16,9 +16,9 @@ interface CalendarProps {
 const Calendar = (props: CalendarProps) => {
   const { onChange, showTopAction = true, onClickItem, currentDay } = props
   const { calendar, pre, next, changeCurrentDay } = useCalendar(currentDay)
-  const tYear = dayjs().year()
-  const tMonth = dayjs().month()
-  const tDate = dayjs().date()
+  const tYear = currentDay.year()
+  const tMonth = currentDay.month()
+  const tDate = currentDay.date()
 
   useEffect(() => {
     onChange?.(calendar)

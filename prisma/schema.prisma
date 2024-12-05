@@ -51,11 +51,32 @@ model Todo {
 }
 
 model Book {
-  id        Int     @id @default(autoincrement())
-  unix      Int
-  create_tm Int
-  desc      String
+  id              Int          @id @default(autoincrement())
+  unix            Int
+  create_tm       Int
+  desc            String
+  type            Int
+  price           Float
+  tag             String?
+  account_book    AccountBook? @relation(fields: [account_book_id], references: [id])
+  account_book_id Int?
+  currency        String?
+}
+
+model Tag {
   type      Int
-  price     Float
-  tag       String?
+  icon      String?
+  color     String?
+  name      String  @id
+  create_tm Int
+}
+
+model AccountBook {
+  id        Int     @id @default(autoincrement())
+  name      String
+  color     String
+  create_tm Int
+  icon      String?
+  balance   Float   @default(0)
+  items     Book[]
 }

@@ -42,8 +42,6 @@ export const defaultPaymentTag = [
   },
   { label: '服饰', value: 'shirt' },
   { label: '日用', value: 'daily' },
-  { label: '服饰', value: 'shirt2' },
-  { label: '日用', value: 'daily43' },
   {
     label: '数码',
     value: 'figure',

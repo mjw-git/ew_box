@@ -7,10 +7,12 @@ import BookContext from './bookContext'
 import dayjs from 'dayjs'
 import ChangeAccountBookModal from './components/ChangeAccountBookModal'
 import { useOpen } from '@/hook/useOpen'
+import AddBookItemModal from './components/AddBookItemModal'
 
 const Book = () => {
   const [type, setType] = useState('month')
   const [currentDay, setCurrentDay] = useState(dayjs())
+  const { open: addOpen, openModal: showAdd, closeModal: closeAdd } = useOpen()
   const { open, openModal, closeModal } = useOpen()
   return (
     <BookContext.Provider value={{ type, setType, currentDay, setCurrentDay }}>
@@ -55,6 +57,10 @@ const Book = () => {
         <div className='flex'>
           <Statistics />
           <BookDetail />
+        </div>
+        <AddBookItemModal open={addOpen} onCancel={closeAdd} currentDay={currentDay} />
+        <div onClick={showAdd} className='fixed flex items-center justify-center cursor-pointer bottom-4 right-4 w-14 h-14 shadow-md rounded-full bg-yellow'>
+          <SvgIcon width={24} height={24} name='add_default' />
         </div>
       </div>
     </BookContext.Provider>
