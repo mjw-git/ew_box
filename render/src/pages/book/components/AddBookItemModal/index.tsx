@@ -1,8 +1,11 @@
 import Modal, { ModalProps } from '@/components/Modal'
+import { Calendar } from '@/components/ui/calendar'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useOpen } from '@/hook/useOpen'
 import { cn } from '@/lib/utils'
 import { defaultIncomeTag, defaultPaymentTag } from '@/utils'
-import { Dayjs } from 'dayjs'
-import { useState } from 'react'
+import dayjs, { Dayjs } from 'dayjs'
+import { useEffect, useState } from 'react'
 interface AddBookItemModalProps extends ModalProps {
   currentDay: Dayjs
 }
@@ -10,12 +13,21 @@ const AddBookItemModal = (props: AddBookItemModalProps) => {
   const { currentDay, onCancel, ...rest } = props
   const [type, setType] = useState<1 | 2>(1)
   const [price, setPrice] = useState('')
+  const [selectDate, setSelectDate] = useState(currentDay)
   const [currentTag, setCurrentTag] = useState<string | null>(null)
+
+  const { open, openModal, closeModal } = useOpen()
+
   const handleCancel = () => {
     onCancel()
     setType(1)
     setCurrentTag(defaultPaymentTag[0].label)
   }
+
+  useEffect(() => {
+    setSelectDate(currentDay)
+  }, [currentDay])
+
   return (
     <Modal
       contentClassName='bg-container-bg'
@@ -58,6 +70,30 @@ const AddBookItemModal = (props: AddBookItemModalProps) => {
           className='p-2 w-full bg-container-bg outline-none rounded-md'
           placeholder='¥ 00.00'></input>
         <div className='flex items-center gap-2 text-[10px] mt-1'>
+          <Popover
+            open={open}
+            onOpenChange={(e) => {
+              if (!e) {
+                closeModal()
+              }
+            }}>
+            <PopoverTrigger asChild>
+              <span onClick={openModal} className='text-[10px] flex-shrink-0 text-grey cursor-pointer bg-container-bg-3 px-1 rounded-md'>
+                {selectDate.format('YYYY-MM-DD')}
+              </span>
+            </PopoverTrigger>
+            <PopoverContent className='w-auto p-0'>
+              <Calendar
+                onSelect={(date) => {
+                  closeModal()
+                  setSelectDate(dayjs(date).set('hour', dayjs().hour()).set('minute', dayjs().minute()).set('second', dayjs().second()))
+                }}
+                selected={selectDate.toDate()}
+                mode='single'
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
           <span className='flex-shrink-0'>备注</span>
           <input placeholder='请填写备注' className='block outline-none w-full p-1 rounded-md bg-container-bg' />
         </div>
