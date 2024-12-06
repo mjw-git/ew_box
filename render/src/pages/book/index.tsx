@@ -8,14 +8,18 @@ import dayjs from 'dayjs'
 import ChangeAccountBookModal from './components/ChangeAccountBookModal'
 import { useOpen } from '@/hook/useOpen'
 import AddBookItemModal from './components/AddBookItemModal'
+import { useRequest } from 'ahooks'
+import { getBookAccountList } from '@/services/book'
 
 const Book = () => {
   const [type, setType] = useState('month')
   const [currentDay, setCurrentDay] = useState(dayjs())
+  const [accountBook, setAccountBook] = useState<Book.BookAccountRes>()
   const { open: addOpen, openModal: showAdd, closeModal: closeAdd } = useOpen()
   const { open, openModal, closeModal } = useOpen()
+
   return (
-    <BookContext.Provider value={{ type, setType, currentDay, setCurrentDay }}>
+    <BookContext.Provider value={{ type, setType, currentDay, setCurrentDay, accountBook, setAccountBook }}>
       <div className='h-[calc(100vh-40px)] overflow-auto'>
         <ChangeAccountBookModal open={open} onCancel={closeModal} />
         <div className='bg-container-bg-2 h-10 w-full flex justify-between items-center px-3'>
@@ -23,10 +27,16 @@ const Book = () => {
             <div className='bg-icon-bg-yellow rounded-sm p-[2px]'>
               <SvgIcon width={12} height={12} className='text-white' name='light' />
             </div>
-            <div onClick={openModal} className='flex items-center gap-[2px] cursor-pointer'>
-              <span className='text-font-default font-bold text-[12px]'>默认账本</span>
-              <SvgIcon width={14} height={14} className='text-primary' name='switch' />
-            </div>
+            {accountBook ? (
+              <div onClick={openModal} className='flex items-center gap-[2px] cursor-pointer'>
+                <span className='text-font-default font-bold text-[12px]'>{accountBook?.name}</span>
+                <SvgIcon width={14} height={14} className='text-primary' name='switch' />
+              </div>
+            ) : (
+              <span onClick={openModal} className='text-font-default font-bold text-[12px] cursor-pointer'>
+                请选择账本
+              </span>
+            )}
           </div>
           {dayjs().isSame(currentDay, 'day') ? (
             <span className='text-font-default font-bold text-[14px]'>账本</span>

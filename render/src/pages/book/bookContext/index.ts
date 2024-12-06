@@ -4,6 +4,8 @@ interface BookContextProps {
   type: string
   setType?: (type: string) => void
   currentDay?: Dayjs
+  accountBook?: Book.BookAccountRes
+  setAccountBook?: (id: Book.BookAccountRes) => void
   setCurrentDay?: (day: Dayjs) => void
 }
 const BookContext = createContext<BookContextProps>({

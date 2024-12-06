@@ -56,11 +56,14 @@ model Book {
   create_tm       Int
   desc            String
   type            Int
-  price           Float
+  price           String
   tag             String?
   account_book    AccountBook? @relation(fields: [account_book_id], references: [id])
   account_book_id Int?
   currency        String?
+  status          Int?
+  Tag             Tag?         @relation(fields: [tag_name], references: [name])
+  tag_name        String?
 }
 
 model Tag {
@@ -69,6 +72,7 @@ model Tag {
   color     String?
   name      String  @id
   create_tm Int
+  items     Book[]
 }
 
 model AccountBook {

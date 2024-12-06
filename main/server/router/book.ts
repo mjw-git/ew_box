@@ -7,6 +7,10 @@ enum Type {
   PAYMENT = 1,
   INCOME = 2,
 }
+enum STATUS {
+  INCLUDE = 1,
+  NOT_INCLUDE = 2,
+}
 interface BookRes {
   unix?: number
   books: Book[]
@@ -230,8 +234,30 @@ router.get('/book/list', async (ctx) => {
     data: { list },
   })
 })
+router.post('/book/account-book', async (ctx) => {
+  const { name, color, icon } = ctx.request.body as Book.AddBookAccountReq
+  const data = await prismaInstance.accountBook.create({
+    data: {
+      name,
+      color,
+      create_tm: dayjs().unix(),
+      icon,
+    },
+  })
+  ctx.body = {
+    code: 200,
+    data: { id: data.id },
+  }
+})
+router.get('/book/account-book', async (ctx) => {
+  const list = await prismaInstance.accountBook.findMany()
+  ctx.body = {
+    code: 200,
+    data: { list },
+  }
+})
 router.post('/book/add', async (ctx) => {
-  const { unix, desc, price, type, tag } = ctx.request.body as Book.AddBookReq
+  const { unix, desc, price, type, tag, account_book_id } = ctx.request.body as Book.AddBookReq
 
   const data = await prismaInstance.book.create({
     data: {
@@ -239,8 +265,11 @@ router.post('/book/add', async (ctx) => {
       type: type,
       desc,
       create_tm: dayjs().unix(),
-      price: Number(price),
+      price: new Decimal(price).toFixed(2).toString(),
       unix,
+      currency: 'CNY',
+      account_book_id: account_book_id,
+      status: STATUS.INCLUDE,
     },
   })
   ctx.body = {

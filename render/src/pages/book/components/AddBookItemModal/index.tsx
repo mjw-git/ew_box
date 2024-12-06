@@ -1,9 +1,12 @@
 import Modal, { ModalProps } from '@/components/Modal'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { useToast } from '@/components/ui/use-toast'
 import { useOpen } from '@/hook/useOpen'
 import { cn } from '@/lib/utils'
+import { addBookItem } from '@/services/book'
 import { defaultIncomeTag, defaultPaymentTag } from '@/utils'
+import { useRequest } from 'ahooks'
 import dayjs, { Dayjs } from 'dayjs'
 import { useEffect, useState } from 'react'
 interface AddBookItemModalProps extends ModalProps {
@@ -13,17 +16,30 @@ const AddBookItemModal = (props: AddBookItemModalProps) => {
   const { currentDay, onCancel, ...rest } = props
   const [type, setType] = useState<1 | 2>(1)
   const [price, setPrice] = useState('')
+  const { toast } = useToast()
+  const [note, setNote] = useState('')
   const [selectDate, setSelectDate] = useState(currentDay)
-  const [currentTag, setCurrentTag] = useState<string | null>(null)
+  const [currentTag, setCurrentTag] = useState<string>(defaultPaymentTag[0].label)
 
   const { open, openModal, closeModal } = useOpen()
 
   const handleCancel = () => {
     onCancel()
     setType(1)
+    closeModal()
+    setSelectDate(currentDay)
+    setPrice('')
     setCurrentTag(defaultPaymentTag[0].label)
   }
-
+  const { run } = useRequest(addBookItem, {
+    manual: true,
+    onSuccess: () => {
+      handleCancel()
+      toast({
+        title: '添加成功',
+      })
+    },
+  })
   useEffect(() => {
     setSelectDate(currentDay)
   }, [currentDay])
@@ -95,7 +111,14 @@ const AddBookItemModal = (props: AddBookItemModalProps) => {
             </PopoverContent>
           </Popover>
           <span className='flex-shrink-0'>备注</span>
-          <input placeholder='请填写备注' className='block outline-none w-full p-1 rounded-md bg-container-bg' />
+          <input
+            value={note}
+            onChange={(e) => {
+              setNote(e.target.value)
+            }}
+            placeholder='请填写备注'
+            className='block outline-none w-full p-1 rounded-md bg-container-bg'
+          />
         </div>
       </div>
     </Modal>

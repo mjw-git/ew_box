@@ -30,3 +30,11 @@ export const addBookItem = (body: Book.AddBookReq) =>
     method: 'POST',
     body,
   })
+
+export const getBookAccountList = () => request<{ list: Book.BookAccountRes[] }>('/book/account-book')
+
+export const addBookAccount = (body: any) =>
+  request('/book/account-book', {
+    method: 'POST',
+    body,
+  })
