@@ -13,6 +13,7 @@ declare namespace Book {
     name: string
   }
   interface AddBookAccountReq {
+    id?: number
     name: string
     color: string
     create_tm: number

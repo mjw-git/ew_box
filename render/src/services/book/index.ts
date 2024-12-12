@@ -38,3 +38,9 @@ export const addBookAccount = (body: any) =>
     method: 'POST',
     body,
   })
+
+export const editBookAccount = (body: any) =>
+  request('/book/account-book', {
+    method: 'PUT',
+    body,
+  })

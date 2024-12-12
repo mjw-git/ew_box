@@ -24,7 +24,7 @@ const Book = () => {
         <ChangeAccountBookModal open={open} onCancel={closeModal} />
         <div className='bg-container-bg-2 h-10 w-full flex justify-between items-center px-3'>
           <div className='flex items-center gap-2'>
-            <div className='bg-icon-bg-yellow rounded-sm p-[2px]'>
+            <div className='bg-icon-bg-yellow rounded-sm p-[2px]' style={{ backgroundColor: accountBook?.color }}>
               <SvgIcon width={12} height={12} className='text-white' name='light' />
             </div>
             {accountBook ? (
@@ -55,7 +55,7 @@ const Book = () => {
             <SelectTrigger>
               <SelectValue placeholder='Select a type' />
             </SelectTrigger>
-            <SelectContent className='bg-select-menu-bg'>
+            <SelectContent>
               <SelectGroup>
                 <SelectItem value='week'>按周统计</SelectItem>
                 <SelectItem value='year'>按年统计</SelectItem>

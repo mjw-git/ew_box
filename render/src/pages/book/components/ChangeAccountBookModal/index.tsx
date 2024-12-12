@@ -1,16 +1,18 @@
 import Modal, { ModalProps } from '@/components/Modal'
 import SvgIcon from '@/components/SvgIcon'
 import { useToast } from '@/components/ui/use-toast'
-import { addBookAccount, getBookAccountList } from '@/services/book'
+import { addBookAccount, editBookAccount, getBookAccountList } from '@/services/book'
 import { iconBgColors } from '@/utils'
 import { useRequest } from 'ahooks'
 import { useContext, useState } from 'react'
 import BookContext from '../../bookContext'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 const ChangeAccountBookModal = (props: ModalProps) => {
   const { onConfirm } = props
   const [step, setStep] = useState('default')
   const [name, setName] = useState('')
+  const [editId, setEditId] = useState<number>()
   const [currentColor, setCurrentColor] = useState(iconBgColors[0].value)
   const { accountBook, setAccountBook } = useContext(BookContext)
   const { toast } = useToast()
@@ -26,6 +28,17 @@ const ChangeAccountBookModal = (props: ModalProps) => {
       }
     },
   })
+  const { run: runEditAccountBook } = useRequest(editBookAccount, {
+    manual: true,
+    onSuccess: () => {
+      toast({
+        title: '编辑成功',
+      })
+      runGetAccountBook()
+      setStep('default')
+    },
+  })
+
   const { run } = useRequest(addBookAccount, {
     manual: true,
     onSuccess: () => {
@@ -43,7 +56,7 @@ const ChangeAccountBookModal = (props: ModalProps) => {
   return (
     <Modal
       {...props}
-      title={step === 'add' ? '添加账本' : '选择账本'}
+      title={step === 'add' ? '添加账本' : step === 'edit' ? '编辑账本' : '选择账本'}
       renderCancel={
         step === 'add' ? (
           <button
@@ -68,37 +81,70 @@ const ChangeAccountBookModal = (props: ModalProps) => {
           <button
             className='outline-none border-none text-blue'
             onClick={() => {
-              run({
-                color: currentColor,
-                name: name,
-              })
+              if (step === 'add') {
+                run({
+                  color: currentColor,
+                  name: name,
+                })
+              } else {
+                runEditAccountBook({
+                  id: editId,
+                  color: currentColor,
+                  name: name,
+                })
+              }
             }}>
             确认
           </button>
         )
       }
       contentClassName='bg-container-bg min-h-[300px]'>
-      {step === 'default' &&
-        accountList?.list.map((item) => (
-          <div onClick={() => setAccountBook?.(item)} key={item.id} className='grid cursor-pointer grid-cols-2 gap-2'>
-            <div className='bg-container-bg-2 p-2 justify-between rounded-lg h-16 flex items-center gap-2'>
-              <div className='flex justify-center flex-col gap-2'>
-                <div className='w-6 h-6  rounded-full  bg-icon-bg-yellow flex items-center justify-center' style={{ backgroundColor: item.color }}>
-                  <SvgIcon name='book_account' style={{ color: '#fff' }} width={14} height={14} />
+      {step === 'default' && (
+        <div className='grid grid-cols-2 gap-2'>
+          {accountList?.list.map((item) => (
+            <div onClick={() => setAccountBook?.(item)} key={item.id} className=' w-full cursor-pointer  '>
+              <div className='bg-container-bg-2 p-2 relative justify-between rounded-lg h-16 flex items-center gap-2'>
+                <div className='flex justify-center flex-col gap-2'>
+                  <div className='flex justify-between w-full'>
+                    <div className='w-6 h-6  rounded-full  bg-icon-bg-yellow flex items-center justify-center' style={{ backgroundColor: item.color }}>
+                      <SvgIcon name='book_account' style={{ color: '#fff' }} width={14} height={14} />
+                    </div>
+
+                    <DropdownMenu>
+                      <DropdownMenuTrigger className='w-4 h-4 absolute right-2 top-2'>
+                        <div className='w-4 h-4 absolute right-2 top-2 border border-primary rounded-full flex items-center justify-center mb-1'>
+                          <SvgIcon name='more' width={12} className='text-primary' height={12} />
+                        </div>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className='bg-container-bg-3'>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            setStep('edit')
+                            setEditId(item.id)
+                            setName(item.name)
+                            setCurrentColor(item.color)
+                          }}
+                          className='text-[12px]'>
+                          编辑
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className='text-[12px]'>删除</DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  <div className='text-[12px] w-full flex justify-between font-bold'>
+                    <span>{item.name}</span>
+                  </div>
                 </div>
-                <div className='text-[12px] w-full flex justify-between font-bold'>
-                  <span>{item.name}</span>
-                </div>
+
+                {accountBook?.id === item.id && <span className='text-blue absolute bottom-1 right-[16px]'>&#10003;</span>}
               </div>
-              {accountBook?.id === item.id && (
-                <div>
-                  <span className='text-blue'>&#10003;</span>
-                </div>
-              )}
             </div>
-          </div>
-        ))}
-      {step === 'add' && (
+          ))}
+        </div>
+      )}
+      {(step === 'add' || step === 'edit') && (
         <>
           <div className='bg-container-bg-2 p-2 rounded-md flex gap-3 items-center'>
             <div className='w-6 h-6 rounded-full text-white flex items-center justify-center' style={{ backgroundColor: currentColor }}>

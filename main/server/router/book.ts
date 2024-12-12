@@ -234,6 +234,17 @@ router.get('/book/list', async (ctx) => {
     data: { list },
   })
 })
+router.put('/book/account-book', async (ctx) => {
+  const { id, name, color, icon } = ctx.request.body as Book.AddBookAccountReq
+  const data = await prismaInstance.accountBook.update({
+    where: { id },
+    data: { name, color, icon },
+  })
+  ctx.body = {
+    code: 200,
+    data: { id: data.id },
+  }
+})
 router.post('/book/account-book', async (ctx) => {
   const { name, color, icon } = ctx.request.body as Book.AddBookAccountReq
   const data = await prismaInstance.accountBook.create({
